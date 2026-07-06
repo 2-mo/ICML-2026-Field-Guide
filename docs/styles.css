@@ -69,6 +69,10 @@ button {
   padding: 4px 0 8px;
 }
 
+.topbar > div {
+  min-width: 0;
+}
+
 .view-switch {
   position: sticky;
   top: 0;
@@ -2963,6 +2967,8 @@ main {
   margin: 6px 0 4px;
   font-size: 0.96rem;
   line-height: 1.2;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .travel-directions-card p {
@@ -2970,6 +2976,8 @@ main {
   color: var(--muted);
   font-size: 0.82rem;
   line-height: 1.35;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .travel-directions-meta {
@@ -3002,6 +3010,12 @@ main {
   color: var(--ink);
   font-size: 0.8rem;
   line-height: 1.32;
+}
+
+.travel-steps li > span:last-child {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .travel-step-line {
@@ -3067,6 +3081,17 @@ main {
 
 .travel-station-token.station-coex {
   color: #111827;
+}
+
+@media (max-width: 759px) {
+  .travel-steps li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .travel-step-line {
+    justify-self: start;
+  }
 }
 
 .travel-hotel-card {
@@ -4396,7 +4421,12 @@ main {
   }
 
   .travel-steps li {
-    grid-template-columns: 58px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .travel-step-line {
+    justify-self: start;
   }
 
   .timeline-item {

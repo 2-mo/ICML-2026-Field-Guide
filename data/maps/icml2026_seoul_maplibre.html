@@ -20,6 +20,60 @@
     .legend { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px 7px; font-size: 10px; color: #334155; }
     .legend span { display: inline-flex; align-items: center; gap: 5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .swatch { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
+    .focus-marker {
+      position: relative; width: 0; height: 0; pointer-events: none;
+      --pin-color: #334155;
+    }
+    .focus-marker-pin {
+      position: absolute; left: -7px; top: -7px; z-index: 2;
+      width: 14px; height: 14px; border: 2px solid #fff; border-radius: 50%;
+      background: var(--pin-color); box-shadow: 0 2px 8px rgba(15,23,42,.28);
+    }
+    .focus-marker.venue { --pin-color: #111827; }
+    .focus-marker.station { --pin-color: #2563eb; }
+    .focus-marker.airport { --pin-color: #ea580c; }
+    .focus-marker.hotel { --pin-color: #be123c; }
+    .focus-marker.nearby { --pin-color: #16a34a; }
+    .focus-label,
+    .focus-route-label {
+      display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 5px;
+      max-width: 168px; padding: 5px 7px; border: 1px solid rgba(148,163,184,.52);
+      border-radius: 9px; background: rgba(255,255,255,.94); box-shadow: 0 8px 22px rgba(15,23,42,.16);
+      color: #0f172a; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: visible; position: relative; text-align: left; pointer-events: auto;
+    }
+    .focus-label {
+      position: absolute; left: var(--label-x, 12px); top: var(--label-y, -18px);
+      z-index: 3; cursor: pointer;
+    }
+    .focus-label > span:not(.focus-label-leader),
+    .focus-route-label > span { position: relative; z-index: 1; }
+    .focus-label strong,
+    .focus-route-label strong { display: block; font-size: 11px; line-height: 1.08; white-space: normal; }
+    .focus-label span:last-child,
+    .focus-route-label span:last-child { display: block; margin-top: 2px; color: #475569; font-size: 9.5px; line-height: 1.12; white-space: normal; }
+    .focus-label-icon { width: 20px; height: 20px; display: inline-grid; place-items: center; border-radius: 50%; color: #fff; font-size: 12px; line-height: 1; box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); }
+    .focus-route-overlay { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+    .maplibregl-marker { z-index: 3; }
+    .focus-label.venue .focus-label-icon { background: #111827; }
+    .focus-label.station .focus-label-icon { background: #2563eb; }
+    .focus-label.airport .focus-label-icon { background: #ea580c; }
+    .focus-label.hotel .focus-label-icon { background: #be123c; }
+    .focus-label.nearby .focus-label-icon { background: #16a34a; }
+    .focus-route-label { max-width: 190px; border-color: rgba(148,163,184,.46); background: rgba(255,255,255,.9); pointer-events: none; }
+    .focus-route-label .focus-label-icon { background: #334155; }
+    .focus-route-label.bus .focus-label-icon { background: #d97706; }
+    .focus-route-label.rail .focus-label-icon { background: #2563eb; }
+    @media (max-width: 520px) {
+      .focus-label {
+        max-width: 132px; gap: 4px; padding: 4px 6px; border-radius: 8px;
+        background: rgba(255,255,255,.8);
+      }
+      .focus-label strong { font-size: 10px; }
+      .focus-label span:last-child { font-size: 8.5px; line-height: 1.08; }
+      .focus-label-icon { width: 18px; height: 18px; font-size: 10px; }
+      .focus-route-label { display: none; }
+    }
     .popup h2 { margin: 0 0 7px; font-size: 16px; color: #0f172a; }
     .popup p { margin: 0 0 9px; color: #475569; line-height: 1.42; }
     .popup a { color: #2563eb; text-decoration: none; font-weight: 800; }
@@ -44,28 +98,29 @@
   </section>
   <script src="https://unpkg.com/maplibre-gl@5.9.0/dist/maplibre-gl.js"></script>
   <script>
-    const points = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0592, 37.5118]}, "properties": {"id": "coex", "category": "venue", "zh": "COEX 会场", "en": "COEX venue", "ko_note": "코엑스", "latitude": 37.5118, "longitude": 127.0592, "google_maps_query": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "note_zh": "主会场与默认出发点。", "note_en": "Main venue and default origin.", "label": "COEX 会场 / COEX venue (코엑스)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul", "marker_color": "#111827", "rank": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0611, 37.5089]}, "properties": {"id": "parnas", "category": "hotel", "zh": "Parnas 酒店区", "en": "Parnas hotel area", "ko_note": "", "latitude": 37.5089, "longitude": 127.0611, "google_maps_query": "Grand InterContinental Seoul Parnas, 521 Teheran-ro, Seoul", "note_zh": "会场酒店与餐饮锚点。", "note_en": "Hotel and food anchor next to COEX.", "label": "Parnas 酒店区 / Parnas hotel area", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Grand+InterContinental+Seoul+Parnas%2C+521+Teheran-ro%2C+Seoul", "marker_color": "#be123c", "rank": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0157, 37.4932]}, "properties": {"id": "provista", "category": "hotel", "zh": "普罗威斯塔酒店", "en": "Provista Hotel", "ko_note": "", "latitude": 37.4932, "longitude": 127.0157, "google_maps_query": "Hotel Provista Seoul, 338 Seocho-daero, Seocho-gu, Seoul 06632", "note_zh": "住处：338 Seocho-daero, Seocho-gu, Seoul 06632。", "note_en": "Hotel base: 338 Seocho-daero, Seocho-gu, Seoul 06632.", "label": "普罗威斯塔酒店 / Provista Hotel", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Hotel+Provista+Seoul%2C+338+Seocho-daero%2C+Seocho-gu%2C+Seoul+06632", "marker_color": "#be123c", "rank": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0631, 37.5088]}, "properties": {"id": "samseong", "category": "station", "zh": "三成站", "en": "Samseong Station", "ko_note": "삼성", "latitude": 37.5088, "longitude": 127.0631, "google_maps_query": "Samseong Station Exit 5, Seoul", "note_zh": "Line 2，COEX 官方建议 5/6 号出口。", "note_en": "Line 2; COEX recommends exits 5/6.", "label": "三成站 / Samseong Station (삼성)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Samseong+Station+Exit+5%2C+Seoul", "marker_color": "#2563eb", "rank": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0602, 37.5142]}, "properties": {"id": "bongeunsa", "category": "station", "zh": "奉恩寺站", "en": "Bongeunsa Station", "ko_note": "봉은사", "latitude": 37.5142, "longitude": 127.0602, "google_maps_query": "Bongeunsa Station Exit 7, Seoul", "note_zh": "Line 9，COEX 官方建议 7 号出口。", "note_en": "Line 9; COEX recommends exit 7.", "label": "奉恩寺站 / Bongeunsa Station (봉은사)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Bongeunsa+Station+Exit+7%2C+Seoul", "marker_color": "#2563eb", "rank": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0276, 37.4979]}, "properties": {"id": "gangnam", "category": "zone", "zh": "江南站", "en": "Gangnam Station", "ko_note": "강남", "latitude": 37.4979, "longitude": 127.0276, "google_maps_query": "Gangnam Station, Seoul", "note_zh": "晚宴、meetup、饭局高密度区域。", "note_en": "High-density dinner and meetup area.", "label": "江南站 / Gangnam Station (강남)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Gangnam+Station%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0396, 37.5013]}, "properties": {"id": "yeoksam", "category": "zone", "zh": "驿三区域", "en": "Yeoksam area", "ko_note": "역삼", "latitude": 37.5013, "longitude": 127.0396, "google_maps_query": "Yeoksam-ro, Gangnam-gu, Seoul", "note_zh": "OpenAI/Hugging Face 等活动公开页只到区域级。", "note_en": "Some RSVP pages expose only this obfuscated area.", "label": "驿三区域 / Yeoksam area (역삼)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Yeoksam-ro%2C+Gangnam-gu%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0364, 37.5002]}, "properties": {"id": "gfc", "category": "event", "zh": "江南金融中心", "en": "Gangnam Finance Center", "ko_note": "", "latitude": 37.5002, "longitude": 127.0364, "google_maps_query": "Gangnam Finance Center 24F, 152 Teheran-ro, Gangnam-gu, Seoul", "note_zh": "Google DeepMind x GDG 活动公开地址。", "note_en": "Public address for the Google DeepMind x GDG event.", "label": "江南金融中心 / Gangnam Finance Center", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Gangnam+Finance+Center+24F%2C+152+Teheran-ro%2C+Gangnam-gu%2C+Seoul", "marker_color": "#7c3aed", "rank": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.047, 37.528]}, "properties": {"id": "dosan", "category": "zone", "zh": "岛山大路 81 街区域", "en": "Dosan-daero 81-gil area", "ko_note": "", "latitude": 37.528, "longitude": 127.047, "google_maps_query": "Dosan-daero 81-gil, Gangnam-gu, Seoul", "note_zh": "VESSL 晚宴公开页只到区域级。", "note_en": "VESSL dinner public page exposes only an obfuscated area.", "label": "岛山大路 81 街区域 / Dosan-daero 81-gil area", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Dosan-daero+81-gil%2C+Gangnam-gu%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0559, 37.5446]}, "properties": {"id": "seongsu", "category": "zone", "zh": "圣水", "en": "Seongsu", "ko_note": "성수", "latitude": 37.5446, "longitude": 127.0559, "google_maps_query": "Seongsu Station, Seoul", "note_zh": "咖啡、品牌空间、轻松半日行程。", "note_en": "Cafe and brand-space zone for a lighter half day.", "label": "圣水 / Seongsu (성수)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Seongsu+Station%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0374, 37.5444]}, "properties": {"id": "seoul_forest", "category": "nearby", "zh": "首尔林", "en": "Seoul Forest", "ko_note": "서울숲", "latitude": 37.5444, "longitude": 127.0374, "google_maps_query": "Seoul Forest, Seoul", "note_zh": "可和圣水一起安排。", "note_en": "Pair with Seongsu rather than a separate trip.", "label": "首尔林 / Seoul Forest (서울숲)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Seoul+Forest%2C+Seoul", "marker_color": "#16a34a", "rank": 7}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [126.9245, 37.5572]}, "properties": {"id": "hongdae", "category": "zone", "zh": "弘大", "en": "Hongdae", "ko_note": "홍대", "latitude": 37.5572, "longitude": 126.9245, "google_maps_query": "Hongik University Station, Seoul", "note_zh": "夜生活备选，不适合短午休。", "note_en": "Nightlife fallback; not ideal for a short lunch gap.", "label": "弘大 / Hongdae (홍대)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Hongik+University+Station%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [126.9946, 37.5345]}, "properties": {"id": "itaewon", "category": "zone", "zh": "梨泰院", "en": "Itaewon", "ko_note": "이태원", "latitude": 37.5345, "longitude": 126.9946, "google_maps_query": "Itaewon Station, Seoul", "note_zh": "晚餐、酒吧、Hannam/Hangangjin 方向。", "note_en": "Dinner, bars, Hannam/Hangangjin direction.", "label": "梨泰院 / Itaewon (이태원)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Itaewon+Station%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [126.7945, 37.5587]}, "properties": {"id": "gimpo", "category": "airport", "zh": "金浦机场换乘", "en": "Gimpo transfer", "ko_note": "김포", "latitude": 37.5587, "longitude": 126.7945, "google_maps_query": "Gimpo International Airport Station", "note_zh": "AREX 换乘 Line 9 的节点。", "note_en": "Transfer from AREX to Line 9.", "label": "金浦机场换乘 / Gimpo transfer (김포)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Gimpo+International+Airport+Station", "marker_color": "#ea580c", "rank": 5}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [126.4407, 37.4602]}, "properties": {"id": "incheon_t1", "category": "airport", "zh": "仁川机场 T1", "en": "Incheon Airport T1", "ko_note": "인천", "latitude": 37.4602, "longitude": 126.4407, "google_maps_query": "Incheon Airport Terminal 1, 272 Gonghang-ro, Yeongjong-gu, Incheon", "note_zh": "国际到达，注意 T1/T2。", "note_en": "International arrival; confirm T1/T2.", "label": "仁川机场 T1 / Incheon Airport T1 (인천)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Incheon+Airport+Terminal+1%2C+272+Gonghang-ro%2C+Yeongjong-gu%2C+Incheon", "marker_color": "#ea580c", "rank": 5}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.1112, 37.3947]}, "properties": {"id": "pangyo", "category": "zone", "zh": "板桥科技谷", "en": "Pangyo Techno Valley", "ko_note": "판교", "latitude": 37.3947, "longitude": 127.1112, "google_maps_query": "Pangyo Techno Valley, Seongnam", "note_zh": "较远的公司/园区活动方向。", "note_en": "Longer offsite company-campus direction.", "label": "板桥科技谷 / Pangyo Techno Valley (판교)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Pangyo+Techno+Valley%2C+Seongnam", "marker_color": "#0f766e", "rank": 4}}]};
-    const routes = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[126.4407, 37.4602], [126.7945, 37.5587]]}, "properties": {"id": "arrival_icn", "category": "airport", "zh": "AREX 仁川 T1 到金浦", "en": "AREX ICN T1 to Gimpo", "points": "incheon_t1 -> gimpo", "color": "#2563eb", "stroke_dasharray": "", "google_maps_origin": "Incheon Airport Terminal 1, 272 Gonghang-ro, Yeongjong-gu, Incheon", "google_maps_destination": "Gimpo International Airport Station", "travelmode": "transit", "note_zh": "仁川 T1 先坐 AREX 到金浦机场换乘。", "note_en": "Take AREX from ICN T1 to Gimpo Airport transfer.", "label": "AREX 仁川 T1 到金浦 / AREX ICN T1 to Gimpo", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Incheon+Airport+Terminal+1%2C+272+Gonghang-ro%2C+Yeongjong-gu%2C+Incheon&destination=Gimpo+International+Airport+Station&travelmode=transit", "dash": ""}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[126.9245, 37.5572], [127.0559, 37.5446], [127.0631, 37.5088], [127.0276, 37.4979]]}, "properties": {"id": "line2_core", "category": "metro", "zh": "Line 2 核心线", "en": "Line 2 core", "points": "hongdae -> seongsu -> samseong -> gangnam", "color": "#2a9d8f", "stroke_dasharray": "", "google_maps_origin": "Samseong Station, Seoul", "google_maps_destination": "Gangnam Station, Seoul", "travelmode": "transit", "note_zh": "会场到江南、圣水、弘大都可用 Line 2 作为主轴。", "note_en": "Line 2 is the main axis for Gangnam, Seongsu, and Hongdae.", "label": "Line 2 核心线 / Line 2 core", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Samseong+Station%2C+Seoul&destination=Gangnam+Station%2C+Seoul&travelmode=transit", "dash": ""}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[126.7945, 37.5587], [127.0602, 37.5142], [127.0592, 37.5118]]}, "properties": {"id": "line9_core", "category": "metro", "zh": "Line 9 金浦到奉恩寺", "en": "Line 9 Gimpo to Bongeunsa", "points": "gimpo -> bongeunsa -> coex", "color": "#b78714", "stroke_dasharray": "", "google_maps_origin": "Gimpo International Airport Station", "google_maps_destination": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "travelmode": "transit", "note_zh": "金浦换乘 Line 9 到奉恩寺站，7 号出口到 COEX。", "note_en": "Transfer to Line 9 at Gimpo, ride to Bongeunsa, then walk to COEX.", "label": "Line 9 金浦到奉恩寺 / Line 9 Gimpo to Bongeunsa", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Gimpo+International+Airport+Station&destination=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&travelmode=transit", "dash": ""}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[127.0157, 37.4932], [127.0631, 37.5088], [127.0592, 37.5118]]}, "properties": {"id": "hotel_line2", "category": "metro", "zh": "Line 2 酒店到三成", "en": "Line 2 hotel to Samseong", "points": "provista -> samseong -> coex", "color": "#2a9d8f", "stroke_dasharray": "", "google_maps_origin": "Hotel Provista Seoul, 338 Seocho-daero, Seocho-gu, Seoul 06632", "google_maps_destination": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "travelmode": "transit", "note_zh": "普罗威斯塔酒店从教大/Line 2 到三成，再步行到 COEX。", "note_en": "From Provista, use Line 2 toward Samseong, then walk to COEX.", "label": "Line 2 酒店到三成 / Line 2 hotel to Samseong", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Hotel+Provista+Seoul%2C+338+Seocho-daero%2C+Seocho-gu%2C+Seoul+06632&destination=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&travelmode=transit", "dash": ""}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[127.0592, 37.5118], [127.047, 37.528], [127.0364, 37.5002], [127.0396, 37.5013], [127.0276, 37.4979]]}, "properties": {"id": "evening_gangnam", "category": "evening", "zh": "江南晚间圈", "en": "Gangnam evening loop", "points": "coex -> dosan -> gfc -> yeoksam -> gangnam", "color": "#4361ee", "stroke_dasharray": "", "google_maps_origin": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "google_maps_destination": "Gangnam Station, Seoul", "travelmode": "transit", "note_zh": "大多数科技公司社交、晚宴、meetup 的第一候选区域。", "note_en": "First-choice zone for many tech socials, dinners, and meetups.", "label": "江南晚间圈 / Gangnam evening loop", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&destination=Gangnam+Station%2C+Seoul&travelmode=transit", "dash": ""}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[127.0592, 37.5118], [126.9946, 37.5345]]}, "properties": {"id": "itaewon", "category": "evening", "zh": "梨泰院方向", "en": "Itaewon direction", "points": "coex -> itaewon", "color": "#7209b7", "stroke_dasharray": "7 6", "google_maps_origin": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "google_maps_destination": "Itaewon Station, Seoul", "travelmode": "transit", "note_zh": "晚餐和酒吧可选，深夜可考虑出租车。", "note_en": "Good for dinner and bars; taxi may be simpler late night.", "label": "梨泰院方向 / Itaewon direction", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&destination=Itaewon+Station%2C+Seoul&travelmode=transit", "dash": "7 6"}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[127.0592, 37.5118], [127.1112, 37.3947]]}, "properties": {"id": "pangyo", "category": "offsite", "zh": "板桥远端活动", "en": "Pangyo offsite", "points": "coex -> pangyo", "color": "#6c757d", "stroke_dasharray": "12 8", "google_maps_origin": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "google_maps_destination": "Pangyo Techno Valley, Seongnam", "travelmode": "transit", "note_zh": "只建议给重要 offsite 留整晚。", "note_en": "Reserve a full evening only for important offsites.", "label": "板桥远端活动 / Pangyo offsite", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&destination=Pangyo+Techno+Valley%2C+Seongnam&travelmode=transit", "dash": "12 8"}}]};
+    const points = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0592, 37.5118]}, "properties": {"id": "coex", "category": "venue", "zh": "COEX 会场", "en": "COEX venue", "ko_note": "코엑스", "latitude": 37.5118, "longitude": 127.0592, "google_maps_query": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "note_zh": "主会场与默认出发点。", "note_en": "Main venue and default origin.", "label": "COEX 会场 / COEX venue (코엑스)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul", "marker_color": "#111827", "rank": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0611, 37.5089]}, "properties": {"id": "parnas", "category": "hotel", "zh": "Parnas 酒店区", "en": "Parnas hotel area", "ko_note": "", "latitude": 37.5089, "longitude": 127.0611, "google_maps_query": "Grand InterContinental Seoul Parnas, 521 Teheran-ro, Seoul", "note_zh": "会场酒店与餐饮锚点。", "note_en": "Hotel and food anchor next to COEX.", "label": "Parnas 酒店区 / Parnas hotel area", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Grand+InterContinental+Seoul+Parnas%2C+521+Teheran-ro%2C+Seoul", "marker_color": "#be123c", "rank": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0607, 37.511]}, "properties": {"id": "coex_mall", "category": "nearby", "zh": "COEX Mall", "en": "Starfield COEX Mall", "ko_note": "스타필드 코엑스몰", "latitude": 37.511, "longitude": 127.0607, "google_maps_query": "Starfield COEX Mall, Seoul", "note_zh": "COEX 地下补给主轴，吃饭、咖啡、雨天动线都在这里。", "note_en": "Main underground supply zone for food, coffee, and rain-safe movement.", "label": "COEX Mall / Starfield COEX Mall (스타필드 코엑스몰)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Starfield+COEX+Mall%2C+Seoul", "marker_color": "#16a34a", "rank": 7}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0597, 37.5103]}, "properties": {"id": "starfield_library", "category": "nearby", "zh": "星空图书馆", "en": "Starfield Library", "ko_note": "별마당도서관", "latitude": 37.5103, "longitude": 127.0597, "google_maps_query": "Starfield Library, Seoul", "note_zh": "会场内好找的集合点和短休息点。", "note_en": "Easy indoor landmark for meeting up and short breaks.", "label": "星空图书馆 / Starfield Library (별마당도서관)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Starfield+Library%2C+Seoul", "marker_color": "#16a34a", "rank": 7}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0577, 37.5121]}, "properties": {"id": "coex_aquarium", "category": "nearby", "zh": "COEX Aquarium", "en": "SEA LIFE COEX Aquarium", "ko_note": "코엑스 아쿠아리움", "latitude": 37.5121, "longitude": 127.0577, "google_maps_query": "SEA LIFE COEX, Seoul", "note_zh": "雨天或空档时的室内备选。", "note_en": "Indoor fallback for weather or awkward schedule gaps.", "label": "COEX Aquarium / SEA LIFE COEX Aquarium (코엑스 아쿠아리움)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=SEA+LIFE+COEX%2C+Seoul", "marker_color": "#16a34a", "rank": 7}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.057, 37.5153]}, "properties": {"id": "bongeunsa_temple", "category": "nearby", "zh": "奉恩寺", "en": "Bongeunsa Temple", "ko_note": "봉은사", "latitude": 37.5153, "longitude": 127.057, "google_maps_query": "Bongeunsa Temple, Seoul", "note_zh": "COEX 北侧安静短走点。", "note_en": "Quiet short-walk option directly north of COEX.", "label": "奉恩寺 / Bongeunsa Temple (봉은사)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Bongeunsa+Temple%2C+Seoul", "marker_color": "#16a34a", "rank": 7}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0157, 37.4932]}, "properties": {"id": "provista", "category": "hotel", "zh": "普罗威斯塔酒店", "en": "Provista Hotel", "ko_note": "", "latitude": 37.4932, "longitude": 127.0157, "google_maps_query": "Hotel Provista Seoul, 338 Seocho-daero, Seocho-gu, Seoul 06632", "note_zh": "住处：338 Seocho-daero, Seocho-gu, Seoul 06632。", "note_en": "Hotel base: 338 Seocho-daero, Seocho-gu, Seoul 06632.", "label": "普罗威斯塔酒店 / Provista Hotel", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Hotel+Provista+Seoul%2C+338+Seocho-daero%2C+Seocho-gu%2C+Seoul+06632", "marker_color": "#be123c", "rank": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0631, 37.5088]}, "properties": {"id": "samseong", "category": "station", "zh": "三成站", "en": "Samseong Station", "ko_note": "삼성", "latitude": 37.5088, "longitude": 127.0631, "google_maps_query": "Samseong Station Exit 5, Seoul", "note_zh": "Line 2，COEX 官方建议 5/6 号出口。", "note_en": "Line 2; COEX recommends exits 5/6.", "label": "三成站 / Samseong Station (삼성)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Samseong+Station+Exit+5%2C+Seoul", "marker_color": "#2563eb", "rank": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0602, 37.5142]}, "properties": {"id": "bongeunsa", "category": "station", "zh": "奉恩寺站", "en": "Bongeunsa Station", "ko_note": "봉은사", "latitude": 37.5142, "longitude": 127.0602, "google_maps_query": "Bongeunsa Station Exit 7, Seoul", "note_zh": "Line 9，COEX 官方建议 7 号出口。", "note_en": "Line 9; COEX recommends exit 7.", "label": "奉恩寺站 / Bongeunsa Station (봉은사)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Bongeunsa+Station+Exit+7%2C+Seoul", "marker_color": "#2563eb", "rank": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0276, 37.4979]}, "properties": {"id": "gangnam", "category": "zone", "zh": "江南站", "en": "Gangnam Station", "ko_note": "강남", "latitude": 37.4979, "longitude": 127.0276, "google_maps_query": "Gangnam Station, Seoul", "note_zh": "晚宴、meetup、饭局高密度区域。", "note_en": "High-density dinner and meetup area.", "label": "江南站 / Gangnam Station (강남)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Gangnam+Station%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0396, 37.5013]}, "properties": {"id": "yeoksam", "category": "zone", "zh": "驿三区域", "en": "Yeoksam area", "ko_note": "역삼", "latitude": 37.5013, "longitude": 127.0396, "google_maps_query": "Yeoksam-ro, Gangnam-gu, Seoul", "note_zh": "OpenAI/Hugging Face 等活动公开页只到区域级。", "note_en": "Some RSVP pages expose only this obfuscated area.", "label": "驿三区域 / Yeoksam area (역삼)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Yeoksam-ro%2C+Gangnam-gu%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0364, 37.5002]}, "properties": {"id": "gfc", "category": "event", "zh": "江南金融中心", "en": "Gangnam Finance Center", "ko_note": "", "latitude": 37.5002, "longitude": 127.0364, "google_maps_query": "Gangnam Finance Center 24F, 152 Teheran-ro, Gangnam-gu, Seoul", "note_zh": "Google DeepMind x GDG 活动公开地址。", "note_en": "Public address for the Google DeepMind x GDG event.", "label": "江南金融中心 / Gangnam Finance Center", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Gangnam+Finance+Center+24F%2C+152+Teheran-ro%2C+Gangnam-gu%2C+Seoul", "marker_color": "#7c3aed", "rank": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.047, 37.528]}, "properties": {"id": "dosan", "category": "zone", "zh": "岛山大路 81 街区域", "en": "Dosan-daero 81-gil area", "ko_note": "", "latitude": 37.528, "longitude": 127.047, "google_maps_query": "Dosan-daero 81-gil, Gangnam-gu, Seoul", "note_zh": "VESSL 晚宴公开页只到区域级。", "note_en": "VESSL dinner public page exposes only an obfuscated area.", "label": "岛山大路 81 街区域 / Dosan-daero 81-gil area", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Dosan-daero+81-gil%2C+Gangnam-gu%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0559, 37.5446]}, "properties": {"id": "seongsu", "category": "zone", "zh": "圣水", "en": "Seongsu", "ko_note": "성수", "latitude": 37.5446, "longitude": 127.0559, "google_maps_query": "Seongsu Station, Seoul", "note_zh": "咖啡、品牌空间、轻松半日行程。", "note_en": "Cafe and brand-space zone for a lighter half day.", "label": "圣水 / Seongsu (성수)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Seongsu+Station%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.0374, 37.5444]}, "properties": {"id": "seoul_forest", "category": "nearby", "zh": "首尔林", "en": "Seoul Forest", "ko_note": "서울숲", "latitude": 37.5444, "longitude": 127.0374, "google_maps_query": "Seoul Forest, Seoul", "note_zh": "可和圣水一起安排。", "note_en": "Pair with Seongsu rather than a separate trip.", "label": "首尔林 / Seoul Forest (서울숲)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Seoul+Forest%2C+Seoul", "marker_color": "#16a34a", "rank": 7}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [126.9245, 37.5572]}, "properties": {"id": "hongdae", "category": "zone", "zh": "弘大", "en": "Hongdae", "ko_note": "홍대", "latitude": 37.5572, "longitude": 126.9245, "google_maps_query": "Hongik University Station, Seoul", "note_zh": "夜生活备选，不适合短午休。", "note_en": "Nightlife fallback; not ideal for a short lunch gap.", "label": "弘大 / Hongdae (홍대)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Hongik+University+Station%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [126.9946, 37.5345]}, "properties": {"id": "itaewon", "category": "zone", "zh": "梨泰院", "en": "Itaewon", "ko_note": "이태원", "latitude": 37.5345, "longitude": 126.9946, "google_maps_query": "Itaewon Station, Seoul", "note_zh": "晚餐、酒吧、Hannam/Hangangjin 方向。", "note_en": "Dinner, bars, Hannam/Hangangjin direction.", "label": "梨泰院 / Itaewon (이태원)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Itaewon+Station%2C+Seoul", "marker_color": "#0f766e", "rank": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [126.7945, 37.5587]}, "properties": {"id": "gimpo", "category": "airport", "zh": "金浦机场换乘", "en": "Gimpo transfer", "ko_note": "김포", "latitude": 37.5587, "longitude": 126.7945, "google_maps_query": "Gimpo International Airport Station", "note_zh": "AREX 换乘 Line 9 的节点。", "note_en": "Transfer from AREX to Line 9.", "label": "金浦机场换乘 / Gimpo transfer (김포)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Gimpo+International+Airport+Station", "marker_color": "#ea580c", "rank": 5}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [126.4407, 37.4602]}, "properties": {"id": "incheon_t1", "category": "airport", "zh": "仁川机场 T1", "en": "Incheon Airport T1", "ko_note": "인천", "latitude": 37.4602, "longitude": 126.4407, "google_maps_query": "Incheon Airport Terminal 1, 272 Gonghang-ro, Yeongjong-gu, Incheon", "note_zh": "国际到达，注意 T1/T2。", "note_en": "International arrival; confirm T1/T2.", "label": "仁川机场 T1 / Incheon Airport T1 (인천)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Incheon+Airport+Terminal+1%2C+272+Gonghang-ro%2C+Yeongjong-gu%2C+Incheon", "marker_color": "#ea580c", "rank": 5}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [127.1112, 37.3947]}, "properties": {"id": "pangyo", "category": "zone", "zh": "板桥科技谷", "en": "Pangyo Techno Valley", "ko_note": "판교", "latitude": 37.3947, "longitude": 127.1112, "google_maps_query": "Pangyo Techno Valley, Seongnam", "note_zh": "较远的公司/园区活动方向。", "note_en": "Longer offsite company-campus direction.", "label": "板桥科技谷 / Pangyo Techno Valley (판교)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Pangyo+Techno+Valley%2C+Seongnam", "marker_color": "#0f766e", "rank": 4}}]};
+    const routes = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[126.4407, 37.4602], [126.7945, 37.5587]]}, "properties": {"id": "arrival_icn", "category": "airport", "zh": "AREX 仁川 T1 到金浦", "en": "AREX ICN T1 to Gimpo", "points": "incheon_t1 -> gimpo", "color": "#2563eb", "stroke_dasharray": "", "google_maps_origin": "Incheon Airport Terminal 1, 272 Gonghang-ro, Yeongjong-gu, Incheon", "google_maps_destination": "Gimpo International Airport Station", "travelmode": "transit", "note_zh": "仁川 T1 先坐 AREX 到金浦机场换乘。", "note_en": "Take AREX from ICN T1 to Gimpo Airport transfer.", "label": "AREX 仁川 T1 到金浦 / AREX ICN T1 to Gimpo", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Incheon+Airport+Terminal+1%2C+272+Gonghang-ro%2C+Yeongjong-gu%2C+Incheon&destination=Gimpo+International+Airport+Station&travelmode=transit", "dash": ""}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[126.4407, 37.4602], [127.0592, 37.5118]]}, "properties": {"id": "airport_bus_6103", "category": "bus", "zh": "6103 机场大巴", "en": "6103 airport limousine bus", "points": "incheon_t1 -> coex", "color": "#d97706", "stroke_dasharray": "9 7", "google_maps_origin": "Incheon International Airport Terminal 1", "google_maps_destination": "COEX City Airport Terminal, Seoul", "travelmode": "transit", "note_zh": "行李多时可考虑 6103 机场大巴直达 COEX / 三成一侧。", "note_en": "With luggage, consider the 6103 airport bus directly to the COEX / Samseong side.", "label": "6103 机场大巴 / 6103 airport limousine bus", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Incheon+International+Airport+Terminal+1&destination=COEX+City+Airport+Terminal%2C+Seoul&travelmode=transit", "dash": "9 7"}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[126.9245, 37.5572], [127.0559, 37.5446], [127.0631, 37.5088], [127.0276, 37.4979]]}, "properties": {"id": "line2_core", "category": "metro", "zh": "Line 2 核心线", "en": "Line 2 core", "points": "hongdae -> seongsu -> samseong -> gangnam", "color": "#2a9d8f", "stroke_dasharray": "", "google_maps_origin": "Samseong Station, Seoul", "google_maps_destination": "Gangnam Station, Seoul", "travelmode": "transit", "note_zh": "会场到江南、圣水、弘大都可用 Line 2 作为主轴。", "note_en": "Line 2 is the main axis for Gangnam, Seongsu, and Hongdae.", "label": "Line 2 核心线 / Line 2 core", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Samseong+Station%2C+Seoul&destination=Gangnam+Station%2C+Seoul&travelmode=transit", "dash": ""}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[126.7945, 37.5587], [127.0602, 37.5142], [127.0592, 37.5118]]}, "properties": {"id": "line9_core", "category": "metro", "zh": "Line 9 金浦到奉恩寺", "en": "Line 9 Gimpo to Bongeunsa", "points": "gimpo -> bongeunsa -> coex", "color": "#b78714", "stroke_dasharray": "", "google_maps_origin": "Gimpo International Airport Station", "google_maps_destination": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "travelmode": "transit", "note_zh": "金浦换乘 Line 9 到奉恩寺站，7 号出口到 COEX。", "note_en": "Transfer to Line 9 at Gimpo, ride to Bongeunsa, then walk to COEX.", "label": "Line 9 金浦到奉恩寺 / Line 9 Gimpo to Bongeunsa", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Gimpo+International+Airport+Station&destination=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&travelmode=transit", "dash": ""}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[127.0157, 37.4932], [127.0631, 37.5088], [127.0592, 37.5118]]}, "properties": {"id": "hotel_line2", "category": "metro", "zh": "Line 2 酒店到三成", "en": "Line 2 hotel to Samseong", "points": "provista -> samseong -> coex", "color": "#2a9d8f", "stroke_dasharray": "", "google_maps_origin": "Hotel Provista Seoul, 338 Seocho-daero, Seocho-gu, Seoul 06632", "google_maps_destination": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "travelmode": "transit", "note_zh": "普罗威斯塔酒店从教大/Line 2 到三成，再步行到 COEX。", "note_en": "From Provista, use Line 2 toward Samseong, then walk to COEX.", "label": "Line 2 酒店到三成 / Line 2 hotel to Samseong", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Hotel+Provista+Seoul%2C+338+Seocho-daero%2C+Seocho-gu%2C+Seoul+06632&destination=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&travelmode=transit", "dash": ""}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[127.0592, 37.5118], [127.047, 37.528], [127.0364, 37.5002], [127.0396, 37.5013], [127.0276, 37.4979]]}, "properties": {"id": "evening_gangnam", "category": "evening", "zh": "江南晚间圈", "en": "Gangnam evening loop", "points": "coex -> dosan -> gfc -> yeoksam -> gangnam", "color": "#4361ee", "stroke_dasharray": "", "google_maps_origin": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "google_maps_destination": "Gangnam Station, Seoul", "travelmode": "transit", "note_zh": "大多数科技公司社交、晚宴、meetup 的第一候选区域。", "note_en": "First-choice zone for many tech socials, dinners, and meetups.", "label": "江南晚间圈 / Gangnam evening loop", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&destination=Gangnam+Station%2C+Seoul&travelmode=transit", "dash": ""}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[127.0592, 37.5118], [126.9946, 37.5345]]}, "properties": {"id": "itaewon", "category": "evening", "zh": "梨泰院方向", "en": "Itaewon direction", "points": "coex -> itaewon", "color": "#7209b7", "stroke_dasharray": "7 6", "google_maps_origin": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "google_maps_destination": "Itaewon Station, Seoul", "travelmode": "transit", "note_zh": "晚餐和酒吧可选，深夜可考虑出租车。", "note_en": "Good for dinner and bars; taxi may be simpler late night.", "label": "梨泰院方向 / Itaewon direction", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&destination=Itaewon+Station%2C+Seoul&travelmode=transit", "dash": "7 6"}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[127.0592, 37.5118], [127.1112, 37.3947]]}, "properties": {"id": "pangyo", "category": "offsite", "zh": "板桥远端活动", "en": "Pangyo offsite", "points": "coex -> pangyo", "color": "#6c757d", "stroke_dasharray": "12 8", "google_maps_origin": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "google_maps_destination": "Pangyo Techno Valley, Seongnam", "travelmode": "transit", "note_zh": "只建议给重要 offsite 留整晚。", "note_en": "Reserve a full evening only for important offsites.", "label": "板桥远端活动 / Pangyo offsite", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&destination=Pangyo+Techno+Valley%2C+Seongnam&travelmode=transit", "dash": "12 8"}}]};
     const params = new URLSearchParams(window.location.search);
     const focus = params.get("focus") || "city";
+    const isCompact = window.innerWidth < 520;
     document.body.classList.toggle("is-focused", focus !== "city");
 
     const focusConfig = {
       airport: {
-        pointIds: ["incheon_t1", "gimpo", "bongeunsa", "coex"],
-        routeIds: ["arrival_icn", "line9_core"],
-        bounds: [[126.36, 37.425], [127.18, 37.585]],
-        compactPadding: { top: 18, left: 18, right: 28, bottom: 24 },
-        padding: { top: 26, left: 32, right: 46, bottom: 32 },
+        pointIds: ["incheon_t1", "gimpo", "bongeunsa", "samseong", "coex"],
+        routeIds: ["arrival_icn", "line9_core", "airport_bus_6103"],
+        bounds: [[126.36, 37.425], [127.075, 37.585]],
+        compactPadding: { top: 18, left: 18, right: 120, bottom: 24 },
+        padding: { top: 26, left: 32, right: 128, bottom: 34 },
         center: [126.75, 37.51],
         zoom: 9.45
       },
       coex: {
-        pointIds: ["coex", "samseong", "bongeunsa", "parnas"],
-        routeIds: ["line2_core", "line9_core"],
-        bounds: [[127.055, 37.507], [127.065, 37.517]],
-        compactPadding: { top: 18, left: 18, right: 28, bottom: 22 },
-        padding: { top: 28, left: 36, right: 48, bottom: 32 },
+        pointIds: ["coex", "samseong", "bongeunsa", "coex_mall", "starfield_library", "coex_aquarium", "bongeunsa_temple"],
+        routeIds: [],
+        bounds: [[127.0537, 37.5068], [127.0666, 37.5170]],
+        compactPadding: { top: 26, left: 44, right: 44, bottom: 72 },
+        padding: { top: 30, left: 42, right: 48, bottom: 82 },
         center: [127.060, 37.512],
         zoom: 15
       }
@@ -79,6 +134,140 @@
     const visiblePoints = activeConfig ? filteredCollection(points, activeConfig.pointIds) : points;
     const visibleRoutes = activeConfig ? filteredCollection(routes, activeConfig.routeIds) : routes;
     window.icmlMapData = { focus, visiblePoints, visibleRoutes };
+
+    const focusPointLabels = {
+      airport: {
+        incheon_t1: { icon: "✈️", kind: "airport", title: "仁川机场 T1", detail: "ICN T1 / 인천공항", compactDetail: "ICN T1", offset: [12, -28], compactOffset: [12, -28] },
+        gimpo: { icon: "🚇", kind: "airport", title: "金浦换乘", detail: "AREX -> Line 9", compactDetail: "AREX -> L9", offset: [12, -48], compactOffset: [12, -48] },
+        bongeunsa: { hidden: true },
+        samseong: { hidden: true },
+        coex: { icon: "📍", kind: "venue", title: "COEX 会场", detail: "Line 9 Bongeunsa / Line 2 Samseong", compactDetail: "Line 9 / Line 2", offset: [-152, 16], compactOffset: [-142, 16] }
+      },
+      coex: {
+        coex: { icon: "📍", kind: "venue", title: "COEX 会场", detail: "Venue / 코엑스", compactDetail: "Venue", offset: [-142, -28], compactOffset: [-132, -28] },
+        bongeunsa: { icon: "🚇", kind: "station", title: "奉恩寺站", detail: "Line 9 Exit 7", compactDetail: "Line 9 Exit 7", offset: [-136, -52], compactOffset: [-128, -52] },
+        samseong: { icon: "🚇", kind: "station", title: "三成站", detail: "Line 2 Exit 5/6", compactDetail: "Line 2 Exit 5/6", offset: [-132, 12], compactOffset: [-128, 12] },
+        parnas: { icon: "🍽️", kind: "hotel", title: "Parnas 酒店区", detail: "Parnas hotel area", offset: [-92, 70], hidden: true },
+        coex_mall: { icon: "☕", kind: "nearby", title: "COEX Mall", detail: "Food + coffee", compactDetail: "Food + coffee", offset: [-126, 12], compactOffset: [-126, 12] },
+        starfield_library: { icon: "📚", kind: "nearby", title: "星空图书馆", detail: "Meet-up spot", compactDetail: "Meet-up spot", offset: [14, -48], compactOffset: [14, -48] },
+        coex_aquarium: { icon: "💧", kind: "nearby", title: "COEX Aquarium", detail: "Indoor backup", compactDetail: "Indoor backup", offset: [-138, -28], compactHidden: true },
+        bongeunsa_temple: { icon: "⛩️", kind: "nearby", title: "奉恩寺", detail: "Short walk", compactDetail: "Short walk", offset: [14, -28], compactHidden: true }
+      }
+    };
+
+    const focusRouteLabels = {
+      airport: []
+    };
+
+    function propsById(collection) {
+      return collection.features.reduce((mapById, feature) => {
+        mapById[feature.properties.id] = feature;
+        return mapById;
+      }, {});
+    }
+
+    function visibleFocusLabelItems() {
+      const pointLabels = focusPointLabels[focus];
+      if (!pointLabels) return [];
+      const pointFeatureById = propsById(visiblePoints);
+      return Object.entries(pointLabels).flatMap(([id, entry]) => {
+        if (entry.hidden) return [];
+        if (isCompact && entry.compactHidden) return [];
+        const feature = pointFeatureById[id];
+        if (!feature) return [];
+        const offset = isCompact && entry.compactOffset ? entry.compactOffset : entry.offset || [0, 0];
+        return [{ id, entry, feature, offset }];
+      });
+    }
+
+    function focusLabelElement(entry, offset) {
+      const root = document.createElement("div");
+      root.className = `focus-marker ${entry.kind || ""}`;
+      const button = document.createElement("button");
+      button.className = `focus-label ${entry.kind || ""}`;
+      button.type = "button";
+      button.setAttribute("aria-label", `${entry.title} ${entry.detail || ""}`.trim());
+      button.style.setProperty("--label-x", `${offset[0]}px`);
+      button.style.setProperty("--label-y", `${offset[1]}px`);
+      const pin = document.createElement("span");
+      pin.className = "focus-marker-pin";
+      pin.setAttribute("aria-hidden", "true");
+      const icon = document.createElement("span");
+      icon.className = "focus-label-icon";
+      icon.textContent = entry.icon || "•";
+      const copy = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = isCompact && entry.compactTitle ? entry.compactTitle : entry.title || "";
+      const detail = document.createElement("span");
+      detail.textContent = isCompact && Object.hasOwn(entry, "compactDetail") ? entry.compactDetail : entry.detail || "";
+      copy.append(title, detail);
+      button.append(icon, copy);
+      root.append(pin, button);
+      return root;
+    }
+
+    function routeLabelElement(entry) {
+      const node = document.createElement("div");
+      node.className = `focus-route-label ${entry.kind || ""}`;
+      const icon = document.createElement("span");
+      icon.className = "focus-label-icon";
+      icon.textContent = entry.icon || "•";
+      const copy = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = entry.title || "";
+      const detail = document.createElement("span");
+      detail.textContent = entry.detail || "";
+      copy.append(title, detail);
+      node.append(icon, copy);
+      return node;
+    }
+
+    function addFocusedRouteOverlay() {
+      if (focus === "city" || !visibleRoutes.features.length) return;
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.classList.add("focus-route-overlay");
+      map.getContainer().appendChild(svg);
+
+      const draw = () => {
+        const canvas = map.getCanvas();
+        svg.setAttribute("viewBox", `0 0 ${canvas.clientWidth} ${canvas.clientHeight}`);
+        svg.setAttribute("width", canvas.clientWidth);
+        svg.setAttribute("height", canvas.clientHeight);
+        svg.replaceChildren();
+        visibleRoutes.features.forEach((feature) => {
+          const d = feature.geometry.coordinates
+            .map((coord, index) => {
+              const point = map.project(coord);
+              return `${index === 0 ? "M" : "L"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+            })
+            .join(" ");
+          const props = feature.properties || {};
+          const glow = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          glow.setAttribute("d", d);
+          glow.setAttribute("fill", "none");
+          glow.setAttribute("stroke", props.color || "#334155");
+          glow.setAttribute("stroke-width", "14");
+          glow.setAttribute("stroke-opacity", "0.22");
+          glow.setAttribute("stroke-linecap", "round");
+          glow.setAttribute("stroke-linejoin", "round");
+          const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          line.setAttribute("d", d);
+          line.setAttribute("fill", "none");
+          line.setAttribute("stroke", props.color || "#334155");
+          line.setAttribute("stroke-width", props.category === "bus" ? "6.5" : "7");
+          line.setAttribute("stroke-opacity", "0.92");
+          line.setAttribute("stroke-linecap", "round");
+          line.setAttribute("stroke-linejoin", "round");
+          if (props.dash) line.setAttribute("stroke-dasharray", props.dash);
+          svg.append(glow, line);
+        });
+      };
+      map.on("move", draw);
+      map.on("zoom", draw);
+      map.on("resize", draw);
+      draw();
+      window.setTimeout(draw, 80);
+    }
 
     const map = new maplibregl.Map({
       container: "map",
@@ -115,6 +304,31 @@
       return `<div class="popup"><h2>${props.label}</h2><p>${props.note_zh}<br/>${props.note_en}</p><a target="_blank" href="${props.google_maps_url}">打开 Google Maps / Open Google Maps</a></div>`;
     }
 
+    function addFocusedHtmlLabels() {
+      visibleFocusLabelItems().forEach(({ entry, feature, offset }) => {
+        const element = focusLabelElement(entry, offset);
+        element.addEventListener("click", () => {
+          new maplibregl.Popup({ closeButton: true })
+            .setLngLat(feature.geometry.coordinates)
+            .setHTML(popupHtml(feature.properties))
+            .addTo(map);
+        });
+        new maplibregl.Marker({ element, anchor: "center" })
+          .setLngLat(feature.geometry.coordinates)
+          .addTo(map);
+      });
+
+      const routeFeatureById = propsById(visibleRoutes);
+      if (!isCompact) {
+        (focusRouteLabels[focus] || []).forEach((entry) => {
+          if (!routeFeatureById[entry.routeId]) return;
+          new maplibregl.Marker({ element: routeLabelElement(entry), anchor: "center", offset: entry.offset || [0, 0] })
+            .setLngLat(entry.coordinates)
+            .addTo(map);
+        });
+      }
+    }
+
     map.on("load", () => {
       map.addSource("routes", { type: "geojson", data: visibleRoutes });
       map.addSource("points", { type: "geojson", data: visiblePoints });
@@ -125,8 +339,8 @@
         source: "routes",
         paint: {
           "line-color": ["get", "color"],
-          "line-width": ["case", ["==", ["get", "category"], "metro"], 10, 8],
-          "line-opacity": 0.18,
+          "line-width": focus === "city" ? ["case", ["==", ["get", "category"], "metro"], 10, ["==", ["get", "category"], "bus"], 9, 8] : 13,
+          "line-opacity": focus === "city" ? 0.18 : 0.28,
           "line-blur": 4
         }
       });
@@ -136,36 +350,31 @@
         source: "routes",
         paint: {
           "line-color": ["get", "color"],
-          "line-width": ["case", ["==", ["get", "category"], "metro"], 5.5, 4.5],
-          "line-opacity": 0.84
+          "line-width": focus === "city" ? ["case", ["==", ["get", "category"], "metro"], 5.5, ["==", ["get", "category"], "bus"], 4.5, 4.5] : 6.8,
+          "line-opacity": focus === "city" ? 0.84 : 0.94
         },
         layout: { "line-cap": "round", "line-join": "round" }
       });
-      map.addLayer({
-        id: "route-labels",
-        type: "symbol",
-        source: "routes",
-        layout: {
-          "symbol-placement": "line",
-          "text-field": [
-            "case",
-            ["==", focus, "airport"],
-            ["case", ["==", ["get", "id"], "arrival_icn"], "AREX", ["==", ["get", "id"], "line9_core"], "Line 9", ["get", "en"]],
-            ["==", focus, "coex"],
-            ["case", ["==", ["get", "id"], "line2_core"], "Line 2", ["==", ["get", "id"], "line9_core"], "Line 9", ["get", "en"]],
-            ["get", "label"]
-          ],
-          "text-font": ["Noto Sans Regular"],
-          "text-size": ["case", ["==", focus, "city"], 13, 11],
-          "text-allow-overlap": false,
-          "text-ignore-placement": false
-        },
-        paint: {
-          "text-color": "#334155",
-          "text-halo-color": "#ffffff",
-          "text-halo-width": 3
-        }
-      });
+      if (focus === "city") {
+        map.addLayer({
+          id: "route-labels",
+          type: "symbol",
+          source: "routes",
+          layout: {
+            "symbol-placement": "line",
+            "text-field": ["get", "label"],
+            "text-font": ["Noto Sans Regular"],
+            "text-size": 13,
+            "text-allow-overlap": false,
+            "text-ignore-placement": false
+          },
+          paint: {
+            "text-color": "#334155",
+            "text-halo-color": "#ffffff",
+            "text-halo-width": 3
+          }
+        });
+      }
       map.addLayer({
         id: "points-halo",
         type: "circle",
@@ -187,51 +396,35 @@
           "circle-stroke-width": 2
         }
       });
-      map.addLayer({
-        id: "point-labels",
-        type: "symbol",
-        source: "points",
-        layout: {
-          "text-field": [
-            "case",
-            ["==", focus, "airport"],
-            ["case",
-              ["==", ["get", "id"], "incheon_t1"], "ICN T1",
-              ["==", ["get", "id"], "gimpo"], "Gimpo",
-              ["==", ["get", "id"], "bongeunsa"], "Bongeunsa",
-              ["==", ["get", "id"], "coex"], "COEX venue",
-              ["get", "en"]
-            ],
-            ["==", focus, "coex"],
-            ["case",
-              ["==", ["get", "id"], "coex"], "COEX venue",
-              ["==", ["get", "id"], "samseong"], "Samseong",
-              ["==", ["get", "id"], "bongeunsa"], "Bongeunsa",
-              ["==", ["get", "id"], "parnas"], "Parnas",
-              ["get", "en"]
-            ],
-            ["get", "label"]
-          ],
-          "text-font": ["Noto Sans Bold"],
-          "text-size": ["case", ["==", focus, "city"], ["case", ["==", ["get", "category"], "venue"], 15, 12], ["==", ["get", "category"], "venue"], 13, 10.5],
-          "text-offset": [0, 1.25],
-          "text-anchor": "top",
-          "text-allow-overlap": false,
-          "text-ignore-placement": false
-        },
-        paint: {
-          "text-color": ["get", "marker_color"],
-          "text-halo-color": "#ffffff",
-          "text-halo-width": 3
-        }
-      });
+      if (focus === "city") {
+        map.addLayer({
+          id: "point-labels",
+          type: "symbol",
+          source: "points",
+          layout: {
+            "text-field": ["get", "label"],
+            "text-font": ["Noto Sans Bold"],
+            "text-size": ["case", ["==", ["get", "category"], "venue"], 15, 12],
+            "text-offset": [0, 1.25],
+            "text-anchor": "top",
+            "text-allow-overlap": false,
+            "text-ignore-placement": false
+          },
+          paint: {
+            "text-color": ["get", "marker_color"],
+            "text-halo-color": "#ffffff",
+            "text-halo-width": 3
+          }
+        });
+      }
 
-      const compact = window.innerWidth < 520;
       const bounds = activeConfig?.bounds || [[126.41, 37.39], [127.16, 37.60]];
       const padding = activeConfig
-        ? (compact ? activeConfig.compactPadding : activeConfig.padding)
-        : (compact ? { top: 210, left: 24, right: 24, bottom: 96 } : { top: 40, left: 470, right: 60, bottom: 58 });
+        ? (isCompact ? activeConfig.compactPadding : activeConfig.padding)
+        : (isCompact ? { top: 210, left: 24, right: 24, bottom: 96 } : { top: 40, left: 470, right: 60, bottom: 58 });
       map.fitBounds(bounds, { padding, duration: 0 });
+      addFocusedRouteOverlay();
+      addFocusedHtmlLabels();
     });
 
     map.on("click", "points-circle", (event) => {

@@ -125,6 +125,10 @@ def build_points() -> list[Point]:
     return [
         Point("coex", "venue", "COEX 会场", "COEX venue", "코엑스", 37.5118, 127.0592, COEX_QUERY, "主会场与默认出发点。", "Main venue and default origin."),
         Point("parnas", "hotel", "Parnas 酒店区", "Parnas hotel area", "", 37.5089, 127.0611, "Grand InterContinental Seoul Parnas, 521 Teheran-ro, Seoul", "会场酒店与餐饮锚点。", "Hotel and food anchor next to COEX."),
+        Point("coex_mall", "nearby", "COEX Mall", "Starfield COEX Mall", "스타필드 코엑스몰", 37.5110, 127.0607, "Starfield COEX Mall, Seoul", "COEX 地下补给主轴，吃饭、咖啡、雨天动线都在这里。", "Main underground supply zone for food, coffee, and rain-safe movement."),
+        Point("starfield_library", "nearby", "星空图书馆", "Starfield Library", "별마당도서관", 37.5103, 127.0597, "Starfield Library, Seoul", "会场内好找的集合点和短休息点。", "Easy indoor landmark for meeting up and short breaks."),
+        Point("coex_aquarium", "nearby", "COEX Aquarium", "SEA LIFE COEX Aquarium", "코엑스 아쿠아리움", 37.5121, 127.0577, "SEA LIFE COEX, Seoul", "雨天或空档时的室内备选。", "Indoor fallback for weather or awkward schedule gaps."),
+        Point("bongeunsa_temple", "nearby", "奉恩寺", "Bongeunsa Temple", "봉은사", 37.5153, 127.0570, "Bongeunsa Temple, Seoul", "COEX 北侧安静短走点。", "Quiet short-walk option directly north of COEX."),
         Point("provista", "hotel", "普罗威斯塔酒店", "Provista Hotel", "", 37.4932, 127.0157, "Hotel Provista Seoul, 338 Seocho-daero, Seocho-gu, Seoul 06632", "住处：338 Seocho-daero, Seocho-gu, Seoul 06632。", "Hotel base: 338 Seocho-daero, Seocho-gu, Seoul 06632."),
         Point("samseong", "station", "三成站", "Samseong Station", "삼성", 37.5088, 127.0631, "Samseong Station Exit 5, Seoul", "Line 2，COEX 官方建议 5/6 号出口。", "Line 2; COEX recommends exits 5/6."),
         Point("bongeunsa", "station", "奉恩寺站", "Bongeunsa Station", "봉은사", 37.5142, 127.0602, "Bongeunsa Station Exit 7, Seoul", "Line 9，COEX 官方建议 7 号出口。", "Line 9; COEX recommends exit 7."),
@@ -145,6 +149,7 @@ def build_points() -> list[Point]:
 def build_routes() -> list[Route]:
     return [
         Route("arrival_icn", "airport", "AREX 仁川 T1 到金浦", "AREX ICN T1 to Gimpo", ("incheon_t1", "gimpo"), "#2563eb", "", "Incheon Airport Terminal 1, 272 Gonghang-ro, Yeongjong-gu, Incheon", "Gimpo International Airport Station", "transit", "仁川 T1 先坐 AREX 到金浦机场换乘。", "Take AREX from ICN T1 to Gimpo Airport transfer."),
+        Route("airport_bus_6103", "bus", "6103 机场大巴", "6103 airport limousine bus", ("incheon_t1", "coex"), "#d97706", "9 7", "Incheon International Airport Terminal 1", "COEX City Airport Terminal, Seoul", "transit", "行李多时可考虑 6103 机场大巴直达 COEX / 三成一侧。", "With luggage, consider the 6103 airport bus directly to the COEX / Samseong side."),
         Route("line2_core", "metro", "Line 2 核心线", "Line 2 core", ("hongdae", "seongsu", "samseong", "gangnam"), "#2a9d8f", "", "Samseong Station, Seoul", "Gangnam Station, Seoul", "transit", "会场到江南、圣水、弘大都可用 Line 2 作为主轴。", "Line 2 is the main axis for Gangnam, Seongsu, and Hongdae."),
         Route("line9_core", "metro", "Line 9 金浦到奉恩寺", "Line 9 Gimpo to Bongeunsa", ("gimpo", "bongeunsa", "coex"), "#b78714", "", "Gimpo International Airport Station", COEX_QUERY, "transit", "金浦换乘 Line 9 到奉恩寺站，7 号出口到 COEX。", "Transfer to Line 9 at Gimpo, ride to Bongeunsa, then walk to COEX."),
         Route("hotel_line2", "metro", "Line 2 酒店到三成", "Line 2 hotel to Samseong", ("provista", "samseong", "coex"), "#2a9d8f", "", "Hotel Provista Seoul, 338 Seocho-daero, Seocho-gu, Seoul 06632", COEX_QUERY, "transit", "普罗威斯塔酒店从教大/Line 2 到三成，再步行到 COEX。", "From Provista, use Line 2 toward Samseong, then walk to COEX."),
@@ -613,6 +618,60 @@ def build_maplibre_html(points: list[Point], routes: list[Route]) -> str:
     .legend { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px 7px; font-size: 10px; color: #334155; }
     .legend span { display: inline-flex; align-items: center; gap: 5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .swatch { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
+    .focus-marker {
+      position: relative; width: 0; height: 0; pointer-events: none;
+      --pin-color: #334155;
+    }
+    .focus-marker-pin {
+      position: absolute; left: -7px; top: -7px; z-index: 2;
+      width: 14px; height: 14px; border: 2px solid #fff; border-radius: 50%;
+      background: var(--pin-color); box-shadow: 0 2px 8px rgba(15,23,42,.28);
+    }
+    .focus-marker.venue { --pin-color: #111827; }
+    .focus-marker.station { --pin-color: #2563eb; }
+    .focus-marker.airport { --pin-color: #ea580c; }
+    .focus-marker.hotel { --pin-color: #be123c; }
+    .focus-marker.nearby { --pin-color: #16a34a; }
+    .focus-label,
+    .focus-route-label {
+      display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 5px;
+      max-width: 168px; padding: 5px 7px; border: 1px solid rgba(148,163,184,.52);
+      border-radius: 9px; background: rgba(255,255,255,.94); box-shadow: 0 8px 22px rgba(15,23,42,.16);
+      color: #0f172a; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: visible; position: relative; text-align: left; pointer-events: auto;
+    }
+    .focus-label {
+      position: absolute; left: var(--label-x, 12px); top: var(--label-y, -18px);
+      z-index: 3; cursor: pointer;
+    }
+    .focus-label > span:not(.focus-label-leader),
+    .focus-route-label > span { position: relative; z-index: 1; }
+    .focus-label strong,
+    .focus-route-label strong { display: block; font-size: 11px; line-height: 1.08; white-space: normal; }
+    .focus-label span:last-child,
+    .focus-route-label span:last-child { display: block; margin-top: 2px; color: #475569; font-size: 9.5px; line-height: 1.12; white-space: normal; }
+    .focus-label-icon { width: 20px; height: 20px; display: inline-grid; place-items: center; border-radius: 50%; color: #fff; font-size: 12px; line-height: 1; box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); }
+    .focus-route-overlay { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+    .maplibregl-marker { z-index: 3; }
+    .focus-label.venue .focus-label-icon { background: #111827; }
+    .focus-label.station .focus-label-icon { background: #2563eb; }
+    .focus-label.airport .focus-label-icon { background: #ea580c; }
+    .focus-label.hotel .focus-label-icon { background: #be123c; }
+    .focus-label.nearby .focus-label-icon { background: #16a34a; }
+    .focus-route-label { max-width: 190px; border-color: rgba(148,163,184,.46); background: rgba(255,255,255,.9); pointer-events: none; }
+    .focus-route-label .focus-label-icon { background: #334155; }
+    .focus-route-label.bus .focus-label-icon { background: #d97706; }
+    .focus-route-label.rail .focus-label-icon { background: #2563eb; }
+    @media (max-width: 520px) {
+      .focus-label {
+        max-width: 132px; gap: 4px; padding: 4px 6px; border-radius: 8px;
+        background: rgba(255,255,255,.8);
+      }
+      .focus-label strong { font-size: 10px; }
+      .focus-label span:last-child { font-size: 8.5px; line-height: 1.08; }
+      .focus-label-icon { width: 18px; height: 18px; font-size: 10px; }
+      .focus-route-label { display: none; }
+    }
     .popup h2 { margin: 0 0 7px; font-size: 16px; color: #0f172a; }
     .popup p { margin: 0 0 9px; color: #475569; line-height: 1.42; }
     .popup a { color: #2563eb; text-decoration: none; font-weight: 800; }
@@ -641,24 +700,25 @@ def build_maplibre_html(points: list[Point], routes: list[Route]) -> str:
     const routes = __ROUTES_GEOJSON__;
     const params = new URLSearchParams(window.location.search);
     const focus = params.get("focus") || "city";
+    const isCompact = window.innerWidth < 520;
     document.body.classList.toggle("is-focused", focus !== "city");
 
     const focusConfig = {
       airport: {
-        pointIds: ["incheon_t1", "gimpo", "bongeunsa", "coex"],
-        routeIds: ["arrival_icn", "line9_core"],
-        bounds: [[126.36, 37.425], [127.18, 37.585]],
-        compactPadding: { top: 18, left: 18, right: 28, bottom: 24 },
-        padding: { top: 26, left: 32, right: 46, bottom: 32 },
+        pointIds: ["incheon_t1", "gimpo", "bongeunsa", "samseong", "coex"],
+        routeIds: ["arrival_icn", "line9_core", "airport_bus_6103"],
+        bounds: [[126.36, 37.425], [127.075, 37.585]],
+        compactPadding: { top: 18, left: 18, right: 120, bottom: 24 },
+        padding: { top: 26, left: 32, right: 128, bottom: 34 },
         center: [126.75, 37.51],
         zoom: 9.45
       },
       coex: {
-        pointIds: ["coex", "samseong", "bongeunsa", "parnas"],
-        routeIds: ["line2_core", "line9_core"],
-        bounds: [[127.055, 37.507], [127.065, 37.517]],
-        compactPadding: { top: 18, left: 18, right: 28, bottom: 22 },
-        padding: { top: 28, left: 36, right: 48, bottom: 32 },
+        pointIds: ["coex", "samseong", "bongeunsa", "coex_mall", "starfield_library", "coex_aquarium", "bongeunsa_temple"],
+        routeIds: [],
+        bounds: [[127.0537, 37.5068], [127.0666, 37.5170]],
+        compactPadding: { top: 26, left: 44, right: 44, bottom: 72 },
+        padding: { top: 30, left: 42, right: 48, bottom: 82 },
         center: [127.060, 37.512],
         zoom: 15
       }
@@ -672,6 +732,140 @@ def build_maplibre_html(points: list[Point], routes: list[Route]) -> str:
     const visiblePoints = activeConfig ? filteredCollection(points, activeConfig.pointIds) : points;
     const visibleRoutes = activeConfig ? filteredCollection(routes, activeConfig.routeIds) : routes;
     window.icmlMapData = { focus, visiblePoints, visibleRoutes };
+
+    const focusPointLabels = {
+      airport: {
+        incheon_t1: { icon: "✈️", kind: "airport", title: "仁川机场 T1", detail: "ICN T1 / 인천공항", compactDetail: "ICN T1", offset: [12, -28], compactOffset: [12, -28] },
+        gimpo: { icon: "🚇", kind: "airport", title: "金浦换乘", detail: "AREX -> Line 9", compactDetail: "AREX -> L9", offset: [12, -48], compactOffset: [12, -48] },
+        bongeunsa: { hidden: true },
+        samseong: { hidden: true },
+        coex: { icon: "📍", kind: "venue", title: "COEX 会场", detail: "Line 9 Bongeunsa / Line 2 Samseong", compactDetail: "Line 9 / Line 2", offset: [-152, 16], compactOffset: [-142, 16] }
+      },
+      coex: {
+        coex: { icon: "📍", kind: "venue", title: "COEX 会场", detail: "Venue / 코엑스", compactDetail: "Venue", offset: [-142, -28], compactOffset: [-132, -28] },
+        bongeunsa: { icon: "🚇", kind: "station", title: "奉恩寺站", detail: "Line 9 Exit 7", compactDetail: "Line 9 Exit 7", offset: [-136, -52], compactOffset: [-128, -52] },
+        samseong: { icon: "🚇", kind: "station", title: "三成站", detail: "Line 2 Exit 5/6", compactDetail: "Line 2 Exit 5/6", offset: [-132, 12], compactOffset: [-128, 12] },
+        parnas: { icon: "🍽️", kind: "hotel", title: "Parnas 酒店区", detail: "Parnas hotel area", offset: [-92, 70], hidden: true },
+        coex_mall: { icon: "☕", kind: "nearby", title: "COEX Mall", detail: "Food + coffee", compactDetail: "Food + coffee", offset: [-126, 12], compactOffset: [-126, 12] },
+        starfield_library: { icon: "📚", kind: "nearby", title: "星空图书馆", detail: "Meet-up spot", compactDetail: "Meet-up spot", offset: [14, -48], compactOffset: [14, -48] },
+        coex_aquarium: { icon: "💧", kind: "nearby", title: "COEX Aquarium", detail: "Indoor backup", compactDetail: "Indoor backup", offset: [-138, -28], compactHidden: true },
+        bongeunsa_temple: { icon: "⛩️", kind: "nearby", title: "奉恩寺", detail: "Short walk", compactDetail: "Short walk", offset: [14, -28], compactHidden: true }
+      }
+    };
+
+    const focusRouteLabels = {
+      airport: []
+    };
+
+    function propsById(collection) {
+      return collection.features.reduce((mapById, feature) => {
+        mapById[feature.properties.id] = feature;
+        return mapById;
+      }, {});
+    }
+
+    function visibleFocusLabelItems() {
+      const pointLabels = focusPointLabels[focus];
+      if (!pointLabels) return [];
+      const pointFeatureById = propsById(visiblePoints);
+      return Object.entries(pointLabels).flatMap(([id, entry]) => {
+        if (entry.hidden) return [];
+        if (isCompact && entry.compactHidden) return [];
+        const feature = pointFeatureById[id];
+        if (!feature) return [];
+        const offset = isCompact && entry.compactOffset ? entry.compactOffset : entry.offset || [0, 0];
+        return [{ id, entry, feature, offset }];
+      });
+    }
+
+    function focusLabelElement(entry, offset) {
+      const root = document.createElement("div");
+      root.className = `focus-marker ${entry.kind || ""}`;
+      const button = document.createElement("button");
+      button.className = `focus-label ${entry.kind || ""}`;
+      button.type = "button";
+      button.setAttribute("aria-label", `${entry.title} ${entry.detail || ""}`.trim());
+      button.style.setProperty("--label-x", `${offset[0]}px`);
+      button.style.setProperty("--label-y", `${offset[1]}px`);
+      const pin = document.createElement("span");
+      pin.className = "focus-marker-pin";
+      pin.setAttribute("aria-hidden", "true");
+      const icon = document.createElement("span");
+      icon.className = "focus-label-icon";
+      icon.textContent = entry.icon || "•";
+      const copy = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = isCompact && entry.compactTitle ? entry.compactTitle : entry.title || "";
+      const detail = document.createElement("span");
+      detail.textContent = isCompact && Object.hasOwn(entry, "compactDetail") ? entry.compactDetail : entry.detail || "";
+      copy.append(title, detail);
+      button.append(icon, copy);
+      root.append(pin, button);
+      return root;
+    }
+
+    function routeLabelElement(entry) {
+      const node = document.createElement("div");
+      node.className = `focus-route-label ${entry.kind || ""}`;
+      const icon = document.createElement("span");
+      icon.className = "focus-label-icon";
+      icon.textContent = entry.icon || "•";
+      const copy = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = entry.title || "";
+      const detail = document.createElement("span");
+      detail.textContent = entry.detail || "";
+      copy.append(title, detail);
+      node.append(icon, copy);
+      return node;
+    }
+
+    function addFocusedRouteOverlay() {
+      if (focus === "city" || !visibleRoutes.features.length) return;
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.classList.add("focus-route-overlay");
+      map.getContainer().appendChild(svg);
+
+      const draw = () => {
+        const canvas = map.getCanvas();
+        svg.setAttribute("viewBox", `0 0 ${canvas.clientWidth} ${canvas.clientHeight}`);
+        svg.setAttribute("width", canvas.clientWidth);
+        svg.setAttribute("height", canvas.clientHeight);
+        svg.replaceChildren();
+        visibleRoutes.features.forEach((feature) => {
+          const d = feature.geometry.coordinates
+            .map((coord, index) => {
+              const point = map.project(coord);
+              return `${index === 0 ? "M" : "L"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+            })
+            .join(" ");
+          const props = feature.properties || {};
+          const glow = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          glow.setAttribute("d", d);
+          glow.setAttribute("fill", "none");
+          glow.setAttribute("stroke", props.color || "#334155");
+          glow.setAttribute("stroke-width", "14");
+          glow.setAttribute("stroke-opacity", "0.22");
+          glow.setAttribute("stroke-linecap", "round");
+          glow.setAttribute("stroke-linejoin", "round");
+          const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          line.setAttribute("d", d);
+          line.setAttribute("fill", "none");
+          line.setAttribute("stroke", props.color || "#334155");
+          line.setAttribute("stroke-width", props.category === "bus" ? "6.5" : "7");
+          line.setAttribute("stroke-opacity", "0.92");
+          line.setAttribute("stroke-linecap", "round");
+          line.setAttribute("stroke-linejoin", "round");
+          if (props.dash) line.setAttribute("stroke-dasharray", props.dash);
+          svg.append(glow, line);
+        });
+      };
+      map.on("move", draw);
+      map.on("zoom", draw);
+      map.on("resize", draw);
+      draw();
+      window.setTimeout(draw, 80);
+    }
 
     const map = new maplibregl.Map({
       container: "map",
@@ -708,6 +902,31 @@ def build_maplibre_html(points: list[Point], routes: list[Route]) -> str:
       return `<div class="popup"><h2>${props.label}</h2><p>${props.note_zh}<br/>${props.note_en}</p><a target="_blank" href="${props.google_maps_url}">打开 Google Maps / Open Google Maps</a></div>`;
     }
 
+    function addFocusedHtmlLabels() {
+      visibleFocusLabelItems().forEach(({ entry, feature, offset }) => {
+        const element = focusLabelElement(entry, offset);
+        element.addEventListener("click", () => {
+          new maplibregl.Popup({ closeButton: true })
+            .setLngLat(feature.geometry.coordinates)
+            .setHTML(popupHtml(feature.properties))
+            .addTo(map);
+        });
+        new maplibregl.Marker({ element, anchor: "center" })
+          .setLngLat(feature.geometry.coordinates)
+          .addTo(map);
+      });
+
+      const routeFeatureById = propsById(visibleRoutes);
+      if (!isCompact) {
+        (focusRouteLabels[focus] || []).forEach((entry) => {
+          if (!routeFeatureById[entry.routeId]) return;
+          new maplibregl.Marker({ element: routeLabelElement(entry), anchor: "center", offset: entry.offset || [0, 0] })
+            .setLngLat(entry.coordinates)
+            .addTo(map);
+        });
+      }
+    }
+
     map.on("load", () => {
       map.addSource("routes", { type: "geojson", data: visibleRoutes });
       map.addSource("points", { type: "geojson", data: visiblePoints });
@@ -718,8 +937,8 @@ def build_maplibre_html(points: list[Point], routes: list[Route]) -> str:
         source: "routes",
         paint: {
           "line-color": ["get", "color"],
-          "line-width": ["case", ["==", ["get", "category"], "metro"], 10, 8],
-          "line-opacity": 0.18,
+          "line-width": focus === "city" ? ["case", ["==", ["get", "category"], "metro"], 10, ["==", ["get", "category"], "bus"], 9, 8] : 13,
+          "line-opacity": focus === "city" ? 0.18 : 0.28,
           "line-blur": 4
         }
       });
@@ -729,36 +948,31 @@ def build_maplibre_html(points: list[Point], routes: list[Route]) -> str:
         source: "routes",
         paint: {
           "line-color": ["get", "color"],
-          "line-width": ["case", ["==", ["get", "category"], "metro"], 5.5, 4.5],
-          "line-opacity": 0.84
+          "line-width": focus === "city" ? ["case", ["==", ["get", "category"], "metro"], 5.5, ["==", ["get", "category"], "bus"], 4.5, 4.5] : 6.8,
+          "line-opacity": focus === "city" ? 0.84 : 0.94
         },
         layout: { "line-cap": "round", "line-join": "round" }
       });
-      map.addLayer({
-        id: "route-labels",
-        type: "symbol",
-        source: "routes",
-        layout: {
-          "symbol-placement": "line",
-          "text-field": [
-            "case",
-            ["==", focus, "airport"],
-            ["case", ["==", ["get", "id"], "arrival_icn"], "AREX", ["==", ["get", "id"], "line9_core"], "Line 9", ["get", "en"]],
-            ["==", focus, "coex"],
-            ["case", ["==", ["get", "id"], "line2_core"], "Line 2", ["==", ["get", "id"], "line9_core"], "Line 9", ["get", "en"]],
-            ["get", "label"]
-          ],
-          "text-font": ["Noto Sans Regular"],
-          "text-size": ["case", ["==", focus, "city"], 13, 11],
-          "text-allow-overlap": false,
-          "text-ignore-placement": false
-        },
-        paint: {
-          "text-color": "#334155",
-          "text-halo-color": "#ffffff",
-          "text-halo-width": 3
-        }
-      });
+      if (focus === "city") {
+        map.addLayer({
+          id: "route-labels",
+          type: "symbol",
+          source: "routes",
+          layout: {
+            "symbol-placement": "line",
+            "text-field": ["get", "label"],
+            "text-font": ["Noto Sans Regular"],
+            "text-size": 13,
+            "text-allow-overlap": false,
+            "text-ignore-placement": false
+          },
+          paint: {
+            "text-color": "#334155",
+            "text-halo-color": "#ffffff",
+            "text-halo-width": 3
+          }
+        });
+      }
       map.addLayer({
         id: "points-halo",
         type: "circle",
@@ -780,51 +994,35 @@ def build_maplibre_html(points: list[Point], routes: list[Route]) -> str:
           "circle-stroke-width": 2
         }
       });
-      map.addLayer({
-        id: "point-labels",
-        type: "symbol",
-        source: "points",
-        layout: {
-          "text-field": [
-            "case",
-            ["==", focus, "airport"],
-            ["case",
-              ["==", ["get", "id"], "incheon_t1"], "ICN T1",
-              ["==", ["get", "id"], "gimpo"], "Gimpo",
-              ["==", ["get", "id"], "bongeunsa"], "Bongeunsa",
-              ["==", ["get", "id"], "coex"], "COEX venue",
-              ["get", "en"]
-            ],
-            ["==", focus, "coex"],
-            ["case",
-              ["==", ["get", "id"], "coex"], "COEX venue",
-              ["==", ["get", "id"], "samseong"], "Samseong",
-              ["==", ["get", "id"], "bongeunsa"], "Bongeunsa",
-              ["==", ["get", "id"], "parnas"], "Parnas",
-              ["get", "en"]
-            ],
-            ["get", "label"]
-          ],
-          "text-font": ["Noto Sans Bold"],
-          "text-size": ["case", ["==", focus, "city"], ["case", ["==", ["get", "category"], "venue"], 15, 12], ["==", ["get", "category"], "venue"], 13, 10.5],
-          "text-offset": [0, 1.25],
-          "text-anchor": "top",
-          "text-allow-overlap": false,
-          "text-ignore-placement": false
-        },
-        paint: {
-          "text-color": ["get", "marker_color"],
-          "text-halo-color": "#ffffff",
-          "text-halo-width": 3
-        }
-      });
+      if (focus === "city") {
+        map.addLayer({
+          id: "point-labels",
+          type: "symbol",
+          source: "points",
+          layout: {
+            "text-field": ["get", "label"],
+            "text-font": ["Noto Sans Bold"],
+            "text-size": ["case", ["==", ["get", "category"], "venue"], 15, 12],
+            "text-offset": [0, 1.25],
+            "text-anchor": "top",
+            "text-allow-overlap": false,
+            "text-ignore-placement": false
+          },
+          paint: {
+            "text-color": ["get", "marker_color"],
+            "text-halo-color": "#ffffff",
+            "text-halo-width": 3
+          }
+        });
+      }
 
-      const compact = window.innerWidth < 520;
       const bounds = activeConfig?.bounds || [[126.41, 37.39], [127.16, 37.60]];
       const padding = activeConfig
-        ? (compact ? activeConfig.compactPadding : activeConfig.padding)
-        : (compact ? { top: 210, left: 24, right: 24, bottom: 96 } : { top: 40, left: 470, right: 60, bottom: 58 });
+        ? (isCompact ? activeConfig.compactPadding : activeConfig.padding)
+        : (isCompact ? { top: 210, left: 24, right: 24, bottom: 96 } : { top: 40, left: 470, right: 60, bottom: 58 });
       map.fitBounds(bounds, { padding, duration: 0 });
+      addFocusedRouteOverlay();
+      addFocusedHtmlLabels();
     });
 
     map.on("click", "points-circle", (event) => {

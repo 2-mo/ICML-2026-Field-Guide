@@ -839,6 +839,21 @@ def maps_directions_url(origin: str, destination: str, travelmode: str = "transi
 def airport_route_steps() -> list[dict[str, object]]:
     return [
         {
+            "name": "ICN T1 -> COEX · 6103 Airport Bus",
+            "badge": "Bus",
+            "badge_kind": "warn",
+            "duration": "about 65 min",
+            "fare": "KRW 18,000",
+            "summary": "Luggage-friendly one-seat ride to COEX City Airport / Samseong side.",
+            "steps": [
+                {"kind": "bus", "line": "6103", "text": "Board Airport Limousine Bus 6103 at Incheon Airport."},
+                {"kind": "bus", "line": "COEX", "text": "Ride toward COEX City Airport Terminal / Samseong area."},
+                {"kind": "walk", "line": "Walk", "text": "Walk from the COEX City Airport side to the COEX venue."},
+            ],
+            "google_maps_directions_url": maps_directions_url("Incheon International Airport Terminal 1", "COEX City Airport Terminal, Seoul", "transit"),
+            "source_url": "https://www.coexcenter.com/directions-map-airport-2/",
+        },
+        {
             "name": "ICN T1 -> COEX · AREX + Line 9",
             "badge": "Subway",
             "badge_kind": "ok",
