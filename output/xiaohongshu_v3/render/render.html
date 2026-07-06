@@ -1043,6 +1043,192 @@
         color: #4d5651;
       }
 
+      .promo-board {
+        display: grid;
+        grid-template-columns: 470px 1fr;
+        gap: 18px;
+        padding: 18px;
+        min-height: 1010px;
+      }
+
+      .phone-frame {
+        position: relative;
+        align-self: stretch;
+        min-height: 1010px;
+        border: 5px solid #171817;
+        border-radius: 46px;
+        background: #171817;
+        box-shadow: 10px 10px 0 rgba(20, 22, 20, 0.18);
+        overflow: hidden;
+      }
+
+      .phone-frame::before {
+        position: absolute;
+        top: 18px;
+        left: 50%;
+        z-index: 2;
+        width: 150px;
+        height: 28px;
+        border-radius: 999px;
+        background: #171817;
+        transform: translateX(-50%);
+        content: "";
+      }
+
+      .phone-frame::after {
+        position: absolute;
+        right: 28px;
+        bottom: 34px;
+        left: 28px;
+        z-index: 3;
+        display: grid;
+        place-items: center;
+        min-height: 78px;
+        border: 3px solid rgba(23, 24, 23, 0.16);
+        border-radius: 999px;
+        background: #fffdf3;
+        color: #111512;
+        font-size: 18px;
+        font-weight: 950;
+        line-height: 1.05;
+        text-align: center;
+        content: "搜：ICML 2026 Field Guide 2-mo";
+      }
+
+      .phone-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        border-radius: 38px;
+        filter: saturate(1.04) contrast(1.02);
+      }
+
+      .promo-copy {
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 14px;
+        min-width: 0;
+      }
+
+      .search-ticket {
+        border: 4px solid #171817;
+        border-radius: 18px;
+        background: #fff7cd;
+        padding: 18px 20px;
+        box-shadow: 6px 6px 0 rgba(20, 22, 20, 0.16);
+      }
+
+      .search-ticket span {
+        display: block;
+        font-size: 18px;
+        line-height: 1.15;
+        font-weight: 900;
+        color: #7d4a2f;
+      }
+
+      .search-ticket b {
+        display: block;
+        margin-top: 9px;
+        font-size: 34px;
+        line-height: 1.02;
+        color: #111512;
+        word-break: break-word;
+      }
+
+      .promo-steps {
+        display: grid;
+        gap: 12px;
+      }
+
+      .promo-step {
+        border: 3px solid #171817;
+        border-radius: 17px;
+        background: #fffdf3;
+        padding: 14px 15px;
+      }
+
+      .promo-step strong {
+        display: block;
+        font-size: 20px;
+        line-height: 1.05;
+        color: #0d615b;
+      }
+
+      .promo-step span {
+        display: block;
+        margin-top: 7px;
+        font-size: 18px;
+        line-height: 1.2;
+        font-weight: 850;
+        color: #38423d;
+      }
+
+      .promo-step code {
+        display: inline-block;
+        max-width: 100%;
+        margin-top: 5px;
+        padding: 4px 7px;
+        border: 2px solid rgba(23, 24, 23, 0.18);
+        border-radius: 8px;
+        background: #f0eadc;
+        color: #111512;
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 16px;
+        line-height: 1.12;
+        word-break: break-word;
+      }
+
+      .promo-caution {
+        border: 4px solid #171817;
+        border-radius: 18px;
+        background: #ffd9bb;
+        padding: 15px 17px;
+        font-size: 20px;
+        line-height: 1.24;
+        font-weight: 900;
+        color: #3f2a22;
+      }
+
+      .promo-feature-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .promo-feature {
+        min-height: 82px;
+        border: 3px solid #171817;
+        border-radius: 16px;
+        background: #d7f2e7;
+        padding: 11px 12px;
+      }
+
+      .promo-feature:nth-child(2),
+      .promo-feature:nth-child(5) {
+        background: #d9e9ff;
+      }
+
+      .promo-feature:nth-child(3),
+      .promo-feature:nth-child(6) {
+        background: #f4dfef;
+      }
+
+      .promo-feature b {
+        display: block;
+        font-size: 18px;
+        line-height: 1.05;
+      }
+
+      .promo-feature span {
+        display: block;
+        margin-top: 6px;
+        font-size: 14px;
+        line-height: 1.15;
+        font-weight: 820;
+        color: #4b5350;
+      }
+
       .opportunity-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1227,6 +1413,7 @@
         airport: "../backgrounds/03-airport-bg.png",
         seoul: "../backgrounds/05-seoul-bg.png",
         onsite: "../backgrounds/08-overview-bg.png",
+        promo: "../backgrounds/01-cover-bg.png",
       };
 
       const topicNames = new Map([
@@ -1669,6 +1856,46 @@
         );
       }
 
+      function renderPromo() {
+        const features = [
+          ["COEX map", "会场图、badge、poster、入口"],
+          ["Paper watchlist", "主题密度、明星作者、路线"],
+          ["Daily schedule", "按日期看 tutorial / poster / workshop"],
+          ["Evening events", "Jul 6-9 活动候选清单"],
+          ["Travel", "机场路线 + 首尔景点"],
+          ["Mobile first", "手机打开直接查，不用装 app"],
+        ];
+        const featureHtml = features
+          .map(([name, desc]) => `<div class="promo-feature"><b>${esc(name)}</b><span>${esc(desc)}</span></div>`)
+          .join("");
+        return card(
+          "promo",
+          "small-title",
+          `
+            ${header("08 · 网页入口", "手机上直接查", "小红书里不放裸链接；用搜索关键词找到网页版更稳")}
+            <div class="board promo-board">
+              <div class="phone-frame">
+                <img src="../screenshots/mobile-homepage.png" alt="ICML 2026 Field Guide mobile screenshot" />
+              </div>
+              <div class="promo-copy">
+                <div class="search-ticket">
+                  <span>复制这组关键词去浏览器 / GitHub 搜</span>
+                  <b>ICML 2026 Field Guide 2-mo</b>
+                </div>
+                <div class="promo-steps">
+                  <div class="promo-step"><strong>GitHub 仓库名</strong><span>搜这个最直接：</span><code>ICML-2026-Field-Guide</code></div>
+                  <div class="promo-step"><strong>页面标题</strong><span>看到标题是这个就对：</span><code>ICML 2026 Field Guide</code></div>
+                  <div class="promo-step"><strong>中文备用词</strong><span>搜不到时加中文：</span><code>ICML 2026 逛会指南 首尔 COEX</code></div>
+                </div>
+                <div class="promo-feature-grid">${featureHtml}</div>
+                <div class="promo-caution">小红书外链经常不可点或被折叠；图里给搜索词，评论/私信再按平台规则补入口。</div>
+              </div>
+            </div>
+            ${footer("Screenshot: mobile homepage · Search keywords only", "No raw URL on card")}
+          `,
+        );
+      }
+
       const renderers = {
         cover: renderCover,
         venue: renderVenue,
@@ -1679,6 +1906,7 @@
         events: renderEvents,
         seoul: renderSeoul,
         onsite: renderOnsite,
+        promo: renderPromo,
       };
 
       const key = new URLSearchParams(window.location.search).get("card") || "cover";

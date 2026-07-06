@@ -16,6 +16,7 @@ const cards = [
   ["papers2", "05-video-mllm-paper-route-b.png"],
   ["events", "06-evening-events-jul6-jul9.png"],
   ["seoul", "07-seoul-attractions.png"],
+  ["promo", "08-website-search-entry.png"],
 ];
 
 function runChrome(url, outPath) {
