@@ -1161,8 +1161,7 @@
 
       .phone-frame {
         position: relative;
-        align-self: stretch;
-        min-height: 1010px;
+        align-self: start;
         border: 5px solid #171817;
         border-radius: 46px;
         background: #171817;
@@ -1184,14 +1183,11 @@
       }
 
       .phone-frame img {
+        display: block;
         width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center top;
+        height: auto;
         border-radius: 38px;
         filter: saturate(1.04) contrast(1.02);
-        transform: translateY(28px);
-        transform-origin: top left;
       }
 
       .promo-copy {
@@ -2076,7 +2072,7 @@
             ${header("08 · 网页入口", "网页里查完整清单", "图上先看重点；网页补全地图、日程、论文路线、活动和首尔点位", "smartphone")}
             <div class="board promo-board">
               <div class="phone-frame">
-                <img src="../screenshots/mobile-homepage-clean.png" alt="ICML 2026 Field Guide mobile screenshot" />
+                <img src="../screenshots/mobile-homepage-no-url.png" alt="ICML 2026 Field Guide mobile screenshot" />
               </div>
               <div class="promo-copy">
                 <div class="search-ticket">
