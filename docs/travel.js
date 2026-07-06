@@ -8,6 +8,32 @@ const GROUP_LABELS = {
 };
 
 const CLASSIC_GROUPS = ["palace_bukchon", "namsan_myeongdong", "hanriver_yeouido", "ddp_city_walk", "jamsil_skyline"];
+const SHORT_STOP_NAMES = {
+  "Starfield Library": "星空图书馆",
+  "Bongeunsa Temple": "奉恩寺",
+  "Banpo Hangang Park": "盘浦汉江",
+  "National Museum of Korea": "中央博物馆",
+  "Itaewon / Hannam-dong": "梨泰院",
+  "N Seoul Tower": "南山塔",
+  Myeongdong: "明洞",
+  "Namsan Cable Car": "南山缆车",
+  "Gyeongbokgung Palace": "景福宫",
+  "Bukchon Hanok Village": "北村",
+  Insadong: "仁寺洞",
+  "Seoul Forest": "首尔林",
+  "Seongsu-dong": "圣水洞",
+  "Lotte World Tower / Seoul Sky": "乐天塔",
+  Hongdae: "弘大",
+  "Yeonnam-dong / Gyeongui Line Forest Park": "延南洞",
+  "Mangwon Market": "望远市场",
+  "Changdeokgung Palace": "昌德宫",
+  "Dongdaemun Design Plaza": "DDP",
+  "Gwangjang Market": "广藏市场",
+  "The Hyundai Seoul": "现代百货",
+  "Yeouido Hangang Park": "汝矣岛汉江",
+  "63 Building": "63大厦",
+};
+const DATA_VERSION = "20260707-routes1";
 
 function escapeHtml(value = "") {
   return String(value)
@@ -49,8 +75,14 @@ function updateBottomNavIndicator() {
 }
 
 async function loadTravel() {
-  const response = await fetch("./data/travel.json");
+  const response = await fetch(`./data/travel.json?v=${DATA_VERSION}`);
   if (!response.ok) throw new Error("Failed to load travel.json");
+  return response.json();
+}
+
+async function loadRouteIdeas() {
+  const response = await fetch(`./data/travel_route_ideas.json?v=${DATA_VERSION}`);
+  if (!response.ok) return null;
   return response.json();
 }
 
@@ -267,6 +299,117 @@ function travelGroupCard(group) {
   `;
 }
 
+function routeIdeaUrl(route, origin) {
+  const stops = (route.stops || []).filter((stop) => Number.isFinite(stop.lat) && Number.isFinite(stop.lng));
+  if (!stops.length || !origin?.query) return "";
+  const destination = stops[stops.length - 1];
+  const params = new URLSearchParams({
+    api: "1",
+    origin: origin.query,
+    destination: `${destination.lat},${destination.lng}`,
+    travelmode: "transit",
+  });
+  const waypoints = stops.slice(0, -1).map((stop) => `${stop.lat},${stop.lng}`).join("|");
+  if (waypoints) params.set("waypoints", waypoints);
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+}
+
+function routeIdeaStop(stop) {
+  return `
+    <li>
+      <b>${escapeHtml(stop.label || stop.name)}</b>
+      <span>${escapeHtml(stop.note || stop.name)}</span>
+    </li>
+  `;
+}
+
+function shortStopName(stop) {
+  const name = typeof stop === "string" ? stop : stop?.name || "";
+  if (typeof stop === "object" && stop?.label) return stop.label;
+  if (SHORT_STOP_NAMES[name]) return SHORT_STOP_NAMES[name];
+  return String(name)
+    .split(" / ")[0]
+    .split(" 与 ")[0]
+    .split(" · ")[0]
+    .replace(/\s+[A-Z][A-Za-z\s]+$/, "")
+    .trim();
+}
+
+function routePhotoTile(stop, index) {
+  const label = shortStopName(stop);
+  return `
+    <figure class="route-photo-tile ${stop.photo ? "" : "is-empty"}" style="--tile-index: ${index}">
+      ${
+        stop.photo
+          ? `<img src="${escapeHtml(stop.photo)}" alt="${escapeHtml(label)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.classList.add('is-empty'); this.remove();">`
+          : ""
+      }
+      <figcaption>${escapeHtml(label)}</figcaption>
+    </figure>
+  `;
+}
+
+function routePhotoCollage(route, stops) {
+  const tiles = stops.slice(0, 3);
+  if (!tiles.length) {
+    return `
+      <div class="route-idea-media has-1">
+        <figure class="route-photo-tile is-empty">
+          <figcaption>${escapeHtml(route.title || "Seoul")}</figcaption>
+        </figure>
+      </div>
+    `;
+  }
+  return `
+    <div class="route-idea-media has-${tiles.length}">
+      ${tiles.map(routePhotoTile).join("")}
+    </div>
+  `;
+}
+
+function routeIdeaCard(route, origins) {
+  const stops = (route.stops || []).slice(0, 3);
+  return `
+    <article class="route-idea-card">
+      ${routePhotoCollage(route, stops)}
+      <div class="route-idea-body">
+        <header>
+          <div>
+            <div class="meta-row">${tag(route.subtitle)}${(route.tags || []).map((label) => tag(label)).join("")}</div>
+            <h3>${escapeHtml(route.title)}</h3>
+          </div>
+        </header>
+        <p class="route-idea-summary">${escapeHtml(route.summary)}</p>
+        <ol class="route-stop-list">${stops.map(routeIdeaStop).join("")}</ol>
+        ${
+          route.backup
+            ? `<p class="route-idea-backup">${tag(route.backup.label)}<span>${escapeHtml(route.backup.summary)}</span></p>`
+            : ""
+        }
+        <div class="route-origin-actions">
+          ${(origins || []).map((origin) => action(routeIdeaUrl(route, origin), origin.label)).join("")}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderRouteIdeas(routeData) {
+  const root = $("#routeIdeas");
+  if (!root) return;
+  const routes = routeData?.routes || [];
+  if (!routes.length) {
+    root.innerHTML = $("#emptyTemplate").innerHTML;
+    return;
+  }
+  root.innerHTML = `
+    <div class="route-ideas-note">
+      <span>${escapeHtml(routeData.note || "Flexible routes")}</span>
+    </div>
+    ${routes.map((route) => routeIdeaCard(route, routeData.origins || [])).join("")}
+  `;
+}
+
 function renderAirport(data) {
   setHtml("#airportRouteSteps", (data.airport_route_steps || []).map(directionsCard).join(""));
 }
@@ -277,12 +420,13 @@ function renderSeoulHighlights(data) {
   bindSpotCopy($("#seoulHighlights"));
 }
 
-loadTravel()
-  .then((data) => {
+Promise.all([loadTravel(), loadRouteIdeas()])
+  .then(([data, routeIdeas]) => {
     updateBottomNavIndicator();
     const frame = $("#travelMapFrame");
     if (frame && data.map_html && !frame.src.includes("?focus=")) frame.src = data.map_html;
     renderAirport(data);
+    renderRouteIdeas(routeIdeas);
     renderSeoulHighlights(data);
   })
   .catch((error) => {

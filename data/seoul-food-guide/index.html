@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>首尔特色美食指南｜不只是烤肉炸鸡</title>
+    <meta
+      name="description"
+      content="给中国游客看的首尔特色美食地图与攻略：生拌牛肉、酱蟹、猪蹄、血肠汤、马铃薯排骨汤、东大门一只鸡、广藏市场小吃等。"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="topbar" aria-label="页面导航">
+        <a href="#foods">美食卡片</a>
+        <a href="#first-route">第一次怎么吃</a>
+        <a href="#area-index">区域索引</a>
+      </nav>
+
+      <div class="hero-grid">
+        <section class="hero-copy" aria-labelledby="page-title">
+          <p class="eyebrow">Seoul Local Food Guide</p>
+          <h1 id="page-title"><span>首尔特色</span><span>美食指南</span></h1>
+          <p class="lead">
+            给中国游客看的“不只是烤肉炸鸡”攻略：市场小吃、汤饭、锅物、生腌、冷面和首尔街区路线。
+          </p>
+          <div class="hero-actions" aria-label="快速信息">
+            <span>18 组图文卡片</span>
+            <span>36 项速览</span>
+            <span>7 个旅行区域</span>
+            <span>不只烤肉炸鸡</span>
+          </div>
+        </section>
+
+        <aside class="hero-panel" aria-label="阅读提示">
+          <p class="panel-title">先看这三条</p>
+          <div class="panel-points">
+            <p><b>价格</b><span>10,000 韩元约 44 元人民币</span></p>
+            <p><b>推荐</b><span>以区域和代表性吃法为主</span></p>
+            <p><b>避雷</b><span>生食、海鲜、内脏按身体情况选择</span></p>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section class="section intro-strip" aria-label="筛选标准">
+        <div>
+          <p class="section-kicker">Selection</p>
+          <h2>这份清单怎么选</h2>
+        </div>
+        <div class="criteria-grid">
+          <article>
+            <span class="dot"></span>
+            <h3>本地性强</h3>
+            <p>优先选市场、汤饭、锅物、老派韩餐和首尔街区中常见的食物。</p>
+          </article>
+          <article>
+            <span class="dot"></span>
+            <h3>国内差异大</h3>
+            <p>关注生食供应链、发酵风味、紫苏粉、泡菜熟成和韩式蘸酱。</p>
+          </article>
+          <article>
+            <span class="dot"></span>
+            <h3>游客可执行</h3>
+            <p>按明洞、钟路、广藏市场、东大门、弘大、江南等区域组织，方便排路线。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="foods" aria-labelledby="foods-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Food Cards</p>
+            <h2 id="foods-title">美食卡片</h2>
+          </div>
+          <p class="section-note">手机优先的全量卡片列表：全部视图用小图快速浏览，切到常规、入门、进阶、挑战后用大图卡片细看。</p>
+        </div>
+
+        <div class="filter-bar" aria-label="按接受难度筛选">
+          <button class="filter-button is-active" type="button" data-filter="全部">全部</button>
+          <button class="filter-button" type="button" data-filter="常规">常规</button>
+          <button class="filter-button" type="button" data-filter="入门">入门</button>
+          <button class="filter-button" type="button" data-filter="进阶">进阶</button>
+          <button class="filter-button" type="button" data-filter="挑战">挑战</button>
+        </div>
+
+        <div class="overview-grid" id="overview-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="section route-section" id="first-route" aria-labelledby="route-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">First Trip</p>
+            <h2 id="route-title">第一次来首尔怎么吃</h2>
+          </div>
+          <p class="section-note">按“低风险开局、市场体验、夜宵锅物、进阶挑战”组织，不需要每天都吃重口。</p>
+        </div>
+        <div class="route-list" id="route-list"></div>
+      </section>
+
+      <section class="section area-section" id="area-index" aria-labelledby="area-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Map Index</p>
+            <h2 id="area-title">地图 / 区域索引</h2>
+          </div>
+          <p class="section-note">这是静态区域索引；实际营业时间、休店日和排队情况请出发前二次核验。</p>
+        </div>
+        <div class="area-grid" id="area-grid"></div>
+      </section>
+
+      <section class="section source-section" aria-labelledby="source-title">
+        <div>
+          <p class="section-kicker">Sources</p>
+          <h2 id="source-title">图片与信息来源说明</h2>
+        </div>
+        <div class="source-layout">
+          <div class="source-card">
+            <h3>图片使用</h3>
+            <p>
+              页面图片已下载到本地，不依赖远程热链。图片主要来自 Wikimedia Commons，按 CC BY / CC BY-SA / CC0 标注；若后续使用 AI 生成图，会在这里单独说明。
+            </p>
+            <div class="photo-credit-list" id="photo-credit-list"></div>
+          </div>
+          <div class="source-card">
+            <h3>信息来源</h3>
+            <p>
+              菜品解释和区域线索参考公开旅游信息，主要推荐区域和吃法，不编造具体店铺评价。
+            </p>
+            <div class="source-links" id="source-links"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

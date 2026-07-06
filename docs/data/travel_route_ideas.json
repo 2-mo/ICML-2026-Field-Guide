@@ -1,0 +1,338 @@
+{
+  "title": "Flexible Seoul route ideas",
+  "note": "Pick by weather, energy, and meeting gaps. Routes are not tied to fixed dates.",
+  "origins": [
+    {
+      "id": "coex",
+      "label": "从 COEX",
+      "query": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul"
+    },
+    {
+      "id": "myeongdong",
+      "label": "从明洞",
+      "query": "Myeongdong Station, Seoul"
+    }
+  ],
+  "routes": [
+    {
+      "id": "coex_bongeunsa_banpo",
+      "title": "COEX + Bongeunsa + Banpo Han River",
+      "subtitle": "会场附近 / 轻松夜景",
+      "summary": "会间或抵达日最省力：COEX 室内补给、奉恩寺短走，天气好再接盘浦汉江夜景。",
+      "tags": [
+        "10-45 min",
+        "雨天优先"
+      ],
+      "backup": {
+        "label": "雨天",
+        "summary": "留在 COEX Mall、星空图书馆、餐厅和咖啡区，跳过汉江。"
+      },
+      "stops": [
+        {
+          "name": "Starfield Library",
+          "label": "星空图书馆",
+          "note": "COEX Mall B1 地标",
+          "lat": 37.51194444,
+          "lng": 127.05888889,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/%EB%B3%84%EB%A7%88%EB%8B%B9.jpg/330px-%EB%B3%84%EB%A7%88%EB%8B%B9.jpg"
+        },
+        {
+          "name": "Bongeunsa Temple",
+          "label": "奉恩寺",
+          "note": "COEX 北侧短走",
+          "lat": 37.51555556,
+          "lng": 127.05722222,
+          "photo": "https://upload.wikimedia.org/wikipedia/en/thumb/a/ac/Bongeunsa_Seoul_5.jpg/330px-Bongeunsa_Seoul_5.jpg"
+        },
+        {
+          "name": "Banpo Hangang Park",
+          "label": "盘浦汉江",
+          "note": "晴天夜景备选",
+          "lat": 37.5155,
+          "lng": 126.996,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/2011%EB%85%84_11%EC%9B%94_%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD_%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C_%EB%AA%85%EC%86%8C_%28Seoul_best_attractions%29_%EB%8B%AC%EB%B9%9B%EB%AC%B4%EC%A7%80%EA%B0%9C%EB%B6%84%EC%88%981.jpg/330px-2011%EB%85%84_11%EC%9B%94_%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD_%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C_%EB%AA%85%EC%86%8C_%28Seoul_best_attractions%29_%EB%8B%AC%EB%B9%9B%EB%AC%B4%EC%A7%80%EA%B0%9C%EB%B6%84%EC%88%981.jpg"
+        }
+      ]
+    },
+    {
+      "id": "myeongdong_namsan",
+      "title": "Myeongdong + Namsan Night View",
+      "subtitle": "明洞住宿友好",
+      "summary": "住明洞的人最顺：晚饭/购物后上南山，天气通透时再登塔。",
+      "tags": [
+        "傍晚/夜间",
+        "饭后散步"
+      ],
+      "backup": {
+        "label": "阴天",
+        "summary": "不上塔，改明洞商圈、乐天百货或新世界百货。"
+      },
+      "stops": [
+        {
+          "name": "Myeongdong",
+          "label": "明洞",
+          "note": "购物和晚饭基地",
+          "lat": 37.5636,
+          "lng": 126.9834,
+          "photo": "https://commons.wikimedia.org/wiki/Special:FilePath/Myeongdong%20night%20market%20seoul%202.jpg?width=480"
+        },
+        {
+          "name": "Namsan Cable Car",
+          "label": "南山缆车",
+          "note": "看排队长度决定",
+          "lat": 37.5567,
+          "lng": 126.9847,
+          "photo": "https://commons.wikimedia.org/wiki/Special:FilePath/Korea-Seoul-Namsan%20Cable%20Car-01.jpg?width=480"
+        },
+        {
+          "name": "N Seoul Tower",
+          "label": "南山塔",
+          "note": "天气通透再上塔",
+          "lat": 37.551216,
+          "lng": 126.988276,
+          "photo": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a6/NamsanTower_%28Cropped%29.jpeg/330px-NamsanTower_%28Cropped%29.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "museum_hannam_namsan",
+      "title": "National Museum + Hannam + Namsan",
+      "subtitle": "高温天室内线",
+      "summary": "正午避暑路线：中央博物馆空调充足，下午去汉南/梨泰院，傍晚视天气接南山。",
+      "tags": [
+        "半日",
+        "避暑"
+      ],
+      "backup": {
+        "label": "雨天",
+        "summary": "博物馆加长，南山改明洞或百货商场。"
+      },
+      "stops": [
+        {
+          "name": "National Museum of Korea",
+          "label": "中央博物馆",
+          "note": "常设展免费",
+          "lat": 37.5239,
+          "lng": 126.9803,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/National_Museum_of_Korea%2C_Seoul_%282%29_%2840236586235%29.jpg/330px-National_Museum_of_Korea%2C_Seoul_%282%29_%2840236586235%29.jpg"
+        },
+        {
+          "name": "Itaewon / Hannam-dong",
+          "label": "梨泰院",
+          "note": "咖啡和晚饭",
+          "lat": 37.53333333,
+          "lng": 126.98333333,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Itaewon_2.jpg/330px-Itaewon_2.jpg"
+        },
+        {
+          "name": "N Seoul Tower",
+          "label": "南山塔",
+          "note": "看天气决定",
+          "lat": 37.551216,
+          "lng": 126.988276,
+          "photo": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a6/NamsanTower_%28Cropped%29.jpeg/330px-NamsanTower_%28Cropped%29.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "palace_bukchon_insadong",
+      "title": "Gyeongbokgung + Bukchon + Insadong",
+      "subtitle": "传统首尔步行线",
+      "summary": "首尔传统核心线，适合完整半天；高温时把正午留给茶馆或博物馆。",
+      "tags": [
+        "半日",
+        "步行多"
+      ],
+      "backup": {
+        "label": "高温",
+        "summary": "上午宫殿，正午茶馆/国立古宫博物馆，17:00 后再走仁寺洞。"
+      },
+      "stops": [
+        {
+          "name": "Gyeongbokgung Palace",
+          "label": "景福宫",
+          "note": "出发前查闭馆日",
+          "lat": 37.579884,
+          "lng": 126.9768,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/%EA%B4%91%ED%99%94%EB%AC%B8_%EC%9B%94%EB%8C%80.jpg/330px-%EA%B4%91%ED%99%94%EB%AC%B8_%EC%9B%94%EB%8C%80.jpg"
+        },
+        {
+          "name": "Bukchon Hanok Village",
+          "label": "北村",
+          "note": "居民区注意安静",
+          "lat": 37.58305556,
+          "lng": 126.98361111,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Bukchon_Hanok_Village_01.jpg/330px-Bukchon_Hanok_Village_01.jpg"
+        },
+        {
+          "name": "Insadong",
+          "label": "仁寺洞",
+          "note": "茶馆/伴手礼/晚饭",
+          "lat": 37.572972,
+          "lng": 126.98618,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Insa-dong_%EC%9D%B8%EC%82%AC%EB%8F%99_October_1_2020_20.jpg/330px-Insa-dong_%EC%9D%B8%EC%82%AC%EB%8F%99_October_1_2020_20.jpg"
+        }
+      ]
+    },
+    {
+      "id": "seongsu_jamsil",
+      "title": "Seongsu + Seoul Forest + Jamsil",
+      "subtitle": "东侧咖啡和天际线",
+      "summary": "偏年轻的城市漫游线：圣水咖啡和买手店，天气好再去蚕室湖边或 Seoul Sky。",
+      "tags": [
+        "午后",
+        "晴天夜景"
+      ],
+      "backup": {
+        "label": "雨天",
+        "summary": "跳过首尔林，圣水室内店 + Lotte World Mall。"
+      },
+      "stops": [
+        {
+          "name": "Seoul Forest",
+          "label": "首尔林",
+          "note": "早上或凉快时去",
+          "lat": 37.544625,
+          "lng": 127.03984444,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/SeoulForest.jpg/330px-SeoulForest.jpg"
+        },
+        {
+          "name": "Seongsu-dong",
+          "label": "圣水洞",
+          "note": "咖啡和快闪店",
+          "lat": 37.5445,
+          "lng": 127.055,
+          "photo": "https://commons.wikimedia.org/wiki/Special:FilePath/Evening%20street%20in%20Seongsu-dong.jpg?width=480"
+        },
+        {
+          "name": "Lotte World Tower / Seoul Sky",
+          "label": "乐天塔",
+          "note": "看天气决定登高",
+          "lat": 37.5125,
+          "lng": 127.10277778,
+          "photo": "https://upload.wikimedia.org/wikipedia/en/thumb/2/28/Lotte_World_Tower_day_view_10.jpg/330px-Lotte_World_Tower_day_view_10.jpg"
+        }
+      ]
+    },
+    {
+      "id": "hongdae_yeonnam_mangwon",
+      "title": "Hongdae + Yeonnam + Mangwon Market",
+      "subtitle": "西侧夜间路线",
+      "summary": "跨到首尔西部的夜间线：弘大/延南逛街，望远市场吃小吃。",
+      "tags": [
+        "夜间",
+        "市场小吃"
+      ],
+      "backup": {
+        "label": "太晚",
+        "summary": "只保留弘大 + 延南，市场改成附近晚餐。"
+      },
+      "stops": [
+        {
+          "name": "Hongdae",
+          "label": "弘大",
+          "note": "逛街和夜生活",
+          "lat": 37.55527778,
+          "lng": 126.92333333,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Street_hongdae_Seoul.jpg/330px-Street_hongdae_Seoul.jpg"
+        },
+        {
+          "name": "Yeonnam-dong / Gyeongui Line Forest Park",
+          "label": "延南洞",
+          "note": "从弘大步行可到",
+          "lat": 37.5618,
+          "lng": 126.9246,
+          "photo": "https://commons.wikimedia.org/wiki/Special:FilePath/Gyeonguiseon%20Forest%20Trail%20Park%20and%20Ttaeng-ttaeng%20Street%20in%20Seoul%20%28near%20Hongdae%2C%201%29.jpg?width=480"
+        },
+        {
+          "name": "Mangwon Market",
+          "label": "望远市场",
+          "note": "小吃和轻晚饭",
+          "lat": 37.5558,
+          "lng": 126.9065,
+          "photo": "https://commons.wikimedia.org/wiki/Special:FilePath/Mercado%20Mangwon%20en%20Se%C3%BAl.jpg?width=480"
+        }
+      ]
+    },
+    {
+      "id": "changdeokgung_ddp_gwangjang",
+      "title": "Changdeokgung + DDP + Gwangjang Market",
+      "subtitle": "市中心建筑和市场",
+      "summary": "传统宫殿、设计建筑、市场小吃连成一条市中心线；最后一站很适合晚饭。",
+      "tags": [
+        "半日",
+        "市场收尾"
+      ],
+      "backup": {
+        "label": "没约到秘苑",
+        "summary": "没约到秘苑就普通参观昌德宫，下午照常去 DDP。"
+      },
+      "stops": [
+        {
+          "name": "Changdeokgung Palace",
+          "label": "昌德宫",
+          "note": "秘苑可选",
+          "lat": 37.57944444,
+          "lng": 126.99277778,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/%EC%B0%BD%EB%8D%95%EA%B6%81_%EC%A0%84%EA%B2%BD_%282012%29.jpg/330px-%EC%B0%BD%EB%8D%95%EA%B6%81_%EC%A0%84%EA%B2%BD_%282012%29.jpg"
+        },
+        {
+          "name": "Dongdaemun Design Plaza",
+          "label": "DDP",
+          "note": "夜景更好",
+          "lat": 37.5669,
+          "lng": 127.0094,
+          "photo": "https://upload.wikimedia.org/wikipedia/en/thumb/8/8f/Dongdaemun_Design_Plaza_at_night%2C_Seoul%2C_Korea.jpg/330px-Dongdaemun_Design_Plaza_at_night%2C_Seoul%2C_Korea.jpg"
+        },
+        {
+          "name": "Gwangjang Market",
+          "label": "广藏市场",
+          "note": "经典市场晚饭",
+          "lat": 37.57,
+          "lng": 126.999,
+          "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Gwangjang_Market%2C_Seoul_01.jpg/330px-Gwangjang_Market%2C_Seoul_01.jpg"
+        }
+      ]
+    },
+    {
+      "id": "yeouido_hanriver",
+      "title": "Yeouido + Han River",
+      "subtitle": "低强度汉江散步",
+      "summary": "不想走太多景点时用这条：汝矣岛吃饭/商场，再去汉江边吹风。",
+      "tags": [
+        "轻松傍晚",
+        "汉江"
+      ],
+      "backup": {
+        "label": "雨天",
+        "summary": "改 IFC Mall / The Hyundai Seoul 室内路线。"
+      },
+      "stops": [
+        {
+          "name": "The Hyundai Seoul",
+          "label": "现代百货",
+          "note": "室内购物/吃饭",
+          "lat": 37.5259,
+          "lng": 126.9284,
+          "photo": "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hyundai%20Seoul%20Yeoui-dong%203.jpg?width=480"
+        },
+        {
+          "name": "Yeouido Hangang Park",
+          "label": "汝矣岛汉江",
+          "note": "平坦河边步道",
+          "lat": 37.5286,
+          "lng": 126.9343,
+          "photo": "https://commons.wikimedia.org/wiki/Special:FilePath/Yeouido%20Han%20River%20Park.jpg?width=480"
+        },
+        {
+          "name": "63 Building",
+          "label": "63大厦",
+          "note": "天际线地标",
+          "lat": 37.5194,
+          "lng": 126.9403,
+          "photo": "https://commons.wikimedia.org/wiki/Special:FilePath/63%20Building%2C%20Seoul%20%2815495025317%29.jpg?width=480"
+        }
+      ]
+    }
+  ]
+}
