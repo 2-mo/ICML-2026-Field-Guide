@@ -145,11 +145,11 @@
         padding: 4px;
         border-radius: 8px;
         background: color-mix(in srgb, var(--icon-color, #0d615b) 14%, #fffdf3);
-        filter:
-          sepia(1)
-          saturate(2.4)
-          hue-rotate(var(--icon-hue, 140deg))
-          brightness(0.78);
+        filter: var(
+          --icon-filter,
+          brightness(0) saturate(100%) invert(25%) sepia(50%) saturate(926%) hue-rotate(133deg) brightness(91%)
+            contrast(93%)
+        );
       }
 
       .icon-title b,
@@ -338,6 +338,8 @@
       .cover-anchor {
         --icon-color: #0d615b;
         --icon-hue: 140deg;
+        --icon-filter: brightness(0) saturate(100%) invert(25%) sepia(50%) saturate(926%) hue-rotate(133deg)
+          brightness(91%) contrast(93%);
         border: 3px solid #171817;
         border-radius: 16px;
         background: #fffdf3;
@@ -667,6 +669,8 @@
       .mini-card {
         --icon-color: #0d615b;
         --icon-hue: 140deg;
+        --icon-filter: brightness(0) saturate(100%) invert(25%) sepia(50%) saturate(926%) hue-rotate(133deg)
+          brightness(91%) contrast(93%);
         border: 3px solid #171817;
         border-radius: 16px;
         background: #fffdf3;
@@ -698,6 +702,8 @@
       .topic-card {
         --icon-color: #0d615b;
         --icon-hue: 140deg;
+        --icon-filter: brightness(0) saturate(100%) invert(25%) sepia(50%) saturate(926%) hue-rotate(133deg)
+          brightness(91%) contrast(93%);
         border: 3px solid #171817;
         border-radius: 18px;
         background: #ffffff;
@@ -794,6 +800,8 @@
       .route-head {
         --icon-color: #0d615b;
         --icon-hue: 140deg;
+        --icon-filter: brightness(0) saturate(100%) invert(25%) sepia(50%) saturate(926%) hue-rotate(133deg)
+          brightness(91%) contrast(93%);
         display: flex;
         align-items: baseline;
         justify-content: space-between;
@@ -866,6 +874,8 @@
       .event-day h3 {
         --icon-color: #265c9c;
         --icon-hue: 185deg;
+        --icon-filter: brightness(0) saturate(100%) invert(30%) sepia(46%) saturate(1293%) hue-rotate(179deg)
+          brightness(89%) contrast(93%);
         margin: 0;
         padding: 13px 15px;
         border-bottom: 3px solid #171817;
@@ -1083,6 +1093,8 @@
       .attraction-item {
         --icon-color: #0d615b;
         --icon-hue: 140deg;
+        --icon-filter: brightness(0) saturate(100%) invert(25%) sepia(50%) saturate(926%) hue-rotate(133deg)
+          brightness(91%) contrast(93%);
         border: 3px solid #171817;
         border-radius: 15px;
         background: #fffdf3;
@@ -1106,7 +1118,7 @@
       }
 
       .attraction-item .icon-title {
-        gap: 7px;
+        gap: 10px;
       }
 
       .attraction-item .icon-title .lucide-icon {
@@ -1144,6 +1156,7 @@
         gap: 18px;
         padding: 18px;
         min-height: 1010px;
+        position: relative;
       }
 
       .phone-frame {
@@ -1170,26 +1183,6 @@
         content: "";
       }
 
-      .phone-frame::after {
-        position: absolute;
-        right: 34px;
-        bottom: 34px;
-        left: 34px;
-        z-index: 3;
-        display: grid;
-        place-items: center;
-        min-height: 78px;
-        border: 3px solid rgba(23, 24, 23, 0.16);
-        border-radius: 999px;
-        background: #fffdf3;
-        color: #111512;
-        font-size: 18px;
-        font-weight: 950;
-        line-height: 1.05;
-        text-align: center;
-        content: "GitHub: 2-mo/ICML-2026-Field-Guide";
-      }
-
       .phone-frame img {
         width: 100%;
         height: 100%;
@@ -1197,6 +1190,8 @@
         object-position: center top;
         border-radius: 38px;
         filter: saturate(1.04) contrast(1.02);
+        transform: translateY(28px);
+        transform-origin: top left;
       }
 
       .promo-copy {
@@ -1240,6 +1235,8 @@
       .promo-step {
         --icon-color: #0d615b;
         --icon-hue: 140deg;
+        --icon-filter: brightness(0) saturate(100%) invert(25%) sepia(50%) saturate(926%) hue-rotate(133deg)
+          brightness(91%) contrast(93%);
         border: 3px solid #171817;
         border-radius: 17px;
         background: #fffdf3;
@@ -1316,6 +1313,21 @@
         color: #3d4541;
       }
 
+      .promo-sticker-wrap {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        min-height: 168px;
+        overflow: visible;
+      }
+
+      .promo-sticker {
+        width: 255px;
+        height: 166px;
+        object-fit: contain;
+        filter: drop-shadow(8px 10px 0 rgba(20, 22, 20, 0.15));
+      }
+
       .promo-feature-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1325,6 +1337,8 @@
       .promo-feature {
         --icon-color: #0d615b;
         --icon-hue: 140deg;
+        --icon-filter: brightness(0) saturate(100%) invert(25%) sepia(50%) saturate(926%) hue-rotate(133deg)
+          brightness(91%) contrast(93%);
         min-height: 86px;
         border: 3px solid #171817;
         border-radius: 16px;
@@ -1336,6 +1350,8 @@
       .promo-feature:nth-child(5) {
         --icon-color: #265c9c;
         --icon-hue: 185deg;
+        --icon-filter: brightness(0) saturate(100%) invert(30%) sepia(46%) saturate(1293%) hue-rotate(179deg)
+          brightness(89%) contrast(93%);
         background: #d9e9ff;
       }
 
@@ -1343,6 +1359,8 @@
       .promo-feature:nth-child(6) {
         --icon-color: #7d4ac7;
         --icon-hue: 245deg;
+        --icon-filter: brightness(0) saturate(100%) invert(36%) sepia(48%) saturate(1284%) hue-rotate(237deg)
+          brightness(88%) contrast(89%);
         background: #f4dfef;
       }
 
@@ -1353,7 +1371,7 @@
 
       .promo-step .icon-title,
       .promo-feature .icon-title {
-        gap: 8px;
+        gap: 10px;
         margin-bottom: 6px;
       }
 
@@ -1930,7 +1948,7 @@
           "events",
           "dense",
           `
-            ${header("06 · 晚间活动", "Jul 6-9 有哪些局", "每天按时间列候选：official / Luma / dinner / meetup，重点看 18:00-21:00", "party-popper")}
+            ${header("06 · 晚间活动", "Jul 6-9 活动索引", "按日期列活动名、时间和状态标签：official / Luma / confirmed / lead", "party-popper")}
             <div class="board">
               <div class="event-columns merged">
                 ${renderEventDay("07/06", events, 5)}
@@ -2058,7 +2076,7 @@
             ${header("08 · 网页入口", "网页里查完整清单", "图上先看重点；网页补全地图、日程、论文路线、活动和首尔点位", "smartphone")}
             <div class="board promo-board">
               <div class="phone-frame">
-                <img src="../screenshots/mobile-homepage.png" alt="ICML 2026 Field Guide mobile screenshot" />
+                <img src="../screenshots/mobile-homepage-clean.png" alt="ICML 2026 Field Guide mobile screenshot" />
               </div>
               <div class="promo-copy">
                 <div class="search-ticket">
@@ -2068,6 +2086,7 @@
                 <div class="promo-feature-grid">${featureHtml}</div>
                 <div class="promo-caution">现场用法：先用图片定路线和重点；到网页里展开当天日程、poster 清单、活动候选和首尔点位。</div>
                 <div class="promo-detail-list">${detailHtml}</div>
+                <div class="promo-sticker-wrap"><img class="promo-sticker" src="../stickers/promo-route-sticker.png" alt="" /></div>
               </div>
             </div>
             ${footer("网页补全：地图 / 日程 / 论文 / 活动 / 首尔", "GitHub: 2-mo/ICML-2026-Field-Guide")}
