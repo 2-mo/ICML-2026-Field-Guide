@@ -2040,84 +2040,121 @@ main {
 }
 
 .candidate-list.stacked-cards {
-  grid-auto-columns: minmax(68%, 1fr);
+  --deck-overlap: clamp(56px, 18vw, 82px);
+  --deck-right-pad: calc(var(--deck-overlap) + 30px);
+  grid-auto-columns: minmax(74%, calc(100% - var(--deck-overlap)));
   gap: 0;
-  padding: 10px 112px 24px 2px;
-  mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 64px), transparent 100%);
-  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 64px), transparent 100%);
-  perspective: 900px;
+  align-items: stretch;
+  padding: 12px var(--deck-right-pad) 26px 2px;
+  isolation: isolate;
+  mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 42px), rgba(0, 0, 0, 0.42) calc(100% - 14px), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 42px), rgba(0, 0, 0, 0.42) calc(100% - 14px), transparent 100%);
+  overscroll-behavior-x: contain;
+  perspective: 1000px;
+  perspective-origin: 42% 50%;
   scroll-padding-left: 2px;
   scroll-snap-type: x mandatory;
+  touch-action: pan-x pan-y;
+}
+
+.candidate-list.stacked-cards.is-scrollable {
+  cursor: grab;
+}
+
+.candidate-list.stacked-cards.is-scrollable:active {
+  cursor: grabbing;
 }
 
 .candidate-list.stacked-cards .candidate-card {
-  z-index: 1;
-  width: calc(100% + 76px);
+  z-index: var(--stack-layer, 1);
+  --stack-x: 0px;
+  --stack-y: 0px;
+  --stack-z-depth: 0px;
+  --stack-rotate-y: -4deg;
+  --stack-rotate-z: -0.6deg;
+  --stack-scale: 1;
+  --stack-opacity: 1;
+  width: calc(100% + var(--deck-overlap));
+  height: 100%;
   min-height: 0;
   margin-right: 0;
   border-color: rgba(75, 67, 50, 0.16);
   background: rgba(255, 253, 246, 0.93);
+  backface-visibility: hidden;
   box-shadow:
-    0 18px 38px rgba(32, 32, 29, 0.16),
-    -10px 0 22px rgba(32, 32, 29, 0.08),
+    0 16px 34px rgba(32, 32, 29, 0.14),
+    -10px 0 20px rgba(32, 32, 29, 0.07),
     inset 0 1px 0 rgba(255, 253, 246, 0.9);
-  transform: translateZ(0) rotateY(-5deg) rotateZ(-0.9deg);
+  opacity: var(--stack-opacity);
+  transform: translate3d(var(--stack-x), var(--stack-y), var(--stack-z-depth)) rotateY(var(--stack-rotate-y)) rotateZ(var(--stack-rotate-z)) scale(var(--stack-scale));
   transform-origin: left center;
+  transform-style: preserve-3d;
   transition:
-    transform 160ms ease,
-    box-shadow 160ms ease;
+    box-shadow 160ms ease,
+    opacity 160ms ease;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
+  will-change: transform, opacity;
 }
 
 .candidate-list.stacked-cards .candidate-card:nth-child(1) {
-  z-index: 7;
+  --stack-layer: 7;
 }
 
 .candidate-list.stacked-cards .candidate-card:nth-child(2) {
-  z-index: 6;
+  --stack-layer: 6;
+  --stack-x: -18px;
+  --stack-y: 7px;
+  --stack-z-depth: -28px;
+  --stack-rotate-y: -8deg;
+  --stack-rotate-z: 0.8deg;
+  --stack-scale: 0.96;
 }
 
 .candidate-list.stacked-cards .candidate-card:nth-child(3) {
-  z-index: 5;
+  --stack-layer: 5;
+  --stack-x: -36px;
+  --stack-y: 13px;
+  --stack-z-depth: -58px;
+  --stack-rotate-y: -13deg;
+  --stack-rotate-z: -1.1deg;
+  --stack-scale: 0.92;
 }
 
 .candidate-list.stacked-cards .candidate-card:nth-child(4) {
-  z-index: 4;
+  --stack-layer: 4;
 }
 
 .candidate-list.stacked-cards .candidate-card:nth-child(5) {
-  z-index: 3;
+  --stack-layer: 3;
 }
 
-.candidate-list.stacked-cards .candidate-card:nth-child(2n) {
-  transform: translateY(6px) translateZ(-12px) rotateY(-6deg) rotateZ(1deg);
+.candidate-list.stacked-cards .candidate-card:nth-child(n + 4) {
+  --stack-x: -50px;
+  --stack-y: 18px;
+  --stack-z-depth: -84px;
+  --stack-rotate-y: -17deg;
+  --stack-rotate-z: 1.3deg;
+  --stack-scale: 0.88;
+  --stack-opacity: 0.8;
 }
 
-.candidate-list.stacked-cards .candidate-card:nth-child(3n) {
-  transform: translateY(11px) translateZ(-22px) rotateY(-7deg) rotateZ(-1.3deg);
-}
-
+.candidate-list.stacked-cards .candidate-card.is-active,
 .candidate-list.stacked-cards .candidate-card:focus-within,
 .candidate-list.stacked-cards .candidate-card:hover {
-  z-index: 5;
   box-shadow:
-    0 20px 42px rgba(32, 32, 29, 0.17),
+    0 22px 44px rgba(32, 32, 29, 0.17),
+    -10px 0 22px rgba(32, 32, 29, 0.07),
     0 0 0 1px rgba(255, 253, 246, 0.8);
-  transform: translateY(-2px) translateZ(24px) rotateY(0deg) rotateZ(0deg);
 }
 
-.route-block:has(.stacked-cards) .route-block-head::after {
-  flex: 0 0 auto;
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: rgba(75, 67, 50, 0.07);
-  color: rgba(104, 100, 91, 0.72);
-  font-size: 0.58rem;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  content: "Swipe stack";
+.candidate-list.stacked-cards .candidate-meta-row {
+  flex-wrap: wrap;
+  gap: 5px 4px;
+}
+
+.candidate-list.stacked-cards .signal-strip {
+  flex-basis: 100%;
+  order: 2;
 }
 
 .home-day-list {
@@ -3188,6 +3225,10 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .candidate-list.stacked-cards .candidate-card {
+    transition: none;
+  }
+
   .spot-card,
   .spot-card::after {
     transition: none;
@@ -4273,18 +4314,20 @@ main {
   }
 
   .candidate-list.stacked-cards {
+    --deck-overlap: clamp(72px, 8vw, 98px);
+    --deck-right-pad: calc(var(--deck-overlap) + 40px);
     grid-template-columns: none;
     grid-auto-flow: column;
-    grid-auto-columns: minmax(280px, 38%);
+    grid-auto-columns: minmax(300px, min(42%, 430px));
     overflow-x: auto;
     overflow-y: hidden;
     margin-right: -10px;
-    padding: 10px 126px 24px 2px;
+    padding: 14px var(--deck-right-pad) 28px 2px;
     scroll-snap-type: x mandatory;
   }
 
   .candidate-list.stacked-cards .candidate-card {
-    width: calc(100% + 88px);
+    width: calc(100% + var(--deck-overlap));
     margin-right: 0;
   }
 
@@ -4343,6 +4386,15 @@ main {
     padding: 10px;
   }
 
+  .candidate-list.stacked-cards {
+    --deck-overlap: clamp(54px, 19vw, 74px);
+    --deck-right-pad: clamp(36px, 10vw, 44px);
+    grid-auto-columns: calc(100% - var(--deck-overlap));
+    margin-right: -10px;
+    padding-top: 10px;
+    padding-bottom: 24px;
+  }
+
   .travel-steps li {
     grid-template-columns: 58px minmax(0, 1fr);
   }
@@ -4368,6 +4420,11 @@ main {
 }
 
 @media (max-width: 360px) {
+  .candidate-list.stacked-cards {
+    --deck-overlap: 52px;
+    --deck-right-pad: 36px;
+  }
+
   .candidate-head {
     grid-template-columns: minmax(0, 1fr);
   }

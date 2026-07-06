@@ -1018,6 +1018,88 @@ function softReveal(root, selector = ".route-block") {
   });
 }
 
+let stackedCardDeckFrame = 0;
+
+function stackedCardDecks(root = document) {
+  if (root?.classList?.contains("stacked-cards")) return [root];
+  return $$(".candidate-list.stacked-cards", root || document);
+}
+
+function requestStackedCardDeckUpdate() {
+  if (stackedCardDeckFrame) return;
+  stackedCardDeckFrame = requestAnimationFrame(() => {
+    stackedCardDeckFrame = 0;
+    updateStackedCardDecks();
+  });
+}
+
+function updateStackedCardDecks(root = document) {
+  stackedCardDecks(root).forEach((list) => {
+    const cards = $$(".candidate-card", list);
+    if (!cards.length) return;
+
+    const firstOffset = cards[0].offsetLeft;
+    const positions = cards.map((card) => card.offsetLeft - firstOffset);
+    const steps = positions
+      .slice(1)
+      .map((position, index) => position - positions[index])
+      .filter((step) => step > 0)
+      .sort((a, b) => a - b);
+    const step = steps[Math.floor(steps.length / 2)] || cards[0].offsetWidth || 1;
+    const scrollLeft = list.scrollLeft;
+    const activeIndex = positions.reduce(
+      (best, position, index) => {
+        const distance = Math.abs(position - scrollLeft);
+        return distance < best.distance ? { index, distance } : best;
+      },
+      { index: 0, distance: Number.POSITIVE_INFINITY },
+    ).index;
+
+    list.classList.toggle("is-scrollable", list.scrollWidth > list.clientWidth + 2);
+    list.dataset.activeCard = String(activeIndex + 1);
+
+    cards.forEach((card, index) => {
+      const rawDistance = (positions[index] - scrollLeft) / step;
+      const distance = Math.max(-3, Math.min(3, rawDistance));
+      const absDistance = Math.abs(distance);
+      const direction = Math.sign(distance);
+      const after = Math.max(0, distance);
+      const before = Math.max(0, -distance);
+      const x = direction >= 0 ? -Math.min(after * 26, 70) : Math.min(before * 14, 34);
+      const y = Math.min(absDistance * 10, 26);
+      const z = -Math.min(absDistance * 46, 120);
+      const rotateY = -direction * Math.min(absDistance * 9, 20);
+      const rotateZ = direction * Math.min(absDistance * 1.2, 3);
+      const scale = 1 - Math.min(absDistance * 0.05, 0.16);
+      const opacity = 1 - Math.min(Math.max(absDistance - 1.85, 0) * 0.24, 0.34);
+      const layer = 1000 - Math.round(absDistance * 100) - Math.abs(index - activeIndex);
+
+      card.style.setProperty("--stack-x", `${x.toFixed(1)}px`);
+      card.style.setProperty("--stack-y", `${y.toFixed(1)}px`);
+      card.style.setProperty("--stack-z-depth", `${z.toFixed(1)}px`);
+      card.style.setProperty("--stack-rotate-y", `${rotateY.toFixed(2)}deg`);
+      card.style.setProperty("--stack-rotate-z", `${rotateZ.toFixed(2)}deg`);
+      card.style.setProperty("--stack-scale", scale.toFixed(3));
+      card.style.setProperty("--stack-opacity", opacity.toFixed(3));
+      card.style.setProperty("--stack-layer", String(layer));
+      card.classList.toggle("is-active", Math.abs(rawDistance) < 0.48);
+      card.classList.toggle("is-before", rawDistance < -0.48);
+      card.classList.toggle("is-after", rawDistance > 0.48);
+    });
+  });
+}
+
+function initStackedCardDecks(root = document) {
+  stackedCardDecks(root).forEach((list) => {
+    if (list.dataset.stackDeckReady === "true") return;
+    list.dataset.stackDeckReady = "true";
+    list.setAttribute("role", "list");
+    $$(".candidate-card", list).forEach((card) => card.setAttribute("role", "listitem"));
+    list.addEventListener("scroll", requestStackedCardDeckUpdate, { passive: true });
+  });
+  updateStackedCardDecks(root);
+}
+
 function showView(view, { updateHash = true } = {}) {
   state.activeView = view;
   $$(".view").forEach((node) => node.classList.toggle("is-active", node.dataset.view === view));
@@ -1235,6 +1317,7 @@ function renderTodayRoute() {
       )
       .join("") + companyDayBlock(state.selectedDate),
   );
+  initStackedCardDecks(routePickList);
   softReveal($("#routePickList"));
 }
 
@@ -1662,8 +1745,22 @@ function bindEvents() {
     });
   });
 
-  window.addEventListener("resize", () => requestAnimationFrame(updateBottomNavIndicator), { passive: true });
-  window.addEventListener("orientationchange", () => setTimeout(updateBottomNavIndicator, 220), { passive: true });
+  window.addEventListener(
+    "resize",
+    () => {
+      requestAnimationFrame(updateBottomNavIndicator);
+      requestStackedCardDeckUpdate();
+    },
+    { passive: true },
+  );
+  window.addEventListener(
+    "orientationchange",
+    () => {
+      setTimeout(updateBottomNavIndicator, 220);
+      setTimeout(requestStackedCardDeckUpdate, 240);
+    },
+    { passive: true },
+  );
 }
 
 async function init() {
