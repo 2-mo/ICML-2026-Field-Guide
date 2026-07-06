@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "seongsu",
+    "file": "output/xiaohongshu_v3/photos/seongsu.jpg",
+    "commons_file": "Seongsu_seoul_4.jpg",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Seongsu_seoul_4.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Seongsu_seoul_4.jpg/1920px-Seongsu_seoul_4.jpg",
+    "artist": "Sgroey",
+    "license": "CC BY-SA 4.0",
+    "credit": "Own work",
+    "description": "Some photos of the super cool neighbourhood just north of Seoul Forest"
+  },
+  {
+    "slug": "seoul_forest",
+    "file": "output/xiaohongshu_v3/photos/seoul_forest.jpg",
+    "commons_file": "Seoul_Forest_in_May_2022_(1).jpg",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Seoul_Forest_in_May_2022_%281%29.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Seoul_Forest_in_May_2022_%281%29.jpg/1920px-Seoul_Forest_in_May_2022_%281%29.jpg",
+    "artist": "CHO woohyuck",
+    "license": "CC BY-SA 4.0",
+    "credit": "Own work",
+    "description": "Seongsu-dong"
+  },
+  {
+    "slug": "gyeongbokgung",
+    "file": "output/xiaohongshu_v3/photos/gyeongbokgung.jpg",
+    "commons_file": "Front_view_of_the_Imperial_Throne_Hall_Geunjeongjeon_at_Gyeongbokgung_Palace_with_blue_sky_in_Seoul.jpg",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Front_view_of_the_Imperial_Throne_Hall_Geunjeongjeon_at_Gyeongbokgung_Palace_with_blue_sky_in_Seoul.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Front_view_of_the_Imperial_Throne_Hall_Geunjeongjeon_at_Gyeongbokgung_Palace_with_blue_sky_in_Seoul.jpg/1920px-Front_view_of_the_Imperial_Throne_Hall_Geunjeongjeon_at_Gyeongbokgung_Palace_with_blue_sky_in_Seoul.jpg",
+    "artist": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "credit": "Own work",
+    "description": "Front view of the Imperial Throne Hall Geunjeongjeon, at Gyeongbokgung Palace, with blue sky in Seoul, South Korea."
+  },
+  {
+    "slug": "namsan_view",
+    "file": "output/xiaohongshu_v3/photos/namsan_view.jpg",
+    "commons_file": "N_Seoul_Tower_view_2.jpg",
+    "page_url": "https://commons.wikimedia.org/wiki/File:N_Seoul_Tower_view_2.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/N_Seoul_Tower_view_2.jpg/1920px-N_Seoul_Tower_view_2.jpg",
+    "artist": "kallerna",
+    "license": "CC BY-SA 4.0",
+    "credit": "Own work",
+    "description": "Seoul seen from N Seoul Tower, Namsan. View towards south."
+  },
+  {
+    "slug": "starfield_library",
+    "file": "output/xiaohongshu_v3/photos/starfield_library.jpg",
+    "commons_file": "Starfield_Library_COEX_20240218.jpg",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Starfield_Library_COEX_20240218.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Starfield_Library_COEX_20240218.jpg/1920px-Starfield_Library_COEX_20240218.jpg",
+    "artist": "Sean Young (@assanges)",
+    "license": "CC BY 4.0",
+    "credit": "Own work",
+    "description": "Starfield Library in Starfield COEX Mall"
+  },
+  {
+    "slug": "bongeunsa",
+    "file": "output/xiaohongshu_v3/photos/bongeunsa.jpg",
+    "commons_file": "Korea-Seoul-Bongeunsa-02.jpg",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Korea-Seoul-Bongeunsa-02.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/74/Korea-Seoul-Bongeunsa-02.jpg",
+    "artist": "by Pachinee Buathong",
+    "license": "CC BY-SA 2.0",
+    "credit": "https://www.flickr.com/photos/buathong/565334565/",
+    "description": "Bongeunsa, a Buddhist temple of Jogye Order located in Samseong-dong, Gangnam-gu, Seoul, South Korea."
+  }
+]

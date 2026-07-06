@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4f1e8" />
+    <meta
+      name="description"
+      content="ICML 2026 Seoul conference guide: daily oral, poster, dinner, and workshop choices."
+    />
+    <title>ICML 2026 Field Guide</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css?v=20260703-maprestore1" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Seoul / COEX · Jul 6-11, 2026</p>
+          <h1>ICML 2026 Field Guide <span>Incomplete Guide • Schedule / Explore / Networking</span></h1>
+        </div>
+        <div class="clock-card" aria-live="polite">
+          <span>KST</span>
+          <strong id="kstClock">--:--</strong>
+        </div>
+      </header>
+
+      <main>
+        <section id="today" class="view is-active" data-view="today">
+          <section class="panel route-picks-panel">
+            <div class="panel-title is-empty">
+              <h2 id="selectedDayHeading"></h2>
+            </div>
+            <div id="dailyFocus" class="daily-focus"></div>
+            <div id="routePickList" class="route-pick-list"></div>
+          </section>
+        </section>
+
+        <section id="papers" class="view" data-view="papers">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Papers Onsite / 现场论文</p>
+              <h2>Topic routes first</h2>
+            </div>
+            <button id="loadPapersButton" class="primary-button">Load papers</button>
+          </div>
+          <div class="filter-bar">
+            <select id="topicFilter" aria-label="Topic filter">
+              <option value="">All topics</option>
+            </select>
+            <select id="paperDayFilter" aria-label="Paper day filter">
+              <option value="">All days</option>
+            </select>
+            <select id="paperBadgeFilter" aria-label="Paper badge filter">
+              <option value="">All flags</option>
+              <option value="oral">Oral</option>
+              <option value="spotlight">Spotlight</option>
+              <option value="extra">Extra attention</option>
+              <option value="stars">Star authors</option>
+            </select>
+          </div>
+          <section class="panel">
+            <div class="panel-title">
+              <h3>Topic routes</h3>
+              <span id="topicRouteCount" class="status-pill">Load to view</span>
+            </div>
+            <div id="topicRoutes" class="route-list"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-title">
+              <h3>Advanced paper lookup</h3>
+              <span id="paperCount" class="status-pill">Use official for full search</span>
+            </div>
+            <details>
+              <summary class="advanced-summary">展开最多 80 条匹配论文 / Expand up to 80 matches</summary>
+              <div id="paperList" class="paper-list"></div>
+            </details>
+          </section>
+        </section>
+
+        <section id="schedule" class="view" data-view="schedule">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Schedule / 日程</p>
+              <h2>按天和类型扫 session</h2>
+            </div>
+          </div>
+          <div class="filter-bar" id="scheduleFilters"></div>
+          <section class="panel">
+            <div id="scheduleList" class="timeline"></div>
+          </section>
+        </section>
+
+        <section id="map" class="view" data-view="map">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Travel Guide</p>
+              <h2>Transport, sights, supplies</h2>
+            </div>
+            <button class="text-button" data-open-view="today">返回时间轴</button>
+          </div>
+          <div class="map-layout">
+            <section class="panel map-card">
+              <iframe
+                title="ICML 2026 Seoul MapLibre map"
+                data-src="./maps/icml2026_seoul_maplibre.html?v=20260703-maprestore1"
+                loading="lazy"
+              ></iframe>
+            </section>
+            <section class="panel">
+              <div class="panel-title">
+                <h3>Transport Routes</h3>
+                <span class="status-pill">Google Maps</span>
+              </div>
+              <div id="routeCards" class="stack"></div>
+            </section>
+          </div>
+          <section class="panel">
+            <div class="panel-title">
+              <h3>Places / 景点和区域</h3>
+              <span class="status-pill">From COEX</span>
+            </div>
+            <div id="nearbyList" class="card-grid"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-title">
+              <h3>Life kit / 生活补给</h3>
+              <span class="status-pill">支付、雨天、吃饭</span>
+            </div>
+            <div class="filter-bar" id="essentialFilters"></div>
+            <div id="essentialList" class="card-grid"></div>
+          </section>
+        </section>
+
+        <section id="events" class="view" data-view="events">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Side Events / 外部活动</p>
+              <h2>晚宴、Meetup、大厂观察</h2>
+            </div>
+          </div>
+          <div class="filter-bar">
+            <button class="seg" data-event-kind="official">Official / 官方</button>
+            <button class="seg is-active" data-event-kind="side">Side events / 外部</button>
+          </div>
+          <section class="panel">
+            <div id="eventWatchList" class="watch-list"></div>
+            <div id="eventList" class="card-grid"></div>
+          </section>
+        </section>
+
+        <section id="search" class="view" data-view="search">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Search / 搜索</p>
+              <h2>结果按 papers / sessions / events / places 分组</h2>
+            </div>
+          </div>
+          <section class="panel">
+            <div id="searchResults" class="search-results"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <nav id="dateNav" class="bottom-nav" aria-label="Conference dates"></nav>
+
+    <template id="emptyTemplate">
+      <div class="empty-state">
+        <strong>No matching items</strong>
+        <span>换个筛选或搜索词 / Try another filter or search term.</span>
+      </div>
+    </template>
+
+    <script src="./app.js?v=20260703-maprestore1" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4f1e8" />
+    <meta
+      name="description"
+      content="ICML 2026 Seoul travel map: COEX routes, transit, attractions, food, and day-trip candidates."
+    />
+    <title>Seoul Routes & Map / ICML 2026</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css?v=20260703-maprestore1" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Seoul from COEX</p>
+          <h1>Map & Travel <span>Airport / Near COEX / Seoul Classics</span></h1>
+        </div>
+        <a class="travel-link" href="./index.html">Back to Guide</a>
+      </header>
+
+      <main>
+        <section class="panel travel-section travel-airport-section">
+          <div class="panel-title travel-section-title">
+            <div>
+              <p class="eyebrow">01</p>
+              <h2>Airport -> COEX</h2>
+            </div>
+            <span class="status-pill">ICN T1</span>
+          </div>
+          <div class="travel-airport-layout">
+            <section class="map-card travel-map-card">
+              <iframe id="travelMapFrame" title="ICML 2026 Seoul MapLibre map" src="./maps/icml2026_seoul_maplibre.html?focus=airport&v=20260703-maprestore1" loading="lazy"></iframe>
+            </section>
+            <div id="airportRouteSteps" class="travel-directions-list"></div>
+          </div>
+        </section>
+
+        <section class="panel travel-section">
+          <div class="panel-title travel-section-title">
+            <div>
+              <p class="eyebrow">02</p>
+              <h2>Near COEX</h2>
+            </div>
+            <span class="status-pill">Breaks / food</span>
+          </div>
+          <section class="map-card travel-map-card travel-coex-map-card">
+            <iframe title="COEX nearby map" src="./maps/icml2026_seoul_maplibre.html?focus=coex&v=20260703-maprestore1" loading="lazy"></iframe>
+          </section>
+        </section>
+
+        <section class="panel travel-section">
+          <div class="panel-title travel-section-title">
+            <div>
+              <p class="eyebrow">03</p>
+              <h2>Seoul Classics</h2>
+            </div>
+            <span class="status-pill">Half-day picks</span>
+          </div>
+          <div id="seoulHighlights" class="travel-route-groups"></div>
+        </section>
+      </main>
+    </div>
+
+    <nav class="bottom-nav" aria-label="Site navigation">
+      <a class="nav-item nav-link" href="./index.html#2026-07-06">
+        <span>Jul 6</span>
+        <b>Mon</b>
+      </a>
+      <a class="nav-item nav-link" href="./index.html#2026-07-07">
+        <span>Jul 7</span>
+        <b>Tue</b>
+      </a>
+      <a class="nav-item nav-link" href="./index.html#2026-07-08">
+        <span>Jul 8</span>
+        <b>Wed</b>
+      </a>
+      <a class="nav-item nav-link" href="./index.html#2026-07-09">
+        <span>Jul 9</span>
+        <b>Thu</b>
+      </a>
+      <a class="nav-item nav-link" href="./index.html#2026-07-10_11">
+        <span>Jul 10-11</span>
+        <b>Workshop</b>
+      </a>
+      <a class="nav-item nav-link is-active" href="./travel.html" aria-current="page">
+        <span>Map</span>
+        <b>Travel</b>
+      </a>
+    </nav>
+
+    <template id="emptyTemplate">
+      <div class="empty-state">
+        <strong>No data</strong>
+        <span>Regenerate docs/data/travel.json.</span>
+      </div>
+    </template>
+
+    <script src="./travel.js?v=20260703-maprestore1" type="module"></script>
+  </body>
+</html>

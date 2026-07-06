@@ -1,0 +1,17 @@
+kind,name,count
+topic_track,Efficient ML / Systems / Hardware,514
+topic_track,LLM / Foundation Models,358
+topic_track,Theory / Optimization / Learning Foundations,350
+topic_track,AI Safety / Alignment / Reliability,316
+topic_track,Causal / Probabilistic / Structured Data,308
+topic_track,Multimodal / Vision-Language / Video,273
+topic_track,Data / Evaluation / Benchmarks,242
+topic_track,Robotics / Embodied AI,167
+topic_track,Agents / Tool Use / GUI,159
+topic_track,Responsible AI / Social Impact / Economics,130
+topic_track,Reinforcement Learning / Decision Making,124
+topic_track,AI4Science / Bio / Molecules,115
+topic_track,Unmatched,4
+decision,Accept (regular),713
+decision,Accept (spotlight),39
+decision,(blank),1

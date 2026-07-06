@@ -1,0 +1,307 @@
+{
+  "last_update": "2026-07-03",
+  "timezone": "KST",
+  "events": [
+    {
+      "id": "alibaba-industry-demo-20260706",
+      "date": "2026-07-06",
+      "day": "Mon",
+      "time": "12:30-14:30",
+      "sort_time": "12:30",
+      "title": "AI for Industry Demonstration",
+      "organizer": "Alibaba",
+      "companies": ["Alibaba", "AliExpress", "Lazada", "AIDC"],
+      "type": "Expo Demo",
+      "status": "Official",
+      "admission": "Official",
+      "venue": "Grand Ballroom Foyer",
+      "area": "COEX",
+      "color": "#ff6a00",
+      "links": [
+        {
+          "label": "Official",
+          "url": "https://icml.cc/virtual/2026/75719"
+        },
+        {
+          "label": "Expo",
+          "url": "https://icml.cc/virtual/2026/events/2026-Expo"
+        }
+      ],
+      "highlights": ["AI for Industry", "E-commerce", "Shopping agents", "Supply-chain models"],
+      "source": "ICML official Expo schedule"
+    },
+    {
+      "id": "xiaomi-mimo-talk-20260706",
+      "date": "2026-07-06",
+      "day": "Mon",
+      "time": "TBD",
+      "sort_time": "99:00",
+      "title": "MiMo-V2.5 Tech Talk",
+      "organizer": "Xiaomi",
+      "companies": ["Xiaomi"],
+      "type": "Tech Talk",
+      "status": "Official",
+      "admission": "Official",
+      "venue": "Hall C / COEX",
+      "area": "COEX",
+      "color": "#ff6900",
+      "links": [
+        {
+          "label": "Official",
+          "url": "https://icml.cc/virtual/2026/75731"
+        }
+      ],
+      "highlights": ["MiMo", "Xiaomi AI", "Research team", "Technical exchange"],
+      "source": "ICML official calendar"
+    },
+    {
+      "id": "xiaomi-booth-demo-20260706",
+      "date": "2026-07-06",
+      "day": "Mon",
+      "time": "All day",
+      "sort_time": "08:00",
+      "title": "Booth & Demo",
+      "organizer": "Xiaomi",
+      "companies": ["Xiaomi"],
+      "type": "Expo",
+      "status": "Official",
+      "admission": "Official",
+      "venue": "Grand Ballroom Foyer",
+      "area": "COEX",
+      "color": "#ff6900",
+      "links": [
+        {
+          "label": "Official",
+          "url": "https://icml.cc/virtual/2026/75720"
+        },
+        {
+          "label": "Expo",
+          "url": "https://icml.cc/virtual/2026/events/2026-Expo"
+        }
+      ],
+      "highlights": ["Xiaomi GUI Agent", "Device AI", "Mobile agents", "Expo booth"],
+      "source": "ICML official Expo schedule"
+    },
+    {
+      "id": "science-art-night-20260707",
+      "date": "2026-07-07",
+      "day": "Tue",
+      "time": "18:30-23:30",
+      "sort_time": "18:30",
+      "title": "A Night of Science & Art",
+      "organizer": "Aureka × NVIDIA × 5Y Capital × GenBio",
+      "companies": ["Aureka", "NVIDIA", "5Y Capital", "GenBio"],
+      "type": "After Party",
+      "status": "Public",
+      "admission": "Public RSVP",
+      "venue": "Seoul",
+      "area": "Seoul",
+      "color": "#76b900",
+      "links": [
+        {
+          "label": "RSVP",
+          "url": "https://luma.com/8hns7pb2?tk=E6NCvC"
+        }
+      ],
+      "highlights": ["DJ", "Networking", "Science + Art", "Startup & VC", "Live music"],
+      "source": "Public Luma event"
+    },
+    {
+      "id": "ant-sglang-coffee-20260708",
+      "date": "2026-07-08",
+      "day": "Wed",
+      "time": "13:30-17:00",
+      "sort_time": "13:30",
+      "title": "AGI Coffee Chat",
+      "organizer": "Ant Group × SGLang",
+      "companies": ["Ant Group", "SGLang"],
+      "type": "Coffee Chat",
+      "status": "Public",
+      "admission": "Walk-in",
+      "venue": "Stem Coffee",
+      "area": "Gangnam",
+      "color": "#1677ff",
+      "links": [],
+      "highlights": ["Free coffee", "Walk-in", "Meet SGLang", "Meet Ant Group"],
+      "source": "Public activity list; URL not yet added"
+    },
+    {
+      "id": "kuaishou-kstar-20260708",
+      "date": "2026-07-08",
+      "day": "Wed",
+      "time": "18:00-21:30",
+      "sort_time": "18:00",
+      "title": "快Star STARRY NIGHT",
+      "organizer": "Kuaishou",
+      "companies": ["Kuaishou"],
+      "type": "Cruise Dinner",
+      "status": "Invite",
+      "admission": "Invitation only",
+      "venue": "Yeouido Pier / Han River Cruise",
+      "area": "Yeouido",
+      "color": "#ff6a00",
+      "links": [
+        {
+          "label": "RSVP",
+          "url": "https://www.wjx.cn/vm/rN1U64h.aspx"
+        }
+      ],
+      "highlights": ["Han River Cruise", "Fireworks", "Kuaishou experts", "AI research", "Recruiting", "Networking"],
+      "source": "Public WJX page; invite-only with registration deadline"
+    },
+    {
+      "id": "alibaba-alistar-20260708",
+      "date": "2026-07-08",
+      "day": "Wed",
+      "time": "18:30-21:00",
+      "sort_time": "18:30",
+      "title": "AliStar Wonder Night",
+      "organizer": "Alibaba",
+      "companies": ["Alibaba", "Tongyi", "DAMO Academy", "Alibaba International"],
+      "type": "Talent Dinner",
+      "status": "Invite",
+      "admission": "Invitation only",
+      "venue": "Seoul",
+      "area": "Seoul",
+      "color": "#ff6a00",
+      "links": [
+        {
+          "label": "Media",
+          "url": "https://news.qq.com/rain/a/20260622A0EUAQ00"
+        }
+      ],
+      "highlights": ["AI for Industry", "AI for Science", "Research networking", "Alibaba International", "Tongyi", "DAMO Academy"],
+      "source": "Media-level clue; public RSVP not found locally"
+    },
+    {
+      "id": "together-aquarium-20260708",
+      "date": "2026-07-08",
+      "day": "Wed",
+      "time": "18:30-21:00",
+      "sort_time": "18:30",
+      "title": "Together Aquarium Reception",
+      "organizer": "Together AI",
+      "companies": ["Together AI"],
+      "type": "Reception",
+      "status": "Public",
+      "admission": "Public RSVP",
+      "venue": "Aquarium",
+      "area": "COEX / Gangnam",
+      "color": "#00c2a8",
+      "links": [],
+      "highlights": ["Reception", "ICML attendees", "Infra builders", "Research networking"],
+      "source": "Public activity list; URL not yet added"
+    },
+    {
+      "id": "techbeat-elite-dinner-20260708",
+      "date": "2026-07-08",
+      "day": "Wed",
+      "time": "Evening",
+      "sort_time": "19:00",
+      "title": "群星闪耀精英晚宴",
+      "organizer": "TechBeat / 将门",
+      "companies": ["TechBeat", "将门"],
+      "type": "Networking Dinner",
+      "status": "Registration",
+      "admission": "Registration + review",
+      "venue": "Near COEX",
+      "area": "COEX",
+      "color": "#ffd400",
+      "links": [
+        {
+          "label": "Search result",
+          "url": "https://weixin.sogou.com/weixin?type=2&query=%E5%B0%86%E9%97%A8%E5%8D%81%E5%91%A8%E5%B9%B4%20ICML%20%E7%B2%BE%E8%8B%B1%E6%99%9A%E5%AE%B4"
+        }
+      ],
+      "highlights": ["AI researchers", "Startup founders", "Investors", "Engineers"],
+      "source": "WeChat search-result snippet; venue after approval"
+    },
+    {
+      "id": "huawei-talent-night-20260709",
+      "date": "2026-07-09",
+      "day": "Thu",
+      "time": "18:00-21:00",
+      "sort_time": "18:00",
+      "title": "Huawei Talent Night",
+      "organizer": "Huawei",
+      "companies": ["Huawei"],
+      "type": "Talent Dinner",
+      "status": "Invite",
+      "admission": "Invitation only",
+      "venue": "Signiel Seoul Hotel",
+      "area": "Jamsil",
+      "color": "#d6001c",
+      "links": [
+        {
+          "label": "Public clue",
+          "url": "https://sg.linkedin.com/in/junwei-liao"
+        }
+      ],
+      "highlights": ["Frontier tech talks", "Top researchers", "Internship", "Campus recruiting", "Full-time recruiting", "Dinner", "Performance", "Lucky draw"],
+      "audience": ["ICML authors", "Researchers", "MSc", "PhD"],
+      "source": "Public clue plus collected event details"
+    },
+    {
+      "id": "xiaomi-talent-night-20260709",
+      "date": "2026-07-09",
+      "day": "Thu",
+      "time": "18:00-21:00",
+      "sort_time": "18:00",
+      "title": "Xiaomi Talent Night",
+      "organizer": "Xiaomi",
+      "companies": ["Xiaomi"],
+      "type": "Talent Dinner",
+      "status": "Registration",
+      "admission": "Registration + review",
+      "venue": "Seoul",
+      "area": "Seoul",
+      "color": "#ff6900",
+      "links": [
+        {
+          "label": "WeChat",
+          "url": "http://mp.weixin.qq.com/s?src=11&timestamp=1782985701&ver=6818&signature=g2Tn0quBkLebKBQSOhXUxOBr04Znch6xSbt8DsXTVQ3yYfCuBm*aVELtaHSji-KogQt7LW1JBh*xzSP9ouQNtJnSUis4JeEL3OUxv5mn2nVAsalr*YN6Xy8FCj4kbRmY&new=1"
+        }
+      ],
+      "highlights": ["Xiaomi AI", "MiMo", "Research team", "Tech exchange", "Dinner"],
+      "source": "WeChat title/source found locally; body blocked by verification"
+    },
+    {
+      "id": "ant-sglang-agipop-20260709",
+      "date": "2026-07-09",
+      "day": "Thu",
+      "time": "18:00-21:00",
+      "sort_time": "18:00",
+      "title": "AGI-POP Night",
+      "organizer": "Ant Group × SGLang",
+      "companies": ["Ant Group", "SGLang"],
+      "type": "Happy Hour",
+      "status": "Registration",
+      "admission": "Registration required",
+      "venue": "Seoul",
+      "area": "Seoul",
+      "color": "#6c63ff",
+      "links": [],
+      "highlights": ["Lightning talks", "Happy hour", "Free-flow drinks", "DJ", "AGI networking"],
+      "source": "Public activity list; URL not yet added"
+    },
+    {
+      "id": "zoda-happy-hour-20260709",
+      "date": "2026-07-09",
+      "day": "Thu",
+      "time": "19:00-21:00",
+      "sort_time": "19:00",
+      "title": "Happy Hour",
+      "organizer": "ZODA × 地瓜机器人 × 真格 × 共绩科技",
+      "companies": ["ZODA", "地瓜机器人", "真格基金", "共绩科技"],
+      "type": "Networking",
+      "status": "Registration",
+      "admission": "Registration required",
+      "venue": "Seoul",
+      "area": "Seoul",
+      "color": "#7b61ff",
+      "links": [],
+      "highlights": ["Networking", "Robotics", "VC", "Founder conversations"],
+      "source": "Public activity list; URL not yet added"
+    }
+  ]
+}

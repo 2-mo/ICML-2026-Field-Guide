@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#10151f" />
+    <meta name="description" content="ICML 2026 Seoul side events, company dinners, public receptions, and RSVP links." />
+    <title>ICML 2026 Seoul Side Events</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css?v=20260703-perf" />
+  </head>
+  <body class="company-page">
+    <div class="app-shell company-shell">
+      <header class="company-hero">
+        <div class="company-hero-copy">
+          <p class="eyebrow">ICML 2026 Seoul</p>
+          <h1>Live Side Events <span>Company dinners / receptions / public links</span></h1>
+          <p id="companyUpdate" class="company-update">Last Update: Loading</p>
+        </div>
+        <a class="travel-link company-back-link" href="./index.html">Field Guide</a>
+      </header>
+
+      <main>
+        <section class="company-stats" id="companyStats" aria-label="Side event statistics"></section>
+
+        <section class="company-control-panel" aria-label="Event filters">
+          <label class="company-search">
+            <span>Search</span>
+            <input id="companySearch" type="search" placeholder="Company, event, venue..." autocomplete="off" />
+          </label>
+          <div class="company-view-tabs" id="companyViewTabs" aria-label="View mode"></div>
+          <div class="company-filter-row" id="companyDateFilters" aria-label="Date filters"></div>
+          <div class="company-filter-row" id="companyStatusFilters" aria-label="Status filters"></div>
+          <div class="company-filter-row" id="companyTypeFilters" aria-label="Type filters"></div>
+        </section>
+
+        <section class="company-view is-active" id="timelineView" data-view="timeline">
+          <div class="company-section-title">
+            <div>
+              <p class="eyebrow">Timeline</p>
+              <h2>July 6-9</h2>
+            </div>
+            <span id="companyCount" class="status-pill">Loading</span>
+          </div>
+          <div id="companyTimeline" class="company-timeline"></div>
+        </section>
+
+        <section class="company-view" id="calendarView" data-view="calendar">
+          <div class="company-section-title">
+            <div>
+              <p class="eyebrow">Calendar</p>
+              <h2>Daily density</h2>
+            </div>
+          </div>
+          <div id="companyCalendar" class="company-calendar"></div>
+        </section>
+
+        <section class="company-view" id="mapView" data-view="map">
+          <div class="company-section-title">
+            <div>
+              <p class="eyebrow">Map</p>
+              <h2>Venue clusters</h2>
+            </div>
+          </div>
+          <div id="companyMap" class="company-map"></div>
+        </section>
+
+        <section class="company-view" id="companyCardsView" data-view="companies">
+          <div class="company-section-title">
+            <div>
+              <p class="eyebrow">Companies</p>
+              <h2>Organizer cards</h2>
+            </div>
+          </div>
+          <div id="companyCards" class="company-card-grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <nav id="dateNav" class="bottom-nav" aria-label="Conference navigation">
+      <a class="nav-item nav-link" href="./index.html#2026-07-06">
+        <span>Jul 6</span>
+        <b>Mon</b>
+      </a>
+      <a class="nav-item nav-link" href="./index.html#2026-07-07">
+        <span>Jul 7</span>
+        <b>Tue</b>
+      </a>
+      <a class="nav-item nav-link" href="./index.html#2026-07-08">
+        <span>Jul 8</span>
+        <b>Wed</b>
+      </a>
+      <a class="nav-item nav-link" href="./index.html#2026-07-09">
+        <span>Jul 9</span>
+        <b>Thu</b>
+      </a>
+      <a class="nav-item nav-link" href="./index.html#2026-07-10_11">
+        <span>Jul 10-11</span>
+        <b>Workshop</b>
+      </a>
+      <a class="nav-item nav-link" href="./travel.html">
+        <span>Map</span>
+        <b>Travel</b>
+      </a>
+    </nav>
+
+    <template id="emptyTemplate">
+      <div class="empty-state">
+        <strong>No data</strong>
+        <span>Regenerate docs/data/company_events.json.</span>
+      </div>
+    </template>
+
+    <script src="./companies.js?v=20260703-perf" type="module"></script>
+  </body>
+</html>

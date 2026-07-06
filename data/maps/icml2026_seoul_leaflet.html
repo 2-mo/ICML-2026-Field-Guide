@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ICML 2026 首尔地图 / Seoul Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body, #map { margin: 0; width: 100%; height: 100%; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body { background: #f8fafc; }
+    #map { min-height: 100vh; }
+    .panel {
+      position: absolute; z-index: 500; top: 22px; left: 22px; width: 390px;
+      background: rgba(255,255,255,.94); border: 1px solid #dbe4ea; border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(15,23,42,.16); padding: 20px 22px;
+    }
+    .panel h1 { margin: 0 0 8px; font-size: 25px; line-height: 1.18; color: #0f172a; }
+    .panel p { margin: 0 0 14px; font-size: 14px; line-height: 1.45; color: #475569; }
+    .legend { display: grid; gap: 8px; font-size: 14px; color: #1f2937; }
+    .legend span { display: inline-flex; align-items: center; gap: 8px; }
+    .swatch { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+    .leaflet-tooltip.label {
+      background: rgba(255,255,255,.92); color: #111827; border: 1px solid rgba(148,163,184,.55);
+      border-radius: 10px; box-shadow: 0 6px 18px rgba(15,23,42,.12); padding: 5px 8px;
+      font-weight: 700; font-size: 13px;
+    }
+    .pin { width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 5px 14px rgba(15,23,42,.25); }
+    .popup h2 { margin: 0 0 6px; font-size: 16px; }
+    .popup p { margin: 0 0 8px; font-size: 13px; line-height: 1.4; color: #374151; }
+    .popup a { color: #2563eb; font-weight: 700; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <section class="panel">
+    <h1>ICML 2026 首尔逛会地图<br/>Seoul Conference Map</h1>
+    <p>中文和英文为主，韩文仅作站名括注。<br/>Chinese and English first; Korean appears only as station-name notes.</p>
+    <div class="legend">
+      <span><i class="swatch" style="background:#111827"></i>主会场 / Venue</span>
+      <span><i class="swatch" style="background:#2563eb"></i>地铁入口 / Subway</span>
+      <span><i class="swatch" style="background:#0f766e"></i>活动区域 / Event zone</span>
+      <span><i class="swatch" style="background:#ea580c"></i>机场路线 / Airport route</span>
+      <span><i class="swatch" style="background:#4361ee"></i>晚间路线 / Evening route</span>
+    </div>
+  </section>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const points = [{"id": "coex", "category": "venue", "zh": "COEX 会场", "en": "COEX venue", "ko_note": "코엑스", "latitude": 37.5118, "longitude": 127.0592, "google_maps_query": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "note_zh": "主会场与默认出发点。", "note_en": "Main venue and default origin.", "label": "COEX 会场 / COEX venue (코엑스)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul"}, {"id": "parnas", "category": "hotel", "zh": "Parnas 酒店区", "en": "Parnas hotel area", "ko_note": "", "latitude": 37.5089, "longitude": 127.0611, "google_maps_query": "Grand InterContinental Seoul Parnas, 521 Teheran-ro, Seoul", "note_zh": "会场酒店与餐饮锚点。", "note_en": "Hotel and food anchor next to COEX.", "label": "Parnas 酒店区 / Parnas hotel area", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Grand+InterContinental+Seoul+Parnas%2C+521+Teheran-ro%2C+Seoul"}, {"id": "provista", "category": "hotel", "zh": "普罗威斯塔酒店", "en": "Provista Hotel", "ko_note": "", "latitude": 37.4932, "longitude": 127.0157, "google_maps_query": "Hotel Provista Seoul, 338 Seocho-daero, Seocho-gu, Seoul 06632", "note_zh": "住处：338 Seocho-daero, Seocho-gu, Seoul 06632。", "note_en": "Hotel base: 338 Seocho-daero, Seocho-gu, Seoul 06632.", "label": "普罗威斯塔酒店 / Provista Hotel", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Hotel+Provista+Seoul%2C+338+Seocho-daero%2C+Seocho-gu%2C+Seoul+06632"}, {"id": "samseong", "category": "station", "zh": "三成站", "en": "Samseong Station", "ko_note": "삼성", "latitude": 37.5088, "longitude": 127.0631, "google_maps_query": "Samseong Station Exit 5, Seoul", "note_zh": "Line 2，COEX 官方建议 5/6 号出口。", "note_en": "Line 2; COEX recommends exits 5/6.", "label": "三成站 / Samseong Station (삼성)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Samseong+Station+Exit+5%2C+Seoul"}, {"id": "bongeunsa", "category": "station", "zh": "奉恩寺站", "en": "Bongeunsa Station", "ko_note": "봉은사", "latitude": 37.5142, "longitude": 127.0602, "google_maps_query": "Bongeunsa Station Exit 7, Seoul", "note_zh": "Line 9，COEX 官方建议 7 号出口。", "note_en": "Line 9; COEX recommends exit 7.", "label": "奉恩寺站 / Bongeunsa Station (봉은사)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Bongeunsa+Station+Exit+7%2C+Seoul"}, {"id": "gangnam", "category": "zone", "zh": "江南站", "en": "Gangnam Station", "ko_note": "강남", "latitude": 37.4979, "longitude": 127.0276, "google_maps_query": "Gangnam Station, Seoul", "note_zh": "晚宴、meetup、饭局高密度区域。", "note_en": "High-density dinner and meetup area.", "label": "江南站 / Gangnam Station (강남)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Gangnam+Station%2C+Seoul"}, {"id": "yeoksam", "category": "zone", "zh": "驿三区域", "en": "Yeoksam area", "ko_note": "역삼", "latitude": 37.5013, "longitude": 127.0396, "google_maps_query": "Yeoksam-ro, Gangnam-gu, Seoul", "note_zh": "OpenAI/Hugging Face 等活动公开页只到区域级。", "note_en": "Some RSVP pages expose only this obfuscated area.", "label": "驿三区域 / Yeoksam area (역삼)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Yeoksam-ro%2C+Gangnam-gu%2C+Seoul"}, {"id": "gfc", "category": "event", "zh": "江南金融中心", "en": "Gangnam Finance Center", "ko_note": "", "latitude": 37.5002, "longitude": 127.0364, "google_maps_query": "Gangnam Finance Center 24F, 152 Teheran-ro, Gangnam-gu, Seoul", "note_zh": "Google DeepMind x GDG 活动公开地址。", "note_en": "Public address for the Google DeepMind x GDG event.", "label": "江南金融中心 / Gangnam Finance Center", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Gangnam+Finance+Center+24F%2C+152+Teheran-ro%2C+Gangnam-gu%2C+Seoul"}, {"id": "dosan", "category": "zone", "zh": "岛山大路 81 街区域", "en": "Dosan-daero 81-gil area", "ko_note": "", "latitude": 37.528, "longitude": 127.047, "google_maps_query": "Dosan-daero 81-gil, Gangnam-gu, Seoul", "note_zh": "VESSL 晚宴公开页只到区域级。", "note_en": "VESSL dinner public page exposes only an obfuscated area.", "label": "岛山大路 81 街区域 / Dosan-daero 81-gil area", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Dosan-daero+81-gil%2C+Gangnam-gu%2C+Seoul"}, {"id": "seongsu", "category": "zone", "zh": "圣水", "en": "Seongsu", "ko_note": "성수", "latitude": 37.5446, "longitude": 127.0559, "google_maps_query": "Seongsu Station, Seoul", "note_zh": "咖啡、品牌空间、轻松半日行程。", "note_en": "Cafe and brand-space zone for a lighter half day.", "label": "圣水 / Seongsu (성수)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Seongsu+Station%2C+Seoul"}, {"id": "seoul_forest", "category": "nearby", "zh": "首尔林", "en": "Seoul Forest", "ko_note": "서울숲", "latitude": 37.5444, "longitude": 127.0374, "google_maps_query": "Seoul Forest, Seoul", "note_zh": "可和圣水一起安排。", "note_en": "Pair with Seongsu rather than a separate trip.", "label": "首尔林 / Seoul Forest (서울숲)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Seoul+Forest%2C+Seoul"}, {"id": "hongdae", "category": "zone", "zh": "弘大", "en": "Hongdae", "ko_note": "홍대", "latitude": 37.5572, "longitude": 126.9245, "google_maps_query": "Hongik University Station, Seoul", "note_zh": "夜生活备选，不适合短午休。", "note_en": "Nightlife fallback; not ideal for a short lunch gap.", "label": "弘大 / Hongdae (홍대)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Hongik+University+Station%2C+Seoul"}, {"id": "itaewon", "category": "zone", "zh": "梨泰院", "en": "Itaewon", "ko_note": "이태원", "latitude": 37.5345, "longitude": 126.9946, "google_maps_query": "Itaewon Station, Seoul", "note_zh": "晚餐、酒吧、Hannam/Hangangjin 方向。", "note_en": "Dinner, bars, Hannam/Hangangjin direction.", "label": "梨泰院 / Itaewon (이태원)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Itaewon+Station%2C+Seoul"}, {"id": "gimpo", "category": "airport", "zh": "金浦机场换乘", "en": "Gimpo transfer", "ko_note": "김포", "latitude": 37.5587, "longitude": 126.7945, "google_maps_query": "Gimpo International Airport Station", "note_zh": "AREX 换乘 Line 9 的节点。", "note_en": "Transfer from AREX to Line 9.", "label": "金浦机场换乘 / Gimpo transfer (김포)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Gimpo+International+Airport+Station"}, {"id": "incheon_t1", "category": "airport", "zh": "仁川机场 T1", "en": "Incheon Airport T1", "ko_note": "인천", "latitude": 37.4602, "longitude": 126.4407, "google_maps_query": "Incheon Airport Terminal 1, 272 Gonghang-ro, Yeongjong-gu, Incheon", "note_zh": "国际到达，注意 T1/T2。", "note_en": "International arrival; confirm T1/T2.", "label": "仁川机场 T1 / Incheon Airport T1 (인천)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Incheon+Airport+Terminal+1%2C+272+Gonghang-ro%2C+Yeongjong-gu%2C+Incheon"}, {"id": "pangyo", "category": "zone", "zh": "板桥科技谷", "en": "Pangyo Techno Valley", "ko_note": "판교", "latitude": 37.3947, "longitude": 127.1112, "google_maps_query": "Pangyo Techno Valley, Seongnam", "note_zh": "较远的公司/园区活动方向。", "note_en": "Longer offsite company-campus direction.", "label": "板桥科技谷 / Pangyo Techno Valley (판교)", "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Pangyo+Techno+Valley%2C+Seongnam"}];
+    const routes = [{"id": "arrival_icn", "category": "airport", "zh": "AREX 仁川 T1 到金浦", "en": "AREX ICN T1 to Gimpo", "points": [[37.4602, 126.4407], [37.5587, 126.7945]], "color": "#2563eb", "stroke_dasharray": "", "google_maps_origin": "Incheon Airport Terminal 1, 272 Gonghang-ro, Yeongjong-gu, Incheon", "google_maps_destination": "Gimpo International Airport Station", "travelmode": "transit", "note_zh": "仁川 T1 先坐 AREX 到金浦机场换乘。", "note_en": "Take AREX from ICN T1 to Gimpo Airport transfer.", "label": "AREX 仁川 T1 到金浦 / AREX ICN T1 to Gimpo", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Incheon+Airport+Terminal+1%2C+272+Gonghang-ro%2C+Yeongjong-gu%2C+Incheon&destination=Gimpo+International+Airport+Station&travelmode=transit"}, {"id": "line2_core", "category": "metro", "zh": "Line 2 核心线", "en": "Line 2 core", "points": [[37.5572, 126.9245], [37.5446, 127.0559], [37.5088, 127.0631], [37.4979, 127.0276]], "color": "#2a9d8f", "stroke_dasharray": "", "google_maps_origin": "Samseong Station, Seoul", "google_maps_destination": "Gangnam Station, Seoul", "travelmode": "transit", "note_zh": "会场到江南、圣水、弘大都可用 Line 2 作为主轴。", "note_en": "Line 2 is the main axis for Gangnam, Seongsu, and Hongdae.", "label": "Line 2 核心线 / Line 2 core", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Samseong+Station%2C+Seoul&destination=Gangnam+Station%2C+Seoul&travelmode=transit"}, {"id": "line9_core", "category": "metro", "zh": "Line 9 金浦到奉恩寺", "en": "Line 9 Gimpo to Bongeunsa", "points": [[37.5587, 126.7945], [37.5142, 127.0602], [37.5118, 127.0592]], "color": "#b78714", "stroke_dasharray": "", "google_maps_origin": "Gimpo International Airport Station", "google_maps_destination": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "travelmode": "transit", "note_zh": "金浦换乘 Line 9 到奉恩寺站，7 号出口到 COEX。", "note_en": "Transfer to Line 9 at Gimpo, ride to Bongeunsa, then walk to COEX.", "label": "Line 9 金浦到奉恩寺 / Line 9 Gimpo to Bongeunsa", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Gimpo+International+Airport+Station&destination=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&travelmode=transit"}, {"id": "hotel_line2", "category": "metro", "zh": "Line 2 酒店到三成", "en": "Line 2 hotel to Samseong", "points": [[37.4932, 127.0157], [37.5088, 127.0631], [37.5118, 127.0592]], "color": "#2a9d8f", "stroke_dasharray": "", "google_maps_origin": "Hotel Provista Seoul, 338 Seocho-daero, Seocho-gu, Seoul 06632", "google_maps_destination": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "travelmode": "transit", "note_zh": "普罗威斯塔酒店从教大/Line 2 到三成，再步行到 COEX。", "note_en": "From Provista, use Line 2 toward Samseong, then walk to COEX.", "label": "Line 2 酒店到三成 / Line 2 hotel to Samseong", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=Hotel+Provista+Seoul%2C+338+Seocho-daero%2C+Seocho-gu%2C+Seoul+06632&destination=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&travelmode=transit"}, {"id": "evening_gangnam", "category": "evening", "zh": "江南晚间圈", "en": "Gangnam evening loop", "points": [[37.5118, 127.0592], [37.528, 127.047], [37.5002, 127.0364], [37.5013, 127.0396], [37.4979, 127.0276]], "color": "#4361ee", "stroke_dasharray": "", "google_maps_origin": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "google_maps_destination": "Gangnam Station, Seoul", "travelmode": "transit", "note_zh": "大多数科技公司社交、晚宴、meetup 的第一候选区域。", "note_en": "First-choice zone for many tech socials, dinners, and meetups.", "label": "江南晚间圈 / Gangnam evening loop", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&destination=Gangnam+Station%2C+Seoul&travelmode=transit"}, {"id": "itaewon", "category": "evening", "zh": "梨泰院方向", "en": "Itaewon direction", "points": [[37.5118, 127.0592], [37.5345, 126.9946]], "color": "#7209b7", "stroke_dasharray": "7 6", "google_maps_origin": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "google_maps_destination": "Itaewon Station, Seoul", "travelmode": "transit", "note_zh": "晚餐和酒吧可选，深夜可考虑出租车。", "note_en": "Good for dinner and bars; taxi may be simpler late night.", "label": "梨泰院方向 / Itaewon direction", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&destination=Itaewon+Station%2C+Seoul&travelmode=transit"}, {"id": "pangyo", "category": "offsite", "zh": "板桥远端活动", "en": "Pangyo offsite", "points": [[37.5118, 127.0592], [37.3947, 127.1112]], "color": "#6c757d", "stroke_dasharray": "12 8", "google_maps_origin": "COEX Convention & Exhibition Center, 513 Yeongdong-daero, Gangnam-gu, Seoul", "google_maps_destination": "Pangyo Techno Valley, Seongnam", "travelmode": "transit", "note_zh": "只建议给重要 offsite 留整晚。", "note_en": "Reserve a full evening only for important offsites.", "label": "板桥远端活动 / Pangyo offsite", "google_maps_url": "https://www.google.com/maps/dir/?api=1&origin=COEX+Convention+%26+Exhibition+Center%2C+513+Yeongdong-daero%2C+Gangnam-gu%2C+Seoul&destination=Pangyo+Techno+Valley%2C+Seongnam&travelmode=transit"}];
+    const colors = {
+      venue: "#111827", station: "#2563eb", zone: "#0f766e", event: "#7c3aed",
+      airport: "#ea580c", hotel: "#be123c", nearby: "#16a34a"
+    };
+    const map = L.map("map", { zoomControl: false, attributionControl: true }).setView([37.515, 127.02], 11);
+    L.control.zoom({ position: "bottomright" }).addTo(map);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
+    }).addTo(map);
+
+    for (const route of routes) {
+      L.polyline(route.points, {
+        color: route.color,
+        weight: route.category === "metro" ? 6 : 5,
+        opacity: .82,
+        dashArray: route.stroke_dasharray || null,
+        lineJoin: "round"
+      }).addTo(map).bindTooltip(route.label, { sticky: true });
+    }
+
+    for (const point of points) {
+      const color = colors[point.category] || "#475569";
+      const icon = L.divIcon({
+        className: "",
+        html: `<div class="pin" style="background:${color}"></div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+      L.marker([point.latitude, point.longitude], { icon }).addTo(map)
+        .bindTooltip(point.label, { permanent: true, direction: "top", offset: [0, -12], className: "label" })
+        .bindPopup(`<div class="popup"><h2>${point.label}</h2><p>${point.note_zh}<br/>${point.note_en}</p><a href="${point.google_maps_url}" target="_blank">打开 Google Maps / Open Google Maps</a></div>`);
+    }
+  </script>
+</body>
+</html>
