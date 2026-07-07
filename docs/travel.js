@@ -33,7 +33,7 @@ const SHORT_STOP_NAMES = {
   "Yeouido Hangang Park": "汝矣岛汉江",
   "63 Building": "63大厦",
 };
-const DATA_VERSION = "20260707-foodfull1";
+const DATA_VERSION = "20260707-shopimg1";
 const FOOD_LEVELS = ["全部", "常规", "入门", "进阶", "挑战"];
 const CARRY_FILTERS = ["全部", "适合带回国", "需要规划", "慎买"];
 const FOOD_DETAIL_ALIASES = {
@@ -636,7 +636,10 @@ function shopMapQuery(item) {
 
 function shopVisual(item) {
   if (item.image_url) {
-    return `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.image_alt || item.product_name_cn)}" loading="lazy">`;
+    return `
+      <img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.image_alt || item.product_name_cn)}" loading="lazy">
+      ${item.image_type === "ai_generated" ? '<span class="travel-image-badge">AI示意</span>' : ""}
+    `;
   }
   return `
     <div class="travel-shop-placeholder" style="--visual-color: ${escapeHtml(item.visual_color || "#d8e3dd")}">

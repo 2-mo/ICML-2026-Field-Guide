@@ -4010,6 +4010,21 @@ main {
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.62);
 }
 
+.travel-image-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 1;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: rgba(32, 32, 29, 0.62);
+  color: #fffdf6;
+  font-size: 0.58rem;
+  font-weight: 900;
+  line-height: 1;
+  backdrop-filter: blur(8px);
+}
+
 .travel-extra-body {
   display: flex;
   flex-direction: column;
@@ -4240,6 +4255,7 @@ main {
 }
 
 .travel-detail-hero {
+  position: relative;
   min-width: 0;
   margin: 0;
   aspect-ratio: 16 / 8.2;

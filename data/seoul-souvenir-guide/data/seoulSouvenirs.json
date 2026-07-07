@@ -29,8 +29,8 @@
     "caution_note": "优先选茶包、茶叶和粉末类；果酱、蜂蜜、瓶装饮品和玻璃杯组合更重且易碎。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。保持原包装，避免压坏礼盒。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载品牌官网图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Photorealistic editorial flat lay of unbranded Korean-inspired tea tins, tea bags and paper gift boxes, no logos, no readable brand names, top-right corner clean for label overlay.",
     "visual_label": "Tea gift set",
     "visual_color": "#cfe8d4",
@@ -45,7 +45,9 @@
       "轻便",
       "礼盒",
       "韩国特色"
-    ]
+    ],
+    "image_url": "./assets/generated/osulloc-tea-bukchon.jpg",
+    "image_alt": "O'sulloc 济州茶礼盒 / 茶包 AI生成示意图"
   },
   {
     "id": "tea-therapy-haengrang",
@@ -76,8 +78,8 @@
     "caution_note": "草本茶不是药品，不要按医疗效果送人；含蜂蜜、果酱或液体饮品的组合要避开随身液体限制。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。选择密封茶包或干燥茶材。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载店铺图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Elegant unbranded Korean herbal tea sachets and dried botanicals on a warm wood table, no medical claims, no readable labels, top-right corner clean for label overlay.",
     "visual_label": "Herbal tea",
     "visual_color": "#e5dcc7",
@@ -91,7 +93,9 @@
       "韩方",
       "轻便",
       "体验感"
-    ]
+    ],
+    "image_url": "./assets/generated/tea-therapy-haengrang.jpg",
+    "image_alt": "Tea Therapy 韩方草本茶 / 个人调配茶 AI生成示意图"
   },
   {
     "id": "guemokdang-the-hyundai",
@@ -122,8 +126,8 @@
     "caution_note": "确认保质期和包装密封；羊羹有一定重量，买多会压箱。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。选常温密封礼盒，不买需要冷藏的点心。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载百货/品牌图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Photorealistic still life of unbranded Korean-style yokan sweets in elegant paper gift boxes, no readable brand names, no exact packaging, top-right corner clean.",
     "visual_label": "Yokan gift",
     "visual_color": "#e7c1b1",
@@ -138,7 +142,9 @@
       "百货",
       "传统甜点",
       "礼盒"
-    ]
+    ],
+    "image_url": "./assets/generated/guemokdang-the-hyundai.jpg",
+    "image_alt": "Guemokdang 手工羊羹礼盒 AI生成示意图"
   },
   {
     "id": "myeongin-myeongchon-the-hyundai",
@@ -169,8 +175,8 @@
     "caution_note": "百货食品馆礼盒可能含酱料、液体、玻璃瓶、冷藏或动植物成分；只选干燥、常温、密封款。",
     "is_suitable_to_bring_home": "conditional",
     "bring_home_note": "有条件适合。现场确认成分、保质期、是否常温保存和目的地入境限制。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载品牌图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Premium unbranded Korean artisan pantry gift set with dry tea, grain snacks and paper boxes, no jars of liquid, no logos, warm department-store lighting.",
     "visual_label": "Artisan food",
     "visual_color": "#d8c8a2",
@@ -185,7 +191,9 @@
       "百货",
       "高端食品",
       "需严筛"
-    ]
+    ],
+    "image_url": "./assets/generated/myeongin-myeongchon-the-hyundai.jpg",
+    "image_alt": "名人名村 韩国匠人食品礼盒 AI生成示意图"
   },
   {
     "id": "hbaf-myeongdong-almond",
@@ -217,8 +225,8 @@
     "caution_note": "坚果过敏者慎送；夏季巧克力涂层口味可能融化，买原包装密封款。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。坚果类按目的地海关食品规则申报或确认。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载品牌/IP包装图。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Photorealistic assortment of unbranded Korean-style almond snack pouches and small sweets, colorful abstract packaging without readable marks or mascots.",
     "visual_label": "Snack packs",
     "visual_color": "#ead25f",
@@ -232,7 +240,9 @@
       "批量",
       "零食",
       "明洞"
-    ]
+    ],
+    "image_url": "./assets/generated/hbaf-myeongdong-almond.jpg",
+    "image_alt": "HBAF 蜂蜜黄油杏仁 / 多口味杏仁 AI生成示意图"
   },
   {
     "id": "lotte-mart-zettaplex-snacks",
@@ -264,8 +274,8 @@
     "caution_note": "避开肉类、冷藏、生鲜、散装食品和玻璃瓶酱料；海苔和饼干容易压碎，放箱内上层。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。选原包装、常温、非肉类非生鲜食品。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载超市货架图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Top-down travel snack haul with generic unbranded Korean-style seaweed packs, cookies, instant coffee sticks and crackers, no readable labels.",
     "visual_label": "Supermarket haul",
     "visual_color": "#f0a85d",
@@ -279,7 +289,9 @@
       "超市",
       "首尔站",
       "批量"
-    ]
+    ],
+    "image_url": "./assets/generated/lotte-mart-zettaplex-snacks.jpg",
+    "image_alt": "韩国超市零食组合 AI生成示意图"
   },
   {
     "id": "oliveyoung-myeongdong-kbeauty",
@@ -311,8 +323,8 @@
     "caution_note": "面膜、安瓶、乳霜、唇釉多属液体/凝胶；随身按 100ml 规则，数量多建议托运。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。关注肤质、过敏、保质期和液体限制。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载美妆商品图。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Clean flat lay of generic Korean beauty items: serum bottles, sunscreen tubes, sheet mask packets and toner pads, pastel unbranded packaging, no readable labels.",
     "visual_label": "K-beauty",
     "visual_color": "#f4b6c2",
@@ -327,7 +339,9 @@
       "明洞",
       "退税",
       "热门"
-    ]
+    ],
+    "image_url": "./assets/generated/oliveyoung-myeongdong-kbeauty.jpg",
+    "image_alt": "Olive Young K-Beauty 热门小件 AI生成示意图"
   },
   {
     "id": "sulwhasoo-bukchon",
@@ -359,8 +373,8 @@
     "caution_note": "护肤品多属液体/乳霜，注意随身 100ml 限制；大礼盒较占箱。",
     "is_suitable_to_bring_home": "conditional",
     "bring_home_note": "有条件适合。少量购买，优先托运或确认免税提货规则。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载品牌官网图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Premium unbranded skincare gift set with cream jars and serum bottles inspired by Korean aesthetics, no logos, no readable labels, no medical claims.",
     "visual_label": "Premium skincare",
     "visual_color": "#dfb86b",
@@ -373,7 +387,9 @@
       "高端",
       "北村",
       "液体需规划"
-    ]
+    ],
+    "image_url": "./assets/generated/sulwhasoo-bukchon.jpg",
+    "image_alt": "雪花秀人参护肤礼盒 / 旅行套装 AI生成示意图"
   },
   {
     "id": "amore-seongsu-beauty",
@@ -404,8 +420,8 @@
     "caution_note": "试用体验强，但购买前确认是否为套装、是否适合肤质；液体/凝胶按航空规则处理。",
     "is_suitable_to_bring_home": "conditional",
     "bring_home_note": "有条件适合。彩妆固体类更省心，护肤液体类建议托运。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实店铺或商品照片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Modern unbranded K-beauty tester table with compact makeup, skincare samples and mirrors, no logos, no readable brand names, clean retail lighting.",
     "visual_label": "Beauty testing",
     "visual_color": "#d5d6f2",
@@ -419,7 +435,9 @@
       "圣水",
       "体验店",
       "液体需规划"
-    ]
+    ],
+    "image_url": "./assets/generated/amore-seongsu-beauty.jpg",
+    "image_alt": "AMORE Seongsu 多品牌美妆礼品 AI生成示意图"
   },
   {
     "id": "fwee-agit-seongsu",
@@ -450,8 +468,8 @@
     "caution_note": "唇釉、膏霜类按液体/凝胶保守处理；色号很挑人，最好按收礼人偏好买。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。小件不重，数量多时建议托运。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载品牌图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Cute unbranded Korean makeup flat lay with small lip-and-cheek pots, pastel pouches and swatches, no readable labels, no exact product packaging.",
     "visual_label": "Makeup minis",
     "visual_color": "#f28aa7",
@@ -464,7 +482,9 @@
       "圣水",
       "彩妆",
       "小件"
-    ]
+    ],
+    "image_url": "./assets/generated/fwee-agit-seongsu.jpg",
+    "image_alt": "fwee 布丁罐唇颊膏 / 彩妆小物 AI生成示意图"
   },
   {
     "id": "tamburins-haus-dosan",
@@ -495,8 +515,8 @@
     "caution_note": "香水、护手霜属液体/凝胶；随身选 100ml 以下，机场免税液体不要拆防拆袋。",
     "is_suitable_to_bring_home": "conditional",
     "bring_home_note": "有条件适合。香味挑人，建议少量买并优先托运。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载品牌图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Minimal unbranded fragrance and hand cream gift set on a stone counter, sculptural Seoul boutique mood, no logos, no readable labels.",
     "visual_label": "Fragrance",
     "visual_color": "#c4c0aa",
@@ -511,7 +531,9 @@
       "香氛",
       "Dosan",
       "液体需规划"
-    ]
+    ],
+    "image_url": "./assets/generated/tamburins-haus-dosan.jpg",
+    "image_alt": "TAMBURINS 香水 / 护手霜 / 香氛膏 AI生成示意图"
   },
   {
     "id": "nonfiction-hannam",
@@ -542,8 +564,8 @@
     "caution_note": "香水和护手霜有液体限制；香味偏个人化，最好现场闻过再买。",
     "is_suitable_to_bring_home": "conditional",
     "bring_home_note": "有条件适合。小规格更省心，托运更稳。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载品牌图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Calm unbranded fragrance boutique still life with perfume samples, hand cream tubes and paper gift bags, no logos, no readable labels.",
     "visual_label": "Lifestyle scent",
     "visual_color": "#b7c7be",
@@ -557,7 +579,9 @@
       "汉南",
       "香氛",
       "液体需规划"
-    ]
+    ],
+    "image_url": "./assets/generated/nonfiction-hannam.jpg",
+    "image_alt": "NONFICTION 香水 / 护手霜礼盒 AI生成示意图"
   },
   {
     "id": "granhand-seochon",
@@ -588,8 +612,8 @@
     "caution_note": "香氛液体需要规划；香囊更轻更稳，但避免直接接触衣物、皮具等易染色材质。",
     "is_suitable_to_bring_home": "conditional",
     "bring_home_note": "香囊适合带回国；液体香氛需按 100ml 和托运规则处理。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载品牌图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Unbranded Korean fragrance sachets and small perfume bottles with kraft paper labels, warm boutique counter, no readable brand names.",
     "visual_label": "Scent sachet",
     "visual_color": "#d2b68a",
@@ -604,7 +628,9 @@
       "西村",
       "香囊",
       "个性化"
-    ]
+    ],
+    "image_url": "./assets/generated/granhand-seochon.jpg",
+    "image_alt": "GRANHAND 香水 / 香囊 / 护手霜 AI生成示意图"
   },
   {
     "id": "gentle-monster-haus-dosan",
@@ -635,8 +661,8 @@
     "caution_note": "眼镜高度挑脸型，小配件更稳；务必官方渠道购买，保留票据。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。眼镜盒和配件注意防压。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实店铺或商品照片；未下载品牌图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Unbranded eyewear accessory still life with sleek glasses case, lens cloth and small metal keychain, futuristic Seoul design mood, no logos.",
     "visual_label": "Design accessory",
     "visual_color": "#aeb6bf",
@@ -650,7 +676,9 @@
       "设计品牌",
       "Dosan",
       "轻便"
-    ]
+    ],
+    "image_url": "./assets/generated/gentle-monster-haus-dosan.jpg",
+    "image_alt": "Gentle Monster 眼镜配件 / 小礼品 AI生成示意图"
   },
   {
     "id": "ssamziegil-insadong-crafts",
@@ -682,8 +710,8 @@
     "caution_note": "陶瓷、玻璃、螺钿盒易碎；尖锐金属、小刀类不要随身；避免贝壳、皮毛、种子等天然材料风险。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。优先选纸品、布艺、轻小工艺。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实店铺或商品照片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Photorealistic still life of Korean craft souvenirs: hanji notebook, bojagi cloth, mother-of-pearl style coaster and brass spoon, no store signs.",
     "visual_label": "K-crafts",
     "visual_color": "#84a98c",
@@ -697,7 +725,9 @@
       "仁寺洞",
       "传统",
       "轻小优先"
-    ]
+    ],
+    "image_url": "./assets/generated/ssamziegil-insadong-crafts.jpg",
+    "image_alt": "仁寺洞 Ssamziegil 传统工艺小物 AI生成示意图"
   },
   {
     "id": "muds-national-museum",
@@ -729,8 +759,8 @@
     "caution_note": "书签、钥匙扣、织物、纸品最稳；陶瓷和玻璃类需要防震包装。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。文化属性强，适合正式礼物。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；博物馆商品图仅作为来源链接。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Museum-shop style still life of unbranded Korean cultural goods: gold crown bookmark, fabric coaster, ceramic cup and notebook, no logos.",
     "visual_label": "Museum goods",
     "visual_color": "#d8b35a",
@@ -746,7 +776,9 @@
       "博物馆",
       "正式",
       "文化"
-    ]
+    ],
+    "image_url": "./assets/generated/muds-national-museum.jpg",
+    "image_alt": "国立中央博物馆 MU:DS 文创 AI生成示意图"
   },
   {
     "id": "seoul-my-soul-ddp",
@@ -778,8 +810,8 @@
     "caution_note": "城市角色周边库存变化快；毛绒玩具占空间，文具钥匙扣更好带。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。选轻小文具、钥匙扣、徽章类最稳。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载官方商品图。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Unbranded city souvenir flat lay inspired by Seoul travel: notebook, keyring, postcard and transit card, no official logos, no readable brand names.",
     "visual_label": "Seoul goods",
     "visual_color": "#6fb3c6",
@@ -794,7 +826,9 @@
       "官方",
       "DDP",
       "轻便"
-    ]
+    ],
+    "image_url": "./assets/generated/seoul-my-soul-ddp.jpg",
+    "image_alt": "Seoul My Soul 官方首尔文创 AI生成示意图"
   },
   {
     "id": "object-seogyo",
@@ -826,8 +860,8 @@
     "caution_note": "纸品怕折，买硬质文件夹或书本夹住；部分商品未必韩国制造，优先挑本地设计师。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。轻便、不涉及液体和食品风险。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载店铺图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Unbranded cute Korean indie stationery spread: stickers, postcards, washi tape and small notebooks, no protected characters, no readable brand names.",
     "visual_label": "Indie stationery",
     "visual_color": "#91c7b1",
@@ -841,7 +875,9 @@
       "弘大",
       "文具",
       "独立设计"
-    ]
+    ],
+    "image_url": "./assets/generated/object-seogyo.jpg",
+    "image_alt": "Object 韩国独立设计师贴纸 / 明信片 / 杂货 AI生成示意图"
   },
   {
     "id": "point-of-view-seongsu",
@@ -873,8 +909,8 @@
     "caution_note": "热门时段可能排队；纸品怕折，钢笔墨水属液体，随身要注意容量。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。优先选纸品、笔、书签、卡片。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实店铺或商品照片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Curated unbranded stationery desk with fountain pens without logos, notebooks, clips and postcards, warm Seoul design shop mood, no readable labels.",
     "visual_label": "Stationery",
     "visual_color": "#b7a7d9",
@@ -888,7 +924,9 @@
       "圣水",
       "精品文具",
       "轻便"
-    ]
+    ],
+    "image_url": "./assets/generated/point-of-view-seongsu.jpg",
+    "image_alt": "Point of View 精品文具 / 书写工具 AI生成示意图"
   },
   {
     "id": "kakao-friends-coex",
@@ -920,8 +958,8 @@
     "caution_note": "大型玩偶占空间；带电周边注意锂电池随身规则。不要购买侵权仿品。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。钥匙扣、贴纸、文具最轻便。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实角色或商品照片；未生成或下载受保护角色图。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Unbranded cute stationery and keychains with original abstract shapes, no protected characters, no mascots, no readable brand names, bright retail mood.",
     "visual_label": "Character goods",
     "visual_color": "#ffd166",
@@ -935,7 +973,9 @@
       "COEX",
       "角色",
       "轻便"
-    ]
+    ],
+    "image_url": "./assets/generated/kakao-friends-coex.jpg",
+    "image_alt": "Kakao Friends 角色周边 AI生成示意图"
   },
   {
     "id": "line-friends-square-myeongdong",
@@ -967,8 +1007,8 @@
     "caution_note": "IP 周边容易买过量；大型玩偶占空间，电子类注意电池规则。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。优先小件、无电池、非易碎款。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实角色或商品照片；未下载受保护 IP 图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Unbranded K-pop fan goods and cute abstract keychains, photo card sleeves without faces, stickers with original non-IP motifs, no protected characters.",
     "visual_label": "Fan goods",
     "visual_color": "#7bdff2",
@@ -983,7 +1023,9 @@
       "明洞",
       "K-pop",
       "IP周边"
-    ]
+    ],
+    "image_url": "./assets/generated/line-friends-square-myeongdong.jpg",
+    "image_alt": "LINE FRIENDS SQUARE / BT21 周边 AI生成示意图"
   },
   {
     "id": "fritz-wonseo-coffee",
@@ -1015,8 +1057,8 @@
     "caution_note": "买密封包装，避免冷萃液体；咖啡豆过安检通常友好，但入境美国等地仍应按食品申报要求处理。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。密封咖啡豆、挂耳和即溶粉最稳。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载品牌包装图。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Unbranded specialty coffee gift flat lay with sealed coffee bean bags and drip bags, warm Seoul cafe table, no logos, no readable labels.",
     "visual_label": "Coffee beans",
     "visual_color": "#8b5e34",
@@ -1031,7 +1073,9 @@
       "咖啡豆",
       "北村",
       "轻便"
-    ]
+    ],
+    "image_url": "./assets/generated/fritz-wonseo-coffee.jpg",
+    "image_alt": "Fritz Coffee Company 咖啡豆 / 挂耳 AI生成示意图"
   },
   {
     "id": "blue-bottle-seongsu-coffee",
@@ -1062,8 +1106,8 @@
     "caution_note": "杯具易碎，咖啡豆和即溶更稳；冷萃液体不适合随身。",
     "is_suitable_to_bring_home": "yes",
     "bring_home_note": "适合带回国。选密封豆、即溶、滤纸等轻便款。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实商品照片；未下载品牌图片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Unbranded minimalist coffee souvenir set with sealed bean bags, instant coffee sticks and a plain tumbler, no logos, no readable labels.",
     "visual_label": "Coffee goods",
     "visual_color": "#9fd3df",
@@ -1078,7 +1122,9 @@
       "圣水",
       "咖啡",
       "轻便"
-    ]
+    ],
+    "image_url": "./assets/generated/blue-bottle-seongsu-coffee.jpg",
+    "image_alt": "Blue Bottle Korea 咖啡豆 / 即溶 / 杯具 AI生成示意图"
   },
   {
     "id": "city-duty-free-t2-last-minute",
@@ -1109,8 +1155,8 @@
     "caution_note": "机场选择少且热门款可能缺货；免税液体需保留防拆袋，转机时尤其注意液体规则。",
     "is_suitable_to_bring_home": "conditional",
     "bring_home_note": "有条件适合。适合作为兜底，不建议把核心采购全押在机场。",
-    "image_type": "placeholder",
-    "image_credit": "本地示意占位，不是真实机场店铺照片。",
+    "image_type": "ai_generated",
+    "image_credit": "AI 生成示意图；不是具体商品真实照片；无品牌字样。",
     "image_prompt_if_generated": "Generic airport duty-free souvenir basket with unbranded packaged snacks, cosmetics minis and postcards, no real airport signs, no readable labels.",
     "visual_label": "Airport backup",
     "visual_color": "#9db4c0",
@@ -1124,6 +1170,8 @@
       "机场",
       "兜底",
       "免税"
-    ]
+    ],
+    "image_url": "./assets/generated/city-duty-free-t2-last-minute.jpg",
+    "image_alt": "仁川机场最后补买包装食品 / 纪念品 / 美妆 AI生成示意图"
   }
 ]
