@@ -3485,6 +3485,13 @@ main {
     transition: none;
   }
 
+  .travel-mode-tabs,
+  .travel-mode-tabs a,
+  .travel-mode-tabs span,
+  .travel-mode-tabs b {
+    transition: none;
+  }
+
   .spot-card.is-copied {
     animation: none;
   }
@@ -3599,7 +3606,7 @@ main {
 
 .travel-mode-tabs {
   position: sticky;
-  top: 0;
+  top: max(0px, env(safe-area-inset-top));
   z-index: 30;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -3613,6 +3620,12 @@ main {
   background: rgba(255, 253, 246, 0.88);
   box-shadow: 0 8px 22px rgba(50, 43, 30, 0.08);
   backdrop-filter: blur(16px);
+  transition:
+    padding 180ms ease,
+    margin 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
 }
 
 .travel-mode-tabs a {
@@ -3626,6 +3639,12 @@ main {
   border-radius: 7px;
   color: var(--muted);
   text-decoration: none;
+  transition:
+    min-height 180ms ease,
+    padding 180ms ease,
+    color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .travel-mode-tabs span {
@@ -3636,21 +3655,61 @@ main {
   line-height: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
+  transition: font-size 180ms ease;
 }
 
 .travel-mode-tabs b {
   max-width: 100%;
+  max-height: 1rem;
   overflow: hidden;
   font-size: 0.62rem;
   line-height: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
+  transition:
+    max-height 180ms ease,
+    opacity 160ms ease,
+    transform 180ms ease,
+    font-size 180ms ease;
 }
 
 .travel-mode-tabs a.is-active {
   background: #20201d;
   color: #fffdf6;
   box-shadow: 0 8px 18px rgba(32, 32, 29, 0.14);
+}
+
+.travel-mode-tabs.is-compact {
+  position: fixed;
+  top: max(6px, env(safe-area-inset-top));
+  right: max(12px, calc((100vw - 1180px) / 2 + 22px));
+  left: max(12px, calc((100vw - 1180px) / 2 + 22px));
+  width: auto;
+  margin: 0 auto;
+  padding: 3px;
+  border-color: rgba(50, 43, 30, 0.16);
+  background: rgba(255, 253, 246, 0.94);
+  box-shadow: 0 8px 20px rgba(50, 43, 30, 0.12);
+}
+
+.travel-mode-tabs.is-compact a {
+  min-height: 34px;
+  padding: 4px 5px;
+}
+
+.travel-mode-tabs.is-compact span {
+  font-size: 0.76rem;
+}
+
+.travel-mode-tabs.is-compact b {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-2px);
+  font-size: 0.56rem;
+}
+
+.travel-mode-tabs.is-compact + main {
+  padding-top: 58px;
 }
 
 .travel-section[data-travel-panel] {

@@ -1992,10 +1992,10 @@
         const photos = [
           ["../photos/starfield_library.jpg", "Starfield Library", "会间隙 / 雨天 / 等人"],
           ["../photos/bongeunsa.jpg", "Bongeunsa", "离 COEX 最近的安静短线"],
-          ["../photos/seongsu.jpg", "Seongsu", "2-3 小时 cafe / brand space"],
+          ["../photos/seongsu.jpg", "Seongsu", "cafe / brand space / 买逛"],
           ["../photos/seoul_forest.jpg", "Seoul Forest", "和 Seongsu 合并，不单独跑"],
           ["../photos/gyeongbokgung.jpg", "Gyeongbokgung", "半天市中心线"],
-          ["../photos/namsan_view.jpg", "Namsan view", "晚间夜景 / Myeongdong 可合并"],
+          ["../photos/namsan_view.jpg", "Namsan view", "夜景 / 明洞吃买可合并"],
         ];
         const photoHtml = photos
           .map(
@@ -2005,16 +2005,16 @@
           )
           .join("");
         const attractions = [
-          ["book-open", "Starfield Library · COEX", "COEX Mall 中央；集合、拍照、短休息。Mall 通常 10:30-22:00，店铺不同。"],
-          ["landmark", "Bongeunsa Temple · COEX", "Bongeunsa Exit 7 方向；会场外最近安静步行点，早上/日落更合适。"],
-          ["map-pin", "SEA LIFE COEX Aquarium", "COEX/Starfield 室内；雨天、同行家属、临时空档备选，查当日 last entry。"],
-          ["map", "Parnas / Hyundai Trade Center", "Samseong / Parnas 一侧；饭局、伴手礼、food hall，比 COEX Mall 稍安静。"],
-          ["coffee", "Seongsu Cafe Street", "Samseong Line 2 → Seongsu；咖啡、快闪、品牌空间，和 Seoul Forest 同线。"],
-          ["map-pinned", "Seoul Forest", "Seongsu/Ttukseom 一带；白天散步、公园，和圣水咖啡街合并。"],
-          ["landmark", "Gyeongbokgung / Bukchon", "古宫 + 韩屋村 + Insadong；半天市中心线，适合无 poster 冲突时段。"],
-          ["route", "Namsan / Myeongdong", "N Seoul Tower 夜景 + 明洞吃饭购物；适合无 RSVP 的晚上。"],
-          ["party-popper", "Hongdae / Hapjeong", "Line 2 跨城；音乐、夜生活、Mapo/Hapjeong 饭局。"],
-          ["users", "Itaewon / Hannam", "餐厅、bar、gallery；晚间 taxi 通常比换乘更省心。"],
+          ["book-open", "Starfield Library · COEX", "会间隙集合、拍照、短休息；下楼就是 Mall 和补给。"],
+          ["landmark", "Bongeunsa Temple · COEX", "会场外最近安静步行点；早上或日落去，比硬挤景点舒服。"],
+          ["coffee", "吃饭先看 COEX / Parnas", "网页 Eat 页列 18 个食物关键词；午餐优先近场、少排队。"],
+          ["map", "Food hall / department store", "Parnas、Hyundai Trade Center、City Air Tower 更适合饭局和雨天。"],
+          ["route", "Seongsu Cafe Street", "Samseong Line 2 直达；咖啡、品牌空间、快闪，和 Seoul Forest 同线。"],
+          ["map-pinned", "Seoul Forest", "白天散步、公园、咖啡续摊；不要和市中心古宫拆成两趟。"],
+          ["landmark", "Gyeongbokgung / Bukchon", "古宫 + 韩屋村 + Insadong；半天市中心线，适合无 poster 冲突。"],
+          ["map-pin", "Namsan / Myeongdong", "晚间夜景 + 明洞吃饭购物；适合没有 RSVP 的晚上。"],
+          ["badge-check", "伴手礼看 Shop 页", "网页已加 24 个商品/门店：护肤、零食、茶、文创、机场可带。"],
+          ["file-search", "搜索词直接复制", "Travel 页卡片带 Google / Naver / copy，按区域和携带难度筛。"],
         ];
         const attractionHtml = attractions
           .map(([iconName, name, desc]) => `<div class="attraction-item">${iconTitle(iconName, name)}<span>${esc(desc)}</span></div>`)
@@ -2023,12 +2023,12 @@
           "seoul",
           "dense",
           `
-            ${header("07 · 首尔顺路玩", "COEX 出发怎么安排", "会间隙：Starfield/Bongeunsa；半天：Seongsu/古宫；晚上：Namsan/Hongdae/Itaewon", "landmark")}
+            ${header("07 · 首尔吃买玩", "COEX 出发怎么排", "会间隙：Starfield/Bongeunsa；吃饭：COEX/Parnas/Seongsu；买礼：Olive Young/百货/机场", "landmark")}
             <div class="board">
               <div class="photo-grid">${photoHtml}</div>
               <div class="attraction-grid">${attractionHtml}</div>
             </div>
-            ${footer("短线看 COEX 周边；半天去 Seongsu/古宫；晚上再跑夜景或饭局")}
+            ${footer("新版 Travel 页：Map / Eat / Shop / Routes 都可直接查")}
           `,
         );
       }
@@ -2075,21 +2075,21 @@
 
       function renderPromo() {
         const features = [
-          ["map-pinned", "COEX map", "会场图、badge、poster、入口"],
+          ["calendar-days", "Daily route", "当天 oral / poster / workshop"],
           ["file-search", "Paper watchlist", "主题密度、明星作者、路线"],
-          ["calendar-days", "Daily schedule", "按日期看 tutorial / poster / workshop"],
+          ["map-pinned", "COEX map", "机场路线、会场、周边点位"],
           ["party-popper", "Evening events", "Jul 6-9 活动候选清单"],
-          ["route", "Travel", "机场路线 + 首尔景点"],
-          ["smartphone", "Mobile first", "手机打开直接查，不用装 app"],
+          ["coffee", "Eat guide", "18 个吃什么 + 区域路线"],
+          ["smartphone", "Shop guide", "24 个伴手礼 + 搜索词"],
         ];
         const featureHtml = features
           .map(([iconName, name, desc]) => `<div class="promo-feature">${iconTitle(iconName, name)}<span>${esc(desc)}</span></div>`)
           .join("");
         const details = [
-          ["Paper watchlist", "34 篇重点；Video Anomaly 6、Multimodal LLMs 7、Reasoning 8、Video 6、Anomaly Detection 7。"],
-          ["Daily tabs", "Jul 6 tutorial；Jul 7-9 poster session；Jul 10-11 workshop；底部 tab 可直接切天。"],
-          ["Travel tab", "COEX 会场、ICN/GMP 到场路线、Starfield/Bongeunsa/Seongsu/古宫/Namsan 等点位。"],
-          ["Evening events", "Jul 6 official social；Jul 7 Upstage/Furiosa/Quadrillion；Jul 8 OpenAI/K-Star/Turing；Jul 9 Qwen/Jazz/Japan Night。"],
+          ["Daily tabs", "Jul 6 tutorial；Jul 7-9 poster session；Jul 10-11 workshop；底部 tab 直接切天。"],
+          ["Paper watchlist", "34 篇重点；Video Anomaly、Multimodal LLMs、Reasoning、Video、Anomaly Detection。"],
+          ["Travel page", "COEX 会场、ICN/GMP 到场路线、Starfield/Bongeunsa/Seongsu/古宫/Namsan。"],
+          ["Eat / Shop", "新增吃什么和买什么：18 个食物、24 个伴手礼，支持 Google / Naver / copy。"],
         ];
         const detailHtml = details
           .map(([title, body]) => `<div class="promo-detail"><b>${esc(title)}</b><span>${esc(body)}</span></div>`)
@@ -2098,7 +2098,7 @@
           "promo",
           "small-title",
           `
-            ${header("08 · 网页入口", "网页里查完整清单", "图上先看重点；网页补全地图、日程、论文路线、活动和首尔点位", "smartphone")}
+            ${header("08 · 网页入口", "网页里查新版清单", "图上先看重点；网页补全日程、论文路线、活动、地图、吃饭和伴手礼", "smartphone")}
             <div class="board promo-board">
               <div class="phone-frame">
                 <img src="../screenshots/mobile-homepage-promo-bar.png" alt="ICML 2026 Field Guide mobile screenshot" />
@@ -2109,12 +2109,12 @@
                   <b>GitHub: 2-mo/ICML-2026-Field-Guide</b>
                 </div>
                 <div class="promo-feature-grid">${featureHtml}</div>
-                <div class="promo-caution">现场用法：先用图片定路线和重点；到网页里展开当天日程、poster 清单、活动候选和首尔点位。</div>
+                <div class="promo-caution">现场用法：先用图片定路线和重点；到网页里展开当天日程、poster 清单、活动候选、吃饭/伴手礼和首尔点位。</div>
                 <div class="promo-detail-list">${detailHtml}</div>
                 <div class="promo-sticker-wrap"><img class="promo-sticker" src="../stickers/promo-route-sticker.png" alt="" /></div>
               </div>
             </div>
-            ${footer("网页补全：地图 / 日程 / 论文 / 活动 / 首尔", "GitHub: 2-mo/ICML-2026-Field-Guide")}
+            ${footer("网页补全：日程 / 论文 / 活动 / 地图 / 吃饭 / 伴手礼", "GitHub: 2-mo/ICML-2026-Field-Guide")}
           `,
         );
       }

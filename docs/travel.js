@@ -740,6 +740,12 @@ function updateTravelTabs(activeKey) {
   });
 }
 
+function updateTravelTabsCompact() {
+  const tabs = $(".travel-mode-tabs");
+  if (!tabs) return;
+  tabs.classList.toggle("is-compact", window.scrollY > 90);
+}
+
 function bindTravelTabObserver() {
   const panels = $$("[data-travel-panel]");
   if (!panels.length || !("IntersectionObserver" in window)) return;
@@ -845,5 +851,7 @@ Promise.all([loadTravel(), loadRouteIdeas(), loadFoodGuide(), loadSouvenirGuide(
   });
 
 window.addEventListener("resize", () => requestAnimationFrame(updateBottomNavIndicator), { passive: true });
+window.addEventListener("scroll", () => requestAnimationFrame(updateTravelTabsCompact), { passive: true });
 window.addEventListener("orientationchange", () => setTimeout(updateBottomNavIndicator, 220), { passive: true });
 requestAnimationFrame(updateBottomNavIndicator);
+requestAnimationFrame(updateTravelTabsCompact);
