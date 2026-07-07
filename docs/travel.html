@@ -10,20 +10,35 @@
     />
     <title>Seoul Routes & Map / ICML 2026</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./styles.css?v=20260707-routes1" />
+    <link rel="stylesheet" href="./styles.css?v=20260707-extras1" />
   </head>
   <body>
     <div class="app-shell">
-      <header class="topbar">
+      <header class="topbar travel-topbar">
         <div>
           <p class="eyebrow">Seoul from COEX</p>
-          <h1>Map & Travel <span>Airport / COEX / Routes / Classics</span></h1>
+          <h1>Map & Travel <span>Airport / COEX / Eat / Shop / Routes</span></h1>
         </div>
         <a class="travel-link" href="./index.html">Back to Guide</a>
       </header>
 
+      <nav class="travel-mode-tabs" aria-label="Travel shortcuts">
+        <a class="is-active" href="#travel-map-section" data-travel-tab="map">
+          <span>Map</span>
+          <b>交通地图</b>
+        </a>
+        <a href="#travel-eat-section" data-travel-tab="eat">
+          <span>Eat</span>
+          <b>吃什么</b>
+        </a>
+        <a href="#travel-shop-section" data-travel-tab="shop">
+          <span>Shop</span>
+          <b>买什么</b>
+        </a>
+      </nav>
+
       <main>
-        <section class="panel travel-section travel-airport-section">
+        <section class="panel travel-section travel-airport-section" id="travel-map-section" data-travel-panel="map">
           <div class="panel-title travel-section-title">
             <div>
               <p class="eyebrow">01</p>
@@ -39,7 +54,7 @@
           </div>
         </section>
 
-        <section class="panel travel-section">
+        <section class="panel travel-section" data-travel-panel="map">
           <div class="panel-title travel-section-title">
             <div>
               <p class="eyebrow">02</p>
@@ -52,10 +67,45 @@
           </section>
         </section>
 
-        <section class="panel travel-section">
+        <section class="panel travel-section travel-extras-section" id="travel-eat-section" data-travel-panel="eat">
           <div class="panel-title travel-section-title">
             <div>
               <p class="eyebrow">03</p>
+              <h2>Eat in Seoul</h2>
+            </div>
+            <span class="status-pill">Food guide</span>
+          </div>
+          <div class="travel-section-tools">
+            <div id="foodFilters" class="travel-filter-strip" aria-label="Food filters"></div>
+            <span id="foodResultCount" class="travel-result-count"></span>
+          </div>
+          <div id="foodGuide" class="travel-card-rail" aria-live="polite"></div>
+          <div id="foodRoutes" class="travel-compact-routes"></div>
+        </section>
+
+        <section class="panel travel-section travel-extras-section" id="travel-shop-section" data-travel-panel="shop">
+          <div class="panel-title travel-section-title">
+            <div>
+              <p class="eyebrow">04</p>
+              <h2>Souvenir Stops</h2>
+            </div>
+            <span class="status-pill">Gifts / addresses</span>
+          </div>
+          <div class="travel-shop-controls">
+            <label class="sr-only" for="travelShopSearch">搜索商品、门店、区域</label>
+            <input id="travelShopSearch" type="search" placeholder="搜索：茶、明洞、香氛、机场" autocomplete="off" />
+            <div id="shopCarryFilters" class="travel-filter-strip" aria-label="Carry filters"></div>
+            <div id="shopCategoryFilters" class="travel-filter-strip" aria-label="Souvenir category filters"></div>
+            <span id="shopResultCount" class="travel-result-count"></span>
+          </div>
+          <div id="shopRoutes" class="travel-compact-routes"></div>
+          <div id="shopGuide" class="travel-card-rail travel-shop-rail" aria-live="polite"></div>
+        </section>
+
+        <section class="panel travel-section" data-travel-panel="map">
+          <div class="panel-title travel-section-title">
+            <div>
+              <p class="eyebrow">05</p>
               <h2>Route Ideas</h2>
             </div>
             <span class="status-pill">COEX / Myeongdong</span>
@@ -63,10 +113,10 @@
           <div id="routeIdeas" class="route-ideas-list"></div>
         </section>
 
-        <section class="panel travel-section">
+        <section class="panel travel-section" data-travel-panel="map">
           <div class="panel-title travel-section-title">
             <div>
-              <p class="eyebrow">04</p>
+              <p class="eyebrow">06</p>
               <h2>Seoul Classics</h2>
             </div>
             <span class="status-pill">Half-day picks</span>
@@ -110,6 +160,13 @@
       </div>
     </template>
 
-    <script src="./travel.js?v=20260707-routes1" type="module"></script>
+    <dialog class="travel-detail-modal" id="travelDetailModal">
+      <div class="travel-modal-shell">
+        <button class="travel-modal-close" type="button" aria-label="Close details" data-close-travel-modal>×</button>
+        <div id="travelModalContent"></div>
+      </div>
+    </dialog>
+
+    <script src="./travel.js?v=20260707-extras1" type="module"></script>
   </body>
 </html>

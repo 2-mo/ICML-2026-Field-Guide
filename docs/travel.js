@@ -33,14 +33,21 @@ const SHORT_STOP_NAMES = {
   "Yeouido Hangang Park": "汝矣岛汉江",
   "63 Building": "63大厦",
 };
-const DATA_VERSION = "20260707-routes1";
+const DATA_VERSION = "20260707-extras1";
+const FOOD_LEVELS = ["全部", "常规", "入门", "进阶", "挑战"];
+const CARRY_FILTERS = ["全部", "适合带回国", "需要规划", "慎买"];
+const foodState = { difficulty: "全部" };
+const shopState = { category: "全部", carry: "全部", query: "" };
+let foodGuideData = null;
+let souvenirGuideData = null;
 
 function escapeHtml(value = "") {
   return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function tag(label, kind = "") {
@@ -84,6 +91,44 @@ async function loadRouteIdeas() {
   const response = await fetch(`./data/travel_route_ideas.json?v=${DATA_VERSION}`);
   if (!response.ok) return null;
   return response.json();
+}
+
+async function loadFoodGuide() {
+  const response = await fetch(`./data/seoul_food.json?v=${DATA_VERSION}`);
+  if (!response.ok) throw new Error("Failed to load seoul_food.json");
+  return response.json();
+}
+
+async function loadSouvenirGuide() {
+  const response = await fetch(`./data/seoul_souvenirs.json?v=${DATA_VERSION}`);
+  if (!response.ok) throw new Error("Failed to load seoul_souvenirs.json");
+  return response.json();
+}
+
+function normalizeText(value = "") {
+  return String(value).toLowerCase().trim();
+}
+
+function googleMapsSearchUrl(query) {
+  const params = new URLSearchParams({ api: "1", query });
+  return `https://www.google.com/maps/search/?${params.toString()}`;
+}
+
+function naverMapSearchUrl(query) {
+  return `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
+}
+
+function copyButton(value, label = "Copy") {
+  if (!value) return "";
+  return `<button class="action-link travel-copy-button" type="button" data-copy="${escapeHtml(value)}">${escapeHtml(label)}</button>`;
+}
+
+function travelFilterButton(label, active, dataName) {
+  return `
+    <button class="travel-filter-chip ${active ? "is-active" : ""}" type="button" ${dataName}="${escapeHtml(label)}" aria-pressed="${active ? "true" : "false"}">
+      ${escapeHtml(label)}
+    </button>
+  `;
 }
 
 function groupById(data, id) {
@@ -410,6 +455,366 @@ function renderRouteIdeas(routeData) {
   `;
 }
 
+function foodQuery(food) {
+  const koreanName = String(food.krName || food.enName || food.cnName || "")
+    .split("/")
+    .map((item) => item.trim())
+    .find(Boolean);
+  const area = (food.areas || []).find(Boolean) || "Seoul";
+  return [koreanName || food.cnName, area, "Seoul"].filter(Boolean).join(" ");
+}
+
+function foodCard(food) {
+  const query = foodQuery(food);
+  const areas = (food.areas || []).slice(0, 3);
+  return `
+    <article class="travel-extra-card travel-food-card">
+      <figure class="travel-extra-media">
+        ${
+          food.image
+            ? `<img src="${escapeHtml(food.image)}" alt="${escapeHtml(food.imageAlt || food.cnName)}" loading="lazy">`
+            : `<div class="travel-visual-placeholder" aria-hidden="true">${escapeHtml(food.cnName || "Food")}</div>`
+        }
+        <figcaption>${escapeHtml(food.difficulty)}</figcaption>
+      </figure>
+      <div class="travel-extra-body">
+        <div class="travel-extra-kicker">
+          <span>${escapeHtml(food.krName || food.enName || "")}</span>
+          ${tag(food.difficulty)}
+        </div>
+        <h3>${escapeHtml(food.cnName)}</h3>
+        <p>${escapeHtml(food.reason)}</p>
+        <div class="travel-mini-tags">${areas.map((area) => tag(area)).join("")}</div>
+        <div class="travel-extra-actions">
+          <button class="action-link" type="button" data-food-detail="${escapeHtml(food.id || food.cnName)}">Details</button>
+          ${action(googleMapsSearchUrl(query), "Google")}
+          ${copyButton(query)}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function foodRouteCard(route, index) {
+  return `
+    <article class="travel-route-mini-card">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <h3>${escapeHtml(route.title)}</h3>
+      <p>${escapeHtml(route.subtitle)}</p>
+      <div class="travel-mini-tags">${(route.picks || []).map((pick) => tag(pick)).join("")}</div>
+    </article>
+  `;
+}
+
+function renderFoodFilters(guide) {
+  const root = $("#foodFilters");
+  if (!root) return;
+  const available = new Set((guide.foods || []).map((food) => food.difficulty));
+  const levels = FOOD_LEVELS.filter((level) => level === "全部" || available.has(level));
+  root.innerHTML = levels.map((level) => travelFilterButton(level, foodState.difficulty === level, "data-food-filter")).join("");
+}
+
+function renderFoodGuide(guide) {
+  const foods = guide.foods || [];
+  const filtered = foodState.difficulty === "全部" ? foods : foods.filter((food) => food.difficulty === foodState.difficulty);
+  renderFoodFilters(guide);
+  setHtml("#foodGuide", filtered.map(foodCard).join(""));
+  setHtml("#foodRoutes", (guide.routes || []).map(foodRouteCard).join(""));
+  const count = $("#foodResultCount");
+  if (count) count.textContent = `${filtered.length} / ${foods.length} foods`;
+}
+
+function carryBucket(item) {
+  if (item.carry_score >= 4 && item.is_suitable_to_bring_home === "yes") return "适合带回国";
+  if (item.is_suitable_to_bring_home === "conditional" || item.carry_score === 3) return "需要规划";
+  return "慎买";
+}
+
+function shopSearchText(item) {
+  return normalizeText(
+    [
+      item.product_name_cn,
+      item.product_name_en,
+      item.product_name_ko,
+      item.brand_or_store,
+      item.shop_name,
+      item.area,
+      item.category,
+      item.category_group,
+      item.nearest_station,
+      item.address_en,
+      item.address_ko,
+      ...(item.best_for || []),
+      ...(item.tags || []),
+    ].join(" "),
+  );
+}
+
+function shopMatches(item) {
+  const query = normalizeText(shopState.query);
+  return (
+    (shopState.category === "全部" || item.category_group === shopState.category) &&
+    (shopState.carry === "全部" || carryBucket(item) === shopState.carry) &&
+    (!query || shopSearchText(item).includes(query))
+  );
+}
+
+function shopMapQuery(item) {
+  return item.map_search_keyword || [item.shop_name, item.address_ko || item.address_en].filter(Boolean).join(" ");
+}
+
+function shopVisual(item) {
+  if (item.image_url) {
+    return `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.image_alt || item.product_name_cn)}" loading="lazy">`;
+  }
+  return `
+    <div class="travel-shop-placeholder" style="--visual-color: ${escapeHtml(item.visual_color || "#d8e3dd")}">
+      <span>${escapeHtml(item.visual_label || item.category_group || "Gift")}</span>
+    </div>
+  `;
+}
+
+function shopCard(item) {
+  const query = shopMapQuery(item);
+  return `
+    <article class="travel-extra-card travel-shop-card">
+      <figure class="travel-extra-media travel-shop-media">
+        ${shopVisual(item)}
+        <figcaption>${escapeHtml(carryBucket(item))}</figcaption>
+      </figure>
+      <div class="travel-extra-body">
+        <div class="travel-extra-kicker">
+          <span>${escapeHtml(item.category_group)}</span>
+          ${tag(item.area)}
+        </div>
+        <h3>${escapeHtml(item.product_name_cn)}</h3>
+        <p>${escapeHtml(item.why_buy)}</p>
+        <div class="travel-shop-facts">
+          <span><b>买</b>${escapeHtml(item.shop_name)}</span>
+          <span><b>站</b>${escapeHtml(item.nearest_station)}</span>
+          <span><b>价</b>${escapeHtml(item.price_bucket || "待确认")}</span>
+        </div>
+        <div class="travel-extra-actions">
+          <button class="action-link" type="button" data-shop-detail="${escapeHtml(item.id)}">Details</button>
+          ${action(naverMapSearchUrl(query), "Naver")}
+          ${action(googleMapsSearchUrl(query), "Google")}
+          ${copyButton(item.address_ko || item.address_en)}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function shopRouteCard(route, index) {
+  return `
+    <article class="travel-route-mini-card travel-shop-route-card">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <h3>${escapeHtml(route.title)}</h3>
+      <p>${escapeHtml(route.summary)}</p>
+      <div class="travel-mini-tags">${tag(route.time)}${tag(route.best_for)}</div>
+      <div class="travel-extra-actions">
+        ${action(naverMapSearchUrl(route.search_keyword || route.stops?.join(" ") || route.title), "Naver")}
+        ${copyButton(`${route.title}: ${(route.stops || []).join(" -> ")}`, "Copy route")}
+      </div>
+    </article>
+  `;
+}
+
+function renderShopFilters(guide) {
+  const categories = ["全部", ...new Set((guide.souvenirs || []).map((item) => item.category_group).filter(Boolean))];
+  setHtml(
+    "#shopCarryFilters",
+    CARRY_FILTERS.map((label) => travelFilterButton(label, shopState.carry === label, "data-shop-carry")).join(""),
+  );
+  setHtml(
+    "#shopCategoryFilters",
+    categories.map((label) => travelFilterButton(label, shopState.category === label, "data-shop-category")).join(""),
+  );
+}
+
+function renderShopGuide(guide) {
+  const items = guide.souvenirs || [];
+  const filtered = items.filter(shopMatches);
+  renderShopFilters(guide);
+  setHtml("#shopRoutes", (guide.routePlans || []).map(shopRouteCard).join(""));
+  setHtml("#shopGuide", filtered.map(shopCard).join(""));
+  const count = $("#shopResultCount");
+  if (count) count.textContent = `${filtered.length} / ${items.length} gifts`;
+}
+
+function detailLine(label, value) {
+  if (!value) return "";
+  return `<div class="travel-detail-line"><b>${escapeHtml(label)}</b><span>${escapeHtml(value)}</span></div>`;
+}
+
+function sourceLinks(urls = []) {
+  return urls
+    .map((url, index) => `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">Source ${index + 1}</a>`)
+    .join("");
+}
+
+function openTravelModal(html) {
+  const modal = $("#travelDetailModal");
+  const content = $("#travelModalContent");
+  if (!modal || !content) return;
+  content.innerHTML = html;
+  if (typeof modal.showModal === "function") modal.showModal();
+  else modal.setAttribute("open", "");
+}
+
+function openFoodDetail(id) {
+  const food = (foodGuideData?.foods || []).find((item) => (item.id || item.cnName) === id);
+  if (!food) return;
+  openTravelModal(`
+    <article class="travel-detail-content">
+      <figure class="travel-detail-hero">
+        ${food.image ? `<img src="${escapeHtml(food.image)}" alt="${escapeHtml(food.imageAlt || food.cnName)}">` : ""}
+      </figure>
+      <p class="eyebrow">${escapeHtml(food.difficulty)} · ${escapeHtml(food.krName || "")}</p>
+      <h2>${escapeHtml(food.cnName)}</h2>
+      <p>${escapeHtml(food.reason)}</p>
+      <div class="travel-detail-grid">
+        ${detailLine("国内差异", food.chinaGap)}
+        ${detailLine("口味特点", food.flavor)}
+        ${detailLine("推荐区域", (food.areas || []).join(" / "))}
+        ${detailLine("适合人群", food.audience)}
+        ${detailLine("避雷提醒", food.warning)}
+        ${detailLine("价格", food.price)}
+      </div>
+      <div class="travel-extra-actions">
+        ${action(googleMapsSearchUrl(foodQuery(food)), "Google Maps")}
+        ${copyButton(foodQuery(food))}
+      </div>
+    </article>
+  `);
+}
+
+function openShopDetail(id) {
+  const item = (souvenirGuideData?.souvenirs || []).find((candidate) => candidate.id === id);
+  if (!item) return;
+  const query = shopMapQuery(item);
+  openTravelModal(`
+    <article class="travel-detail-content">
+      <figure class="travel-detail-hero travel-shop-detail-hero">
+        ${shopVisual(item)}
+      </figure>
+      <p class="eyebrow">${escapeHtml(item.category_group)} · ${escapeHtml(item.area)}</p>
+      <h2>${escapeHtml(item.product_name_cn)}</h2>
+      <p class="travel-detail-subtitle">${escapeHtml(item.product_name_ko)} · ${escapeHtml(item.product_name_en)}</p>
+      <p>${escapeHtml(item.why_buy)}</p>
+      <div class="travel-detail-grid">
+        ${detailLine("适合送给", (item.best_for || []).join(" / "))}
+        ${detailLine("预估价格", item.price_range_krw)}
+        ${detailLine("购买地点", item.shop_name)}
+        ${detailLine("最近地铁", item.nearest_station)}
+        ${detailLine("韩文地址", item.address_ko)}
+        ${detailLine("英文地址", item.address_en)}
+        ${detailLine("营业时间", item.opening_hours)}
+        ${detailLine("购买提醒", item.caution_note)}
+        ${detailLine("带回国", item.bring_home_note)}
+      </div>
+      <div class="travel-extra-actions">
+        ${action(naverMapSearchUrl(query), "Naver Map")}
+        ${action(googleMapsSearchUrl(query), "Google Maps")}
+        ${copyButton(item.address_ko || item.address_en, "Copy address")}
+        ${copyButton(query, "Copy keyword")}
+      </div>
+      <div class="travel-source-links">${sourceLinks(item.source_urls)}</div>
+    </article>
+  `);
+}
+
+function closeTravelModal() {
+  const modal = $("#travelDetailModal");
+  if (!modal) return;
+  if (typeof modal.close === "function") modal.close();
+  else modal.removeAttribute("open");
+}
+
+function updateTravelTabs(activeKey) {
+  $$("[data-travel-tab]").forEach((tab) => {
+    const isActive = tab.dataset.travelTab === activeKey;
+    tab.classList.toggle("is-active", isActive);
+    if (isActive) tab.setAttribute("aria-current", "true");
+    else tab.removeAttribute("aria-current");
+  });
+}
+
+function bindTravelTabObserver() {
+  const panels = $$("[data-travel-panel]");
+  if (!panels.length || !("IntersectionObserver" in window)) return;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible?.target?.dataset.travelPanel) updateTravelTabs(visible.target.dataset.travelPanel);
+    },
+    { rootMargin: "-22% 0px -62% 0px", threshold: [0.04, 0.12, 0.2] },
+  );
+  panels.forEach((panel) => observer.observe(panel));
+}
+
+function bindTravelInteractions() {
+  document.addEventListener("click", async (event) => {
+    const foodFilter = event.target.closest?.("[data-food-filter]");
+    if (foodFilter) {
+      foodState.difficulty = foodFilter.dataset.foodFilter;
+      renderFoodGuide(foodGuideData);
+      return;
+    }
+
+    const shopCategory = event.target.closest?.("[data-shop-category]");
+    if (shopCategory) {
+      shopState.category = shopCategory.dataset.shopCategory;
+      renderShopGuide(souvenirGuideData);
+      return;
+    }
+
+    const shopCarry = event.target.closest?.("[data-shop-carry]");
+    if (shopCarry) {
+      shopState.carry = shopCarry.dataset.shopCarry;
+      renderShopGuide(souvenirGuideData);
+      return;
+    }
+
+    const foodDetail = event.target.closest?.("[data-food-detail]");
+    if (foodDetail) {
+      openFoodDetail(foodDetail.dataset.foodDetail);
+      return;
+    }
+
+    const shopDetail = event.target.closest?.("[data-shop-detail]");
+    if (shopDetail) {
+      openShopDetail(shopDetail.dataset.shopDetail);
+      return;
+    }
+
+    const copyTarget = event.target.closest?.("[data-copy]");
+    if (copyTarget) {
+      await copyText(copyTarget.dataset.copy || "");
+      showCopied(copyTarget);
+      return;
+    }
+
+    const closeButton = event.target.closest?.("[data-close-travel-modal]");
+    if (closeButton) closeTravelModal();
+  });
+
+  $("#travelDetailModal")?.addEventListener("click", (event) => {
+    if (event.target === event.currentTarget) closeTravelModal();
+  });
+
+  $("#travelShopSearch")?.addEventListener("input", (event) => {
+    shopState.query = event.target.value;
+    renderShopGuide(souvenirGuideData);
+  });
+
+  $$("[data-travel-tab]").forEach((tab) => {
+    tab.addEventListener("click", () => updateTravelTabs(tab.dataset.travelTab));
+  });
+}
+
 function renderAirport(data) {
   setHtml("#airportRouteSteps", (data.airport_route_steps || []).map(directionsCard).join(""));
 }
@@ -420,14 +825,20 @@ function renderSeoulHighlights(data) {
   bindSpotCopy($("#seoulHighlights"));
 }
 
-Promise.all([loadTravel(), loadRouteIdeas()])
-  .then(([data, routeIdeas]) => {
+Promise.all([loadTravel(), loadRouteIdeas(), loadFoodGuide(), loadSouvenirGuide()])
+  .then(([data, routeIdeas, foodGuide, souvenirGuide]) => {
+    foodGuideData = foodGuide;
+    souvenirGuideData = souvenirGuide;
     updateBottomNavIndicator();
     const frame = $("#travelMapFrame");
     if (frame && data.map_html && !frame.src.includes("?focus=")) frame.src = data.map_html;
     renderAirport(data);
+    renderFoodGuide(foodGuide);
+    renderShopGuide(souvenirGuide);
     renderRouteIdeas(routeIdeas);
     renderSeoulHighlights(data);
+    bindTravelInteractions();
+    bindTravelTabObserver();
   })
   .catch((error) => {
     document.body.insertAdjacentHTML("afterbegin", `<div class="panel"><strong>${escapeHtml(error.message)}</strong></div>`);
