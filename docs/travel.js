@@ -33,9 +33,18 @@ const SHORT_STOP_NAMES = {
   "Yeouido Hangang Park": "汝矣岛汉江",
   "63 Building": "63大厦",
 };
-const DATA_VERSION = "20260707-extras1";
+const DATA_VERSION = "20260707-foodfull1";
 const FOOD_LEVELS = ["全部", "常规", "入门", "进阶", "挑战"];
 const CARRY_FILTERS = ["全部", "适合带回国", "需要规划", "慎买"];
+const FOOD_DETAIL_ALIASES = {
+  血肠汤饭: "血肠汤饭 / 米肠",
+  韩式猪蹄: "韩式酱卤猪蹄",
+  部队锅: "部队锅本地吃法",
+  炸鸡: "韩式炸鸡",
+  拌饭: "石锅 / 全州拌饭",
+  雪冰: "雪冰 / 韩式刨冰",
+};
+const GENERATED_FOOD_IMAGE_CREDIT = "AI generated thumbnail";
 const foodState = { difficulty: "全部" };
 const shopState = { category: "全部", carry: "全部", query: "" };
 let foodGuideData = null;
@@ -460,36 +469,94 @@ function foodQuery(food) {
     .split("/")
     .map((item) => item.trim())
     .find(Boolean);
-  const area = (food.areas || []).find(Boolean) || "Seoul";
+  const area =
+    (food.areas || []).find(Boolean) ||
+    String(food.area || "")
+      .split("/")
+      .map((item) => item.trim())
+      .find(Boolean) ||
+    "Seoul";
   return [koreanName || food.cnName, area, "Seoul"].filter(Boolean).join(" ");
+}
+
+function foodDetailForName(guide, name) {
+  const targetName = FOOD_DETAIL_ALIASES[name] || name;
+  return (guide?.foods || []).find((food) => food.cnName === targetName || food.id === targetName);
+}
+
+function foodAreaTags(food) {
+  if (food.areas?.length) return food.areas.slice(0, 2);
+  return String(food.area || "")
+    .split("/")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .slice(0, 2);
+}
+
+function foodOverviewItems(guide) {
+  const groups = guide?.overviewGroups || [];
+  if (!groups.length) {
+    return (guide?.foods || []).map((food) => ({
+      ...food,
+      key: food.id || food.cnName,
+      detail: food,
+      group: food.difficulty,
+      area: (food.areas || []).join(" / "),
+      groupNote: food.reason,
+    }));
+  }
+
+  return groups.flatMap((group) =>
+    (group.items || []).map(([cnName, krName, area, difficulty, itemImage]) => {
+      const detail = foodDetailForName(guide, cnName);
+      const overviewImage = itemImage || guide?.overviewImages?.[cnName] || "";
+      const image = detail?.image || overviewImage;
+      return {
+        key: `${group.name}::${cnName}`,
+        cnName,
+        krName: krName || detail?.krName || "",
+        difficulty: difficulty || detail?.difficulty || "",
+        area,
+        areas: detail?.areas || [],
+        group: group.name,
+        groupNote: group.note || "",
+        detail,
+        image,
+        imageAlt: detail?.imageAlt || cnName,
+        imageCredit: detail?.imageCredit || (overviewImage ? GENERATED_FOOD_IMAGE_CREDIT : ""),
+        reason: detail?.reason || group.note || "",
+      };
+    }),
+  );
 }
 
 function foodCard(food) {
   const query = foodQuery(food);
-  const areas = (food.areas || []).slice(0, 3);
+  const areas = foodAreaTags(food);
   return `
-    <article class="travel-extra-card travel-food-card">
-      <figure class="travel-extra-media">
-        ${
-          food.image
-            ? `<img src="${escapeHtml(food.image)}" alt="${escapeHtml(food.imageAlt || food.cnName)}" loading="lazy">`
-            : `<div class="travel-visual-placeholder" aria-hidden="true">${escapeHtml(food.cnName || "Food")}</div>`
-        }
-        <figcaption>${escapeHtml(food.difficulty)}</figcaption>
-      </figure>
-      <div class="travel-extra-body">
-        <div class="travel-extra-kicker">
-          <span>${escapeHtml(food.krName || food.enName || "")}</span>
-          ${tag(food.difficulty)}
+    <article class="travel-food-tile">
+      <button class="travel-food-tile-main" type="button" data-food-detail="${escapeHtml(food.key)}">
+        <figure class="travel-food-thumb">
+          ${
+            food.image
+              ? `<img src="${escapeHtml(food.image)}" alt="${escapeHtml(food.imageAlt || food.cnName)}" loading="lazy">`
+              : `<div class="travel-visual-placeholder" aria-hidden="true">${escapeHtml(food.cnName || "Food")}</div>`
+          }
+          <figcaption>${escapeHtml(food.difficulty)}</figcaption>
+        </figure>
+        <div class="travel-food-tile-body">
+          <div class="travel-extra-kicker">
+            <span>${escapeHtml(food.group || food.krName || "")}</span>
+            ${tag(food.difficulty)}
+          </div>
+          <h3>${escapeHtml(food.cnName)}</h3>
+          <p>${escapeHtml(food.krName || food.reason || "")}</p>
+          <div class="travel-mini-tags">${areas.map((area) => tag(area)).join("")}</div>
         </div>
-        <h3>${escapeHtml(food.cnName)}</h3>
-        <p>${escapeHtml(food.reason)}</p>
-        <div class="travel-mini-tags">${areas.map((area) => tag(area)).join("")}</div>
-        <div class="travel-extra-actions">
-          <button class="action-link" type="button" data-food-detail="${escapeHtml(food.id || food.cnName)}">Details</button>
-          ${action(googleMapsSearchUrl(query), "Google")}
-          ${copyButton(query)}
-        </div>
+      </button>
+      <div class="travel-extra-actions">
+        ${action(googleMapsSearchUrl(query), "Google")}
+        ${copyButton(query)}
       </div>
     </article>
   `;
@@ -509,16 +576,20 @@ function foodRouteCard(route, index) {
 function renderFoodFilters(guide) {
   const root = $("#foodFilters");
   if (!root) return;
-  const available = new Set((guide.foods || []).map((food) => food.difficulty));
+  const available = new Set(foodOverviewItems(guide).map((food) => food.difficulty));
   const levels = FOOD_LEVELS.filter((level) => level === "全部" || available.has(level));
   root.innerHTML = levels.map((level) => travelFilterButton(level, foodState.difficulty === level, "data-food-filter")).join("");
 }
 
 function renderFoodGuide(guide) {
-  const foods = guide.foods || [];
+  const foods = foodOverviewItems(guide);
   const filtered = foodState.difficulty === "全部" ? foods : foods.filter((food) => food.difficulty === foodState.difficulty);
   renderFoodFilters(guide);
-  setHtml("#foodGuide", filtered.map(foodCard).join(""));
+  const foodRoot = $("#foodGuide");
+  if (foodRoot) {
+    foodRoot.className = "travel-food-grid";
+    foodRoot.innerHTML = filtered.map(foodCard).join("") || $("#emptyTemplate").innerHTML;
+  }
   setHtml("#foodRoutes", (guide.routes || []).map(foodRouteCard).join(""));
   const count = $("#foodResultCount");
   if (count) count.textContent = `${filtered.length} / ${foods.length} foods`;
@@ -663,8 +734,31 @@ function openTravelModal(html) {
 }
 
 function openFoodDetail(id) {
-  const food = (foodGuideData?.foods || []).find((item) => (item.id || item.cnName) === id);
-  if (!food) return;
+  const overview = foodOverviewItems(foodGuideData).find((item) => item.key === id || item.detail?.id === id || item.detail?.cnName === id);
+  const food = overview?.detail || (foodGuideData?.foods || []).find((item) => (item.id || item.cnName) === id);
+  if (!overview && !food) return;
+  if (!food) {
+    openTravelModal(`
+      <article class="travel-detail-content">
+        <figure class="travel-detail-hero">
+          ${overview.image ? `<img src="${escapeHtml(overview.image)}" alt="${escapeHtml(overview.imageAlt || overview.cnName)}">` : ""}
+        </figure>
+        <p class="eyebrow">${escapeHtml(overview.difficulty)} · ${escapeHtml(overview.krName || "")}</p>
+        <h2>${escapeHtml(overview.cnName)}</h2>
+        <p>${escapeHtml(overview.groupNote)}</p>
+        <div class="travel-detail-grid">
+          ${detailLine("分类", overview.group)}
+          ${detailLine("推荐区域", overview.area)}
+          ${detailLine("图片", overview.imageCredit)}
+        </div>
+        <div class="travel-extra-actions">
+          ${action(googleMapsSearchUrl(foodQuery(overview)), "Google Maps")}
+          ${copyButton(foodQuery(overview))}
+        </div>
+      </article>
+    `);
+    return;
+  }
   openTravelModal(`
     <article class="travel-detail-content">
       <figure class="travel-detail-hero">
