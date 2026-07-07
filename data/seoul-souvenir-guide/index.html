@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>首尔伴手礼购买指南｜按地址去买</title>
+    <meta
+      name="description"
+      content="首尔适合带回国的伴手礼购买指南：茶、零食、美妆、香氛、文创、机场补买，含地址、地铁、营业时间、携带提醒和来源。"
+    />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./data/souvenirs.js" defer></script>
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <nav class="topbar" aria-label="页面导航">
+        <a href="#shopping-list">清单</a>
+        <a href="#route-board">路线</a>
+        <a href="#carry-rules">携带</a>
+        <a href="#verification">核查</a>
+      </nav>
+
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Seoul Gift Guide</p>
+          <h1 id="page-title">首尔伴手礼购买指南</h1>
+          <p class="lead">
+            不是泛泛推荐品牌，而是把商品、门店、地址、地铁、营业时间和携带风险放在一张可以边逛边查的清单里。
+          </p>
+          <div class="quick-stats" aria-label="页面摘要">
+            <span><b id="stat-count">0</b> 个条目</span>
+            <span><b id="stat-category-count">0</b> 类商品</span>
+            <span><b id="stat-area-count">0</b> 个购物区域</span>
+          </div>
+        </div>
+        <figure class="hero-photo">
+          <img
+            src="https://images.unsplash.com/photo-1699316788084-d4c0943a4bcf?auto=format&fit=crop&w=1400&q=78"
+            alt="首尔明洞夜间购物街"
+          />
+          <figcaption>真实照片 · Unsplash · Nathan Park</figcaption>
+        </figure>
+      </section>
+    </header>
+
+    <main>
+      <section class="control-panel" aria-label="购物清单筛选">
+        <div class="search-wrap">
+          <label for="search-input">搜索商品、门店、区域</label>
+          <input id="search-input" type="search" placeholder="例如：茶、明洞、香氛、文创、机场" />
+        </div>
+
+        <div class="filters">
+          <div>
+            <p>分类</p>
+            <div class="chip-row" id="category-filters"></div>
+          </div>
+          <div>
+            <p>价格</p>
+            <div class="chip-row" id="price-filters"></div>
+          </div>
+          <div>
+            <p>携带友好</p>
+            <div class="chip-row" id="carry-filters"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section route-board" id="route-board" aria-labelledby="route-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Route</p>
+            <h2 id="route-title">今日购物路线建议</h2>
+          </div>
+          <p class="section-note">按地理位置聚合，适合直接塞进行程。实际动线请结合住宿和当天营业状态微调。</p>
+        </div>
+        <div class="route-grid" id="route-grid"></div>
+      </section>
+
+      <section class="section" id="shopping-list" aria-labelledby="list-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Checklist</p>
+            <h2 id="list-title">可购买清单</h2>
+          </div>
+          <p class="section-note" id="result-count">正在加载...</p>
+        </div>
+        <div class="card-grid" id="card-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="section carry-rules" id="carry-rules" aria-labelledby="carry-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Carry</p>
+            <h2 id="carry-title">带回国前先看</h2>
+          </div>
+          <p class="section-note">这里按普通国际航班保守处理。液体、食品和动植物制品请以航空公司与目的地海关规则为准。</p>
+        </div>
+        <div class="rule-grid">
+          <article>
+            <h3>最稳选择</h3>
+            <p>设计小物、咖啡豆/挂耳、茶包、贴纸文具、小包装坚果零食。轻、常温、原包装、用途明确。</p>
+          </article>
+          <article>
+            <h3>需要规划</h3>
+            <p>香水、护手霜、面膜精华、液体茶饮或玻璃瓶食品。随身通常按 100ml 单瓶限制，建议托运或机场免税防拆袋。</p>
+          </article>
+          <article>
+            <h3>慎买或不买</h3>
+            <p>生鲜、冷藏、肉类/水产、散装食物、带种子或土壤的天然材料、易碎陶瓷大件。无法确认就不要作为跨境伴手礼。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section verification" id="verification" aria-labelledby="verification-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Verification</p>
+            <h2 id="verification-title">来源与核查状态</h2>
+          </div>
+          <p class="section-note">页面保留来源链接。价格、库存和营业时间变化快，未核实字段统一显示“待确认”。</p>
+        </div>
+        <div class="verification-grid">
+          <article>
+            <h3>图片策略</h3>
+            <p>
+              商品卡片默认使用“示意占位”，不伪装成真实照片；真实照片只用于首尔街景或地点氛围，并显示来源。若后续接入
+              gpt-image-2，可按数据里的 prompt 生成带角标的 AI 示意图。
+            </p>
+          </article>
+          <article>
+            <h3>核查口径</h3>
+            <p>
+              地址、营业时间和门店信息优先来自品牌官网、商场/机场官网、Visit Seoul、Visit Korea、Gangnam Tourism 等来源。无法确认则保留“待确认”。
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="detail-modal" id="detail-modal">
+      <div class="modal-shell">
+        <button class="icon-button modal-close" type="button" aria-label="关闭详情" data-close-modal>×</button>
+        <div id="modal-content"></div>
+      </div>
+    </dialog>
+  </body>
+</html>

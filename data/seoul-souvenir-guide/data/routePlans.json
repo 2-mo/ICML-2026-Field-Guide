@@ -1,0 +1,76 @@
+[
+  {
+    "title": "明洞半日补货",
+    "summary": "最适合第一次来首尔、时间少、想一次买美妆和角色周边的人。",
+    "stops": [
+      "Olive Young Myeongdong Global Town",
+      "HBAF Myeongdong No.1",
+      "LINE FRIENDS SQUARE Myeongdong"
+    ],
+    "time": "2-3 小时",
+    "best_for": "美妆 + 零食 + IP 周边",
+    "search_keyword": "올리브영 명동 글로벌타운 HBAF 명동 LINE FRIENDS SQUARE 명동"
+  },
+  {
+    "title": "北村到仁寺洞文化线",
+    "summary": "茶、韩方、博物馆感和传统工艺更集中，送长辈或老师更稳。",
+    "stops": [
+      "OSULLOC Tea House Bukchon",
+      "Tea Therapy Haengrang",
+      "Ssamziegil",
+      "Fritz Wonseo"
+    ],
+    "time": "3-4 小时",
+    "best_for": "茶 + 传统 + 咖啡",
+    "search_keyword": "오설록 북촌 티테라피 행랑 쌈지길 프릳츠 원서점"
+  },
+  {
+    "title": "圣水设计与美妆线",
+    "summary": "适合想买韩国本地美妆、文具和咖啡，同时逛热门街区的人。",
+    "stops": [
+      "AMORE Seongsu",
+      "fwee Agit Seongsu",
+      "POINT OF VIEW SEOUL",
+      "Blue Bottle Seongsu"
+    ],
+    "time": "3-5 小时",
+    "best_for": "K-beauty + 文具 + 咖啡",
+    "search_keyword": "아모레성수 퓌 아지트 성수 포인트오브뷰 블루보틀 성수"
+  },
+  {
+    "title": "汝矣岛百货食品线",
+    "summary": "适合雨天或想在一个商场内完成精致食品礼盒的人。",
+    "stops": [
+      "The Hyundai Seoul B1 Food Hall",
+      "Guemokdang",
+      "Myeongin Myeongchon"
+    ],
+    "time": "2-3 小时",
+    "best_for": "百货食品礼盒",
+    "search_keyword": "더현대 서울 B1 금옥당 명인명촌"
+  },
+  {
+    "title": "Dosan 香氛设计线",
+    "summary": "香氛、眼镜设计和空间体验都强，但液体类要提前规划行李。",
+    "stops": [
+      "Gentle Monster HAUS DOSAN",
+      "TAMBURINS HAUS DOSAN",
+      "NONFICTION Hannam 或 GRANHAND Seochon"
+    ],
+    "time": "3-4 小时",
+    "best_for": "香氛 + 设计品牌",
+    "search_keyword": "젠틀몬스터 하우스도산 탬버린즈 하우스도산 논픽션 한남 그랑핸드 서촌"
+  },
+  {
+    "title": "机场兜底路线",
+    "summary": "只适合补买，不适合承担全部购物计划。先确认登机口和安检后可用时间。",
+    "stops": [
+      "City Duty Free T2 Gate 221",
+      "机场化妆品/包装食品店",
+      "登机前复查液体防拆袋"
+    ],
+    "time": "30-60 分钟",
+    "best_for": "最后补货",
+    "search_keyword": "인천공항 제2여객터미널 City Duty Free Gate 221"
+  }
+]
